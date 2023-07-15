@@ -1,0 +1,109 @@
+/*--------------------------------------------------------------
+# Portofolio Session
+--------------------------------------------------------------*/
+.head-title{
+  margin: 0px 0px 15px -85px;
+}
+.container-custom{padding:80px;}
+
+
+.sectiontitle{display:block; max-width:55%; margin:0 auto 80px; text-align:center;}
+/* .sectiontitle *{margin:0;} */
+
+
+
+/* Split Fifty */
+#splitfifty{
+  margin-top: 90px;
+}
+#splitfifty > .sectiontitle{max-width:none; margin:0 0 50px 0; text-align:left;}
+#splitfifty > .sectiontitle .heading.underline::after{left:0; margin-left:0;}
+#splitfifty > div:nth-of-type(2) article{display:block; float:left; width:50%; padding:50px;}
+/* #splitfifty > div:nth-of-type(2) article *{margin:0 0 30px 0;} */
+#splitfifty > div:nth-of-type(2) article .heading{}
+#splitfifty > div:nth-of-type(2) article p{}
+#splitfifty > div:nth-of-type(2) article footer, #splitfifty > div:nth-of-type(2) article footer a{margin:0;}
+#splitfifty.disright > div:nth-of-type(2) article{float:right;}/* Display the block to the right, instead of left - depends on your preference */
+
+
+/* *, *::before, *::after{transition:all .3s ease-in-out;}
+#mainav form *{transition:none !important;} */
+
+.overlay{color:#FFFFFF; background-color:inherit;}
+.overlay::after{color:inherit; background-color:rgba(0,0,0,.55);}
+.overlay.light{color:#474747;}
+.overlay.light::after{background-color:rgba(255,255,255,.7);}
+
+.btn, .btn.inverse:hover{color:#FFFFFF; background-color:#1D8DC3; border-color:#1D8DC3;}
+.btn:hover, .btn.inverse{color:inherit; background-color:transparent; border-color:inherit;}
+
+.heading.underline::after{background-color:#1D8DC3;}
+#splitfifty article{color:#474747; background-color:rgba(255,255,255,.8);}
+#splitfifty article:hover{background-color:#FFFFFF;}
+
+
+
+
+/* Media Queries
+--------------------------------------------------------------------------------------------------------------- */
+@-ms-viewport{width:device-width;}
+
+
+/* Max Wrapper Width - Laptop, Desktop etc.
+--------------------------------------------------------------------------------------------------------------- */
+@media screen and (min-width:1140px){
+	.hoc{max-width:1140px;}
+}
+
+@media screen and (min-width:978px) and (max-width:1140px){
+	.hoc{max-width:95%;}
+}
+
+
+/* Mobile Devices
+--------------------------------------------------------------------------------------------------------------- */
+@media screen and (max-width:978px){
+	.hoc{max-width:90%;}
+}
+
+@media screen and (max-width:750px){
+	
+	.sectiontitle{max-width:none;}
+	#splitfifty > div:nth-of-type(2) article{display:block; float:none; width:100%;}
+}
+
+
+@media screen and (max-width:450px){
+	#splitfifty > div:nth-of-type(2) article, #testimonials ul, #latest article .excerpt{padding:20px;}
+}
+
+/* Other
+--------------------------------------------------------------------------------------------------------------- */
+@media screen and (max-width:650px){
+	.scrollable{display:block; width:100%; margin:0 0 30px 0; padding:0 0 15px 0; overflow:auto; overflow-x:scroll;}
+	.scrollable table{margin:0; padding:0; white-space:nowrap;}
+
+	.inline li{display:block; margin-bottom:10px;}
+	.pushright li{margin-right:0;}
+
+	.font-x2{font-size:1.6rem;}
+	.font-x3{font-size:1.8rem;}
+}
+
+.back{
+  background-position: right;
+  background-repeat: no-repeat;
+  background-size: inherit;
+  z-index: -1;
+  margin-left: -70px;
+  margin-right: -70px;
+}
+
+.heading-custom{
+  line-height: normal;
+  font-weight: normal;
+  text-transform: uppercase;
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  margin-bottom: 25px;
+}
