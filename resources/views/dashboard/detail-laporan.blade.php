@@ -173,12 +173,16 @@
                             @endif
                         </div>
                         @if($laporan[0]->status == "Diterima" && $laporan[0]->sign_first == 0)
-                        <a href="/dashobard/laporan/view-pdf/{{ $laporan[0]->id }}" class="btn btn-outline-primary col-12">Sign Dokumen</a>
+                        <a href="/dashboard/laporan/view-pdf/{{ $laporan[0]->id }}" class="btn btn-outline-primary col-12">Sign Dokumen</a>
                         @endif
                         
                         @if($laporan[0]->sign_first == 1 && $laporan[0]->sign_second == 0)
-                            <a  class="btn btn-outline-secondary col-12" disabled>View & Download</a>
-                            <i>Dosen Pembimbing Belum Tanda Tangan </i>
+                            @if($laporan[0]->status != "sedang berjalan")
+                                <a  class="btn btn-outline-secondary col-12" disabled>View & Download</a>
+                                <i>Dosen Pembimbing Belum Tanda Tangan </i>
+                            @else
+                                <i>Dalam Pemeriksaan Dosen Pembimbing</i>
+                            @endif
                         @endif
                         @if($laporan[0]->sign_second == 1 && $laporan[0]->sign_third == 0)
                             <a class="btn btn-outline-secondary col-12" disabled>View & Download</a>

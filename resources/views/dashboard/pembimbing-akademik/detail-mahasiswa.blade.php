@@ -14,7 +14,7 @@
             <div class="card-header pb-0">
                 <div class="d-flex align-items-center">
                     <h5>Informasi Mbkm {{ $laporan[0]->listMbkm->name }}</h5>
-                    <a href="/dashboard/pa/logbook/{{ $laporan[0]->owner }}" class="btn btn-primary ms-md-auto mt-2"> Lihat Logbook</a>
+                    <a href="/dashboard/pa/logbook/{{ $laporan[0]->mbkm }}" class="btn btn-primary ms-md-auto mt-2"> Lihat Logbook</a>
                 </div>
             </div>
             <div class="card-body">

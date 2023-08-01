@@ -123,23 +123,42 @@ class KpsController extends Controller
         ]);
     }
 
-    public function savePdf(Request $request){
-        Storage::makeDirectory('dokumen-annotate');
-        $data = json_decode($request->file, true);
-        Storage::put('dokumen-annotate/'.$request->name.'.json', json_encode($data));
+    // public function savePdf(Request $request){
+    //     Storage::makeDirectory('dokumen-annotate');
+    //     $data = json_decode($request->file, true);
+    //     Storage::put('dokumen-annotate/'.$request->name.'.json', json_encode($data));
 
-        $rules['json_annotate'] = 'dokumen-annotate/'.$request->name.'.json';
+    //     $rules['json_annotate'] = 'dokumen-annotate/'.$request->name.'.json';
+    //     $rules['sign_fourth'] = '1';
+
+    //     $pdf = Laporan::find($request->fileId);
+    //     $pdf->update($rules);
+
+    //     return $pdf;
+    // }
+
+    public function savePdf(Request $request){
+        $fileName = pathinfo($request->dokumenPath, PATHINFO_FILENAME);
+        // dd($test);
+        Storage::makeDirectory('dokumen-annotate');
+        $data = json_decode($request->annotateJson, true);
+        // $data = json_encode($request->annotateJson, true);
+        Storage::put('dokumen-annotate/'. $fileName .'.json', json_encode($data));
+
+        $rules['json_annotate'] = 'dokumen-annotate/'. $fileName .'.json';
         $rules['sign_fourth'] = '1';
 
         $pdf = Laporan::find($request->fileId);
         $pdf->update($rules);
 
-        return $pdf;
+        // return $pdf;
+        return redirect('/laporan/dosbing')->with('success', 'Dokumen Laporan Berhasil ditandatangan!');       
     }
-
+    
     public function konversi(){
-        $user = User::where('fakultas_id', auth()->user()->fakultas_id)->where('role', 7)->get('id')->toArray();
+        $user = User::where('jurusan_id', auth()->user()->jurusan_id)->where('role', 7)->get('id')->toArray();
         $konversi = HasilKonversi::whereIn('owner', $user)->where('status', 'dalam pemeriksaan')->with('dataOwner')->get();
+        
         return view('dashboard.kps.konversi',[
             'title' => 'Konversi',
             'title_page' => 'Konversi',
@@ -191,7 +210,7 @@ class KpsController extends Controller
     }
     
     public function hasilKonversi(){
-        $user = User::where('fakultas_id', auth()->user()->fakultas_id)->where('role', 7)->get('id')->toArray();
+        $user = User::where('jurusan_id', auth()->user()->jurusan_id)->where('role', 7)->get('id')->toArray();
         $konversi = HasilKonversi::whereIn('owner', $user)->where('status', 'Sudah Dikonversi')->with('dataOwner')->get();
         return view('dashboard.kps.hasil-konversi', [
             'title' => 'Konversi / Hasil Konversi',

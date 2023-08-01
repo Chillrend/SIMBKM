@@ -30,6 +30,7 @@
                           <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Jurusan</th>
                           <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Prodi</th>
                           <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Program</th>
+                          <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Program Ke-</th>
                           <th class="text-secondary opacity-7 ">Action</th>
                         </tr>
                       </thead>
@@ -52,8 +53,11 @@
                                 <td class="text-sm text-center ">
                                   <p class="text-xs font-weight-bold mb-0">{{ $data->dataProgram->name }}</p>
                                 </td>
+                                <td class="text-sm text-center ">
+                                  <p class="text-xs font-weight-bold mb-0">{{ $data->program_keberapa }}</p>
+                                </td>
                                 <td class="text-sm text-center">
-                                    <a href="/dashboard/pa/{{ $data->user }}" ><span class="badge badge-primary"></span><i class="fa fa-regular fa-eye" style="color: #3eeefe;"></i></a>
+                                    <a href="/dashboard/pa/{{ $data->id }}" ><span class="badge badge-primary"></span><i class="fa fa-regular fa-eye" style="color: #3eeefe;"></i></a>
                                 </td>
                           @endforeach
                       </tbody>

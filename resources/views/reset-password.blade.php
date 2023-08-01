@@ -44,24 +44,20 @@
                   <input type="email" class="form-control" placeholder="Email" value="{{ $email ?? old('email') }}" disabled>
                   @error('email')
                       <div class="invalid-feedback">
-                        {{ $message }}
+                        <span class="text-danger">{{ $message }}</span>
                       </div>
                   @enderror
                 </div>
                 <div class="mb-3">
-                    <input type="password" class="form-control" placeholder="Masukan Password Baru" name="password" id="password" value="{{ $password ?? old('password') }}">
+                    <input type="password" class="form-control" placeholder="Masukan Password Baru" name="password" id="password" value="{{ $password ?? old('password') }}" required>
                     @error('password')
-                      <div class="invalid-feedback">
-                        {{ $message }}
-                      </div>
+                        <span class="text-danger">{{ $message }}</span>
                     @enderror
                   </div>
                   <div class="mb-3">
-                    <input type="password" class="form-control" placeholder="Konfirmasi Password" name="password_confirmation" id="password_confirmation" value="{{ $password_confirm ?? old('password_confirm') }}">
-                    @error('password_confirm')
-                      <div class="invalid-feedback">
-                        {{ $message }}
-                      </div>
+                    <input type="password" class="form-control" placeholder="Konfirmasi Password" name="password_confirmation" id="password_confirmation" value="{{ $password_confirm ?? old('password_confirm') }}" required>
+                    @error('password_confirmation')
+                        <span class="text-danger">{{ $message }}</span>
                     @enderror
                   </div>
                 <div class="text-center">

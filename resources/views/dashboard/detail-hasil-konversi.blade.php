@@ -12,7 +12,11 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h4>Upload Kurikulum</h4>
+                <div class="d-flex">
+                    <h4>Upload Kurikulum</h4>
+                    <a href="/dashboard/forum"  class="btn ms-md-auto">Back</a>
+                </div>
+                
             </div>
 
             <div class="card-body">

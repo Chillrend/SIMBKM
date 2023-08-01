@@ -145,14 +145,14 @@ class DosbingController extends Controller
             'title' => 'Laporan',
             'title_page' => 'Laporan / Detail',
             'active' => 'Laporan Dosbing',
-            'laporan' => Laporan::find($id)->with('listMbkm')->get(),
+            'laporan' => Laporan::where('id', $id)->with('listMbkm')->get(),
             'logcomment' => CommentLaporan::all()->where('laporan', $id)
         ]);
     }
 
     public function viewPdf($id){
         return view('dashboard.dosbing.view-pdf',[
-            'laporan' => Laporan::find($id)->get()
+            'laporan' => Laporan::where('id',$id)->get()
         ]);
     }
 
@@ -181,22 +181,26 @@ class DosbingController extends Controller
 
     public function signPdf($id){
         return view('dashboard.dosbing.sign-pdf',[
-            'laporan' => Laporan::find($id)->get()
+            'laporan' => Laporan::where('id',$id)->get()
         ]);
     }
 
     public function savePdf(Request $request){
+        $fileName = pathinfo($request->dokumenPath, PATHINFO_FILENAME);
+        // dd($test);
         Storage::makeDirectory('dokumen-annotate');
-        $data = json_decode($request->file, true);
-        Storage::put('dokumen-annotate/'.$request->name.'.json', json_encode($data));
+        $data = json_decode($request->annotateJson, true);
+        // $data = json_encode($request->annotateJson, true);
+        Storage::put('dokumen-annotate/'. $fileName .'.json', json_encode($data));
 
-        $rules['json_annotate'] = 'dokumen-annotate/'.$request->name.'.json';
+        $rules['json_annotate'] = 'dokumen-annotate/'. $fileName .'.json';
         $rules['sign_second'] = '1';
 
         $pdf = Laporan::find($request->fileId);
         $pdf->update($rules);
 
-        return $pdf;
+        // return $pdf;
+        return redirect('/laporan/dosbing')->with('success', 'Dokumen Laporan Berhasil ditandatangan!');       
     }
 
 }

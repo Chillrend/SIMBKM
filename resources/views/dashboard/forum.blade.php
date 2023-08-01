@@ -36,10 +36,10 @@
                 </div>
                 <small class="mt-0">{{ $post->updated_at->diffForHumans()}}</small>
               </div>
-              <div class="row mt-3">
-                <p>{!! $post->body !!}</p>
-                
-              <div class="d-flex">
+              <div class="row mt-3 ">
+                {!! $post->body !!}
+
+              <div class="d-flex mt-2">
                  {{-- <div class="btn btn-info me-2">Share</div>   --}}
                 {{-- <div class="btn btn-info">Detail</div> --}}
                 <a href="/dashboard/forum/detail/{{ $post->id }}" class="btn btn-info">Detail</a>

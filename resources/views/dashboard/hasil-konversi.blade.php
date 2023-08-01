@@ -37,7 +37,7 @@
                           </td>
                             
                           <td>
-                            <p class="text-xs font-weight-bold mb-0">{{ $data->body }}</p>
+                            <p class="text-xs font-weight-bold mt-4">{!! $data->body !!}</p>
                             
                           </td>
 

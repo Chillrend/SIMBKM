@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('forum_comments', function (Blueprint $table) {
             $table->id();
             $table->string('body');
-            $table->string('is_delete');
+            $table->string('is_delete')->default(0);
             $table->string('created_by');
             $table->string('forum_post');
             $table->timestamps();

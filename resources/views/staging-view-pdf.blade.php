@@ -29,16 +29,16 @@
 		<button class="btn btn-danger btn-sm" onclick="deleteSelectedObject(event)"><i class="fa fa-trash"></i></button>
 	</div>
 	
-	{{-- <div class="tool">
+	<div class="tool">
 		<button class="btn btn-info btn-sm" onclick="showPdfData()">{}</button>
-	</div> --}}
+	</div>
 
   <div class="tool">
-		<button class="btn btn-info btn-sm" onclick="synchroneAnnonate()" data-toggle="modal" data-target="#popSuccess">SYNC</button>
+		<button class="btn btn-info btn-sm" onclick="synchroneAnnonate()">SYNC</button>
 	</div>
 
 	<div class="tool">
-        <form action="/laporan/dosbing/sign-pdf/save" method="POST" enctype="multipart/form-data">
+        <form action="/dashboard/laporan/save-document" method="POST" enctype="multipart/form-data">
             @csrf
             <input id="dokumen" name="dokumen"  type="text" value="{{ $laporan[0]->id }}" hidden>
             <input id="annotateJson" name="annotateJson" type="text" hidden>
@@ -68,25 +68,6 @@
 	</div>
 </div>
 
-<div class="modal" id="popSuccess" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Sinkronisasi Berhasil</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      {{-- <div class="modal-body">
-        <p>Modal body text goes here.</p>
-      </div> --}}
-      <div class="modal-footer">
-        {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -125,33 +106,21 @@
     function synchroneAnnonate(status){
       pdf.serializePdf(function (string, defaultValue){
             var oldValue = {
-              // version: defaultValue[0].version,
-              // objects: []
+              version: defaultValue[0].version,
+              objects: []
             }
-            
             var data = JSON.parse(string);
-            // for(let i = 0; i < data.pages.length; i++ ){
-            //   var pagesDefault = data.pages[i];
-            //   pagesDefault['backgroundImage'] = pageContent;
-            //   console.log(pagesDefault);
-            // }
 
             if(status == "Baru"){
               data = JSON.parse(string);
-              console.log(data);
               data.pages[data.pages.length - 1] = oldValue;
-              data.pages[data.pages.length - 2] = oldValue;
               data.pages[syncPageBaru-1] = syncDataBaru;
-              
-              
             }else{
               data = JSON.parse(string);
               var dataSync = data.pages[data.pages.length - 1];
               dataSync['backgroundImage'] = pageContent;
               data.pages[data.pages.length - 1] = oldValue;
-              data.pages[data.pages.length - 2] = oldValue;
               data.pages[syncPageBaru-1] = dataSync;  
-              
             }
             
             var dynamicVariableName = "annotate";
@@ -165,9 +134,9 @@
       }
 
 
-//   var buttonImage = $('#imageButton').click(function(){
-//     $(this).hide();
-//   });
+  var buttonImage = $('#imageButton').click(function(){
+    $(this).hide();
+  });
 
 
     var pdf = new PDFAnnotate('pdf-container', appUrl + '/storage/'  + dokumen.dokumen_path, {
@@ -181,19 +150,10 @@
     },
     ready() {
         console.log('Plugin initialized successfully');
-		console.log(dokumen.json_annotate);
-		if(dokumen.json_annotate !== null && dokumen.json_annotate !== undefined && dokumen.json_annotate !== ''){
-			fetch(appUrl + '/storage/'  + dokumen.json_annotate)
-			.then(response => response.json())
-			.then(data =>{
-				pdf.loadFromJSON(data);
-			});
-		}
-    // pdf.loadFromJSON(sampleOutput)
-		
+        // pdf.loadFromJSON(sampleOutput);
     },
     scale: 1.5,
-    pageImageCompression: 'MEDIUM', // FAST, MEDIUM, SLOW(Helps to control the new PDF file size)
+    pageImageCompression: 'FAST', // FAST, MEDIUM, SLOW(Helps to control the new PDF file size)
     });
 
 function changeActiveTool(event) {

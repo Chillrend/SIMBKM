@@ -171,7 +171,7 @@
                         <a class="btn btn-outline-secondary col-12" disabled>Sign Dokumen</a>
                         <i>Mahasiswa Belum Tanda Tangan</i>
                         @endif
-                        @if($laporan[0]->sign_first == 1 && $laporan[0]->sign_second == 0)
+                        @if($laporan[0]->sign_first == 1 && $laporan[0]->sign_second == 0 && $laporan[0]->status == "Diterima")
                             {{-- <a  class="btn btn-outline-secondary col-12" disabled>View & Download</a> --}}
                             {{-- <a href="/laporan/dosbing/view-pdf/{{ $laporan[0]->id }}" class="btn btn-outline-gray900">View Dokumen</a> --}}
                             <a href="/laporan/dosbing/sign-pdf/{{ $laporan[0]->id }}" class="btn btn-outline-primary col-12">Sign Dokumen</a>

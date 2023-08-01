@@ -32,12 +32,12 @@ class WadirController extends Controller
             'active' => 'Dashboard Wadir',
             'title_page' => 'Dashboard / Detail Mahasiswa',
             'title' => 'Dashboard',       
-            'laporan' => Laporan::where('owner', $id)->with('listMbkm')->get()
+            'laporan' => Laporan::where('id', $id)->with('listMbkm')->get()
         ]);
     }
 
     public function logbookMahasiswa($id){
-        $logbook = Logbook::with('listMbkm')->where('user', $id)->get();
+        $logbook = Logbook::with('listMbkm')->where('mbkm', $id)->get();
         $log_logbook = LogLogbook::where('logbook', $logbook[0]->id)->get();
         return view('dashboard.wadir.logbook-mahasiswa',[
             'title' => 'Dashboard',

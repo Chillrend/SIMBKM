@@ -20,12 +20,12 @@
                         <input class="form-control" type="datetime-local" name="tanggal_dibuat" value="{{  date('Y-m-d\TH:i', strtotime($log_logbooks->tanggal_dibuat)) }}" required>
                       </div>
                     </div>
-                    <div class="col-md-4">
+                    {{-- <div class="col-md-4">
                       <div class="form-group">
                         <label for="lokasi" class="form-control-label">Lokasi</label>
                         <input class="form-control" type="text" name="lokasi" value="{{ $log_logbooks->lokasi }}" required>
                       </div>
-                    </div>
+                    </div> --}}
                   </div>
 
                   <div class="row">

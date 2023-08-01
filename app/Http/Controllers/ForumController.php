@@ -6,6 +6,7 @@ use Error;
 use App\Models\User;
 use App\Models\ForumDoc;
 use App\Models\ForumPost;
+use App\Models\ForumComment;
 use Illuminate\Http\Request;
 use function Deployer\timestamp;
 use Illuminate\Cache\RedisStore;
@@ -25,7 +26,7 @@ class ForumController extends Controller
             'title_page' => 'Forum',
             'active' => 'Forum',
             'name' => auth()->user()->name,
-            'posts' => ForumPost::with('author')->where('is_delete', '0')->latest('updated_at')->get()
+            'posts' => ForumPost::with('author')->where('is_delete', '0')->latest('updated_at')->get(),
         ]);
     }
 
@@ -178,13 +179,14 @@ class ForumController extends Controller
     public function detailPost($id){
         $forum = ForumPost::find($id);
         $forum_file = ForumDoc::where('forum_id', $forum->id)->get();
-        
+        $comment = ForumComment::where('forum_post', $id)->with('author')->get();
         return view('dashboard.detail-forum',[
             'title' => 'Forum',
             'active' => 'Forum',
             'title_page' => 'Forum / Detail',
             'post' => $forum,
-            'files' => $forum_file
+            'files' => $forum_file,
+            'komen' => $comment
         ]);
     }
 
@@ -242,5 +244,21 @@ class ForumController extends Controller
             }
         }
         return redirect('/dashboard/forum')->with('success', 'Post has been updated!');
+    }
+
+    public function postComment(Request $request){
+
+        $request->validate([
+            'body' => 'required|max:100'
+        ],[
+            'body.max' => 'Maksimal 100 Kata'
+        ]);
+
+        ForumComment::create([
+            'body' => $request->body,
+            'created_by' => auth()->user()->id,
+            'forum_post' => $request->id
+        ]);
+        return redirect()->back()->with('success', 'Komen Berhasil diunggah');
     }
 }

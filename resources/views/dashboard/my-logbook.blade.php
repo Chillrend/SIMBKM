@@ -6,12 +6,12 @@
             <div class="card-header pb-0">
                 <div class="d-flex align-items-center">
                     <h5>Logbook {{ auth()->user()->name }}</h5>
-                    <div class="ms-md-auto d-flex">
-                      <a href="/dashboard/logbook/create/{{ $idLogbook }}" class="btn btn-outline-primary align-items-center d-flex m-0 me-5 w-50"><i class="fas fa-plus me-2" aria-hidden="true"></i>Isi Logbook</a>
-                      <div class="input-group ms-md-auto d-flex">
+                    <div class="ms-md-auto">
+                      <a href="/dashboard/logbook/create/{{ $idLogbook }}" class="btn btn-outline-primary align-items-center  m-0 me-5 w-75"><i class="fas fa-plus me-2" aria-hidden="true"></i>Isi Logbook</a>
+                      {{-- <div class="input-group ms-md-auto d-flex">
                         <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
                         <input type="text" class="form-control me-3" placeholder="Search here..." onfocus="focused(this)" onfocusout="defocused(this)">
-                      </div>
+                      </div> --}}
                     </div>
                 </div>
             </div>

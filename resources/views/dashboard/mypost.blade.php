@@ -12,6 +12,7 @@
           <div class="card mb-4">
             <div class="card-header pb-0">
               <div class="d-flex align-items-center">
+                <a class="btn ms-2 mt-2" href="/dashboard/forum">Back</a>
                 {{-- <button class="btn ">Sort By</button>   --}}
                 {{-- <div class="ms-md-auto d-flex">
                   <div class="input-group ms-md-auto d-flex">

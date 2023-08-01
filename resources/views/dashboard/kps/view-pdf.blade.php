@@ -19,9 +19,9 @@
 	<div class="tool">
 		<span>SIMBKM Signature</span>
 	</div>
-
+	
 	<div class="tool d-flex justify-content-between">
-
+		<a href="{{ url()->previous() }}" class="btn btn-light btn-sm"><i class="fa fa-save"></i> Back</a>
 	</div>
 </div>
 <div id="pdf-container"></div>

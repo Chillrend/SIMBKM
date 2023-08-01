@@ -142,17 +142,35 @@ class PembimbingIndustriController extends Controller
         ]);
     }
 
-    public function savePdf(Request $request){
-        Storage::makeDirectory('dokumen-annotate');
-        $data = json_decode($request->file, true);
-        Storage::put('dokumen-annotate/'.$request->name.'.json', json_encode($data));
+    // public function savePdf(Request $request){
+    //     Storage::makeDirectory('dokumen-annotate');
+    //     $data = json_decode($request->file, true);
+    //     Storage::put('dokumen-annotate/'.$request->name.'.json', json_encode($data));
 
-        $rules['json_annotate'] = 'dokumen-annotate/'.$request->name.'.json';
+    //     $rules['json_annotate'] = 'dokumen-annotate/'.$request->name.'.json';
+    //     $rules['sign_third'] = '1';
+
+    //     $pdf = Laporan::find($request->fileId);
+    //     $pdf->update($rules);
+
+    //     return $pdf;
+    // }
+
+    public function savePdf(Request $request){
+        $fileName = pathinfo($request->dokumenPath, PATHINFO_FILENAME);
+        // dd($test);
+        Storage::makeDirectory('dokumen-annotate');
+        $data = json_decode($request->annotateJson, true);
+        // $data = json_encode($request->annotateJson, true);
+        Storage::put('dokumen-annotate/'. $fileName .'.json', json_encode($data));
+
+        $rules['json_annotate'] = 'dokumen-annotate/'. $fileName .'.json';
         $rules['sign_third'] = '1';
 
         $pdf = Laporan::find($request->fileId);
         $pdf->update($rules);
 
-        return $pdf;
+        // return $pdf;
+        return redirect('/laporan/dosbing')->with('success', 'Dokumen Laporan Berhasil ditandatangan!');       
     }
 }

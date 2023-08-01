@@ -60,8 +60,13 @@ class LoginController extends Controller
 
     public function submitForgotPasswordForm(Request $request){
         $request->validate([
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email|unique:password_reset_tokens|exists:users',
+        ],[
+            'email.unique' => 'Reset Token Sudah dikirim di email anda',
+            'email.required' => 'Email Harus diisi',
+            'email.exists' => 'Email Belum Terdaftar'
         ]);
+
 
         $token = Str::random(64);
 
@@ -77,6 +82,11 @@ class LoginController extends Controller
             'created_at' => Carbon::now()
           ]);
 
+        if($name != null ){
+            $name = User::where('email', $request->email)->get();
+        }else{
+            $name = null;
+        }  
         Mail::send('email.forgetPassword',
         ['token' => $token,
          'name' => $name[0]->name, 
@@ -96,6 +106,10 @@ class LoginController extends Controller
                     ->where('token', $token)
                     ->first();
 
+        if($account == null){
+            return abort(419);
+        }
+
         return view('reset-password', [
             'token' => $token,
             'email' => $account->email
@@ -105,8 +119,11 @@ class LoginController extends Controller
     public function submitResetPasswordForm(Request $request){
         $request->validate([
             'email' => 'required|email|exists:users',
-            'password' => 'required|string|min:6|confirmed',
-            'password_confirmation' => 'required'
+            'password' => 'required|string|min:6',
+            'password_confirmation' => 'required|same:password'
+        ],[
+            'password.min' => 'Minimal Password 6 Kata',
+            'password_confirmation.same' => 'password konfirmasi salah'
         ]);
 
         $updatePassword = DB::table('password_reset_tokens')

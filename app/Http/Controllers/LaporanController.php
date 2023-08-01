@@ -12,22 +12,20 @@ use Illuminate\Http\File;
 class LaporanController extends Controller
 {
     public function index($id){
-
-        $test = Laporan::find($id)->with('listMbkm')->get();
-        // dd($test);
+        
         return view('dashboard.detail-laporan', [
             'title' => 'Laporan',
             'title_page' => 'Laporan / Edit',
             'active' => 'Laporan',
             'name' => auth()->user()->name,
-            'laporan' => Laporan::find($id)->with('listMbkm')->get(),
+            'laporan' => Laporan::where('id', $id)->with('listMbkm')->get(),
             'logcomment' => CommentLaporan::all()->where('laporan', $id)
         ]);
     }    
 
     public function viewPdf($id){
         return view('dashboard.viewpdf',[
-            'laporan' => Laporan::find($id)->get()
+            'laporan' => Laporan::where('id',$id)->get()
         ]);
     }
 
@@ -46,8 +44,8 @@ class LaporanController extends Controller
 
         $rules['dokumen_name'] = $request->dokumen->getClientOriginalName();
         $rules['dokumen_path'] = $request->file('dokumen')->store('dokumen-laporan');
-        $rules['sign_first'] = 0;
-        $rules['sign_second']= 0;
+        // $rules['sign_first'] = 1;
+        // $rules['sign_second']= 0;
 
         // Laporan::where('id', $id)->update($rules);
 
@@ -77,18 +75,36 @@ class LaporanController extends Controller
         return redirect('/dashboard/laporan/'.$id)->with('success', 'Dokumen Laporan berhasil ditambahkan!');
     }
 
-    public function savePdf(Request $request){
-        Storage::makeDirectory('dokumen-annotate');
-        $data = json_decode($request->file, true);
-        Storage::put('dokumen-annotate/'.$request->name.'.json', json_encode($data));
+    // public function savePdf(Request $request){
+    //     Storage::makeDirectory('dokumen-annotate');
+    //     $data = json_decode($request->file, true);
+    //     Storage::put('dokumen-annotate/'.$request->name.'.json', json_encode($data));
 
-        $rules['json_annotate'] = 'dokumen-annotate/'.$request->name.'.json';
+    //     $rules['json_annotate'] = 'dokumen-annotate/'.$request->name.'.json';
+    //     $rules['sign_first'] = '1';
+
+    //     $pdf = Laporan::find($request->fileId);
+    //     $pdf->update($rules);
+
+    //     return $pdf;
+    // }
+
+    public function savePdf(Request $request){
+        $fileName = pathinfo($request->dokumenPath, PATHINFO_FILENAME);
+        // dd($test);
+        Storage::makeDirectory('dokumen-annotate');
+        $data = json_decode($request->annotateJson, true);
+        // $data = json_encode($request->annotateJson, true);
+        Storage::put('dokumen-annotate/'. $fileName .'.json', json_encode($data));
+
+        $rules['json_annotate'] = 'dokumen-annotate/'. $fileName .'.json';
         $rules['sign_first'] = '1';
 
         $pdf = Laporan::find($request->fileId);
         $pdf->update($rules);
 
-        return $pdf;
+        // return $pdf;
+        return redirect('/dashboard/laporan')->with('success', 'Dokumen Laporan Berhasil ditandatangan!');       
     }
 
     public function previewPdf($id){

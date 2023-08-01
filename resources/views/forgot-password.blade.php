@@ -43,10 +43,14 @@
                 @csrf
                 <div class="mb-3">
                   <input type="email" id="email" class="form-control" placeholder="Masukan Email.." name="email" value="{{ old('email') }}" required autofocus>
-                  @if ($errors->has('email'))
+                  @error('email')
+                      <span class="text-danger">{{ $message }}</span>
+                  @enderror
+                  {{-- @if ($errors->has('email')) --}}
+                    {{-- <span class="text-danger">{{ $message }}</span> --}}
                       {{-- <span class="text-danger">{{ $errors->first('email') }}</span> --}}
-                      <span class="text-danger">Permintaan Reset Password sudah dikirim, silahkan cek email anda</span>
-                  @endif
+                      {{-- <span class="text-danger">Permintaan Reset Password sudah dikirim, silahkan cek email anda</span> --}}
+                  {{-- @endif --}}
                 </div>
                 <div class="text-center">
                   <button type="submit" class="btn bg-gradient-dark w-100 my-4 mb-2">Send Password Reset Link</button>
