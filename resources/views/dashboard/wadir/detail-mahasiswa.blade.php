@@ -179,7 +179,12 @@
                             </div>
                             @endif
                         </div>
-                        <a href="/dashboard/wadir/view-pdf/{{ $laporan[0]->id }}" class="btn btn-outline-primary col-12">Lihat Dokumen</a>
+                        @if($laporan[0]->sign_fourth === 0 || $laporan[0]->sign_fourth === null )
+                            <a href="#" class="btn btn-secondary col-12" disabled">Dokumen Belum Selesai ditandatangan</a>
+                        @else
+                            <a href="/dashboard/wadir/view-pdf/{{ $laporan[0]->id }}" class="btn btn-outline-primary col-12">Dokumen Belum Selesai ditandatangan</a>
+                        @endif
+                        
                     </div>
                    
                 @else

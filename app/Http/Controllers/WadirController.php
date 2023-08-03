@@ -8,6 +8,7 @@ use App\Models\Laporan;
 use App\Models\Logbook;
 use App\Models\LogLogbook;
 use Illuminate\Http\Request;
+use App\Models\LogSignaturePdf;
 use Illuminate\Support\Facades\DB;
 
 class WadirController extends Controller
@@ -59,8 +60,10 @@ class WadirController extends Controller
     }
 
     public function viewPdf($id){
+        // $test = LogSignaturePdf::where('laporan_id', $id)->get();
         return view('dashboard.wadir.view-pdf',[
-            'laporan' => Laporan::find($id)->get()
+            'laporan' => Laporan::find($id)->get(),
+            'signature' => LogSignaturePdf::where('laporan_id', $id)->get()
         ]);
     }
 }

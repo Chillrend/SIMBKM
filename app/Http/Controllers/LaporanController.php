@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Laporan;
 use Illuminate\Http\Request;
 use App\Models\CommentLaporan;
+use App\Models\LogSignaturePdf;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\File;
@@ -25,7 +26,8 @@ class LaporanController extends Controller
 
     public function viewPdf($id){
         return view('dashboard.viewpdf',[
-            'laporan' => Laporan::where('id',$id)->get()
+            'laporan' => Laporan::where('id',$id)->get(),
+            'signature' => LogSignaturePdf::where('laporan_id', $id)->get()
         ]);
     }
 
@@ -53,9 +55,13 @@ class LaporanController extends Controller
 
         $laporan->update($rules);
 
+        LogSignaturePdf::create([
+            'laporan_id' => $id
+        ]);
+
         return redirect('/dashboard/laporan/'.$id)->with('success', 'Dokumen Laporan berhasil ditambahkan!');       
     }
-
+    
     public function revisi(Request $request, $id){
         $rules = $request->validate([
             'dokumen' => 'required|mimes:pdf'            
@@ -75,33 +81,34 @@ class LaporanController extends Controller
         return redirect('/dashboard/laporan/'.$id)->with('success', 'Dokumen Laporan berhasil ditambahkan!');
     }
 
-    // public function savePdf(Request $request){
-    //     Storage::makeDirectory('dokumen-annotate');
-    //     $data = json_decode($request->file, true);
-    //     Storage::put('dokumen-annotate/'.$request->name.'.json', json_encode($data));
-
-    //     $rules['json_annotate'] = 'dokumen-annotate/'.$request->name.'.json';
-    //     $rules['sign_first'] = '1';
-
-    //     $pdf = Laporan::find($request->fileId);
-    //     $pdf->update($rules);
-
-    //     return $pdf;
-    // }
-
     public function savePdf(Request $request){
         $fileName = pathinfo($request->dokumenPath, PATHINFO_FILENAME);
-        // dd($test);
+
         Storage::makeDirectory('dokumen-annotate');
-        $data = json_decode($request->annotateJson, true);
-        // $data = json_encode($request->annotateJson, true);
-        Storage::put('dokumen-annotate/'. $fileName .'.json', json_encode($data));
+        Storage::makeDirectory('dokumen-signature');
+        Storage::makeDirectory('dokumen-signature-background');
+        Storage::makeDirectory('dokumen-json-signature-background');
+
+        $dataAnnotate = json_encode($request->annotateJson, true);
+        $dataSignaturePertama = json_encode($request->signature_pertama, true);
+        $dataJsonBackgroundSignature = json_encode($request->bgJson, true);
+        
+        Storage::put('dokumen-annotate/' . $fileName . '.json', json_decode($dataAnnotate));
+        Storage::put('dokumen-signature/' . $fileName . '_pertama.json', json_decode($dataSignaturePertama));
+        Storage::put('dokumen-json-signature-background/' . $fileName . '_pertama.json', json_decode($dataJsonBackgroundSignature));
 
         $rules['json_annotate'] = 'dokumen-annotate/'. $fileName .'.json';
         $rules['sign_first'] = '1';
 
+        $rulesSignature['json_sign_pertama'] = 'dokumen-signature/' . $fileName . '_pertama.json';
+        $rulesSignature['json_background_pertama'] = 'dokumen-json-signature-background/' . $fileName . '_pertama.json';
+        $rulesSignature['file_background_pertama'] = $request->file('bgImage')->store('dokumen-signature-background');
+
         $pdf = Laporan::find($request->fileId);
         $pdf->update($rules);
+
+        $signatureData = LogSignaturePdf::where('laporan_id', $request->fileId);
+        $signatureData->update($rulesSignature);
 
         // return $pdf;
         return redirect('/dashboard/laporan')->with('success', 'Dokumen Laporan Berhasil ditandatangan!');       
@@ -109,7 +116,8 @@ class LaporanController extends Controller
 
     public function previewPdf($id){
         return view('dashboard.preview-pdf',[
-            'laporan' => Laporan::find($id)->get()
+            'laporan' => Laporan::find($id)->get(),
+            'signature' => LogSignaturePdf::where('laporan_id', $id)->get()
         ]);
     }
 

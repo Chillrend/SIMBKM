@@ -54,6 +54,7 @@ var sampleOutput = {
             ]
         },
         {
+            "page": 3,
             "version": "4.3.0",
             "objects": [
                 {

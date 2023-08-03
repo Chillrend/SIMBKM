@@ -22,18 +22,18 @@
         </div>
     </div>
 	
-	<div class="tool" id="imageButton">
+	<div class="tool">
 		<button  class="tool-button"><i class="fa fa-picture-o" title="Add an Image" onclick="addImage(event)"></i></button>
 	</div>
 	<div class="tool">
 		<button class="btn btn-danger btn-sm" onclick="deleteSelectedObject(event)"><i class="fa fa-trash"></i></button>
 	</div>
 	
-	<div class="tool">
+	{{-- <div class="tool">
 		<button class="btn btn-info btn-sm" onclick="showPdfData()">{}</button>
-	</div>
+	</div> --}}
 
-  <div class="tool">
+  <div class="tool" id="syncBtn">
 		<button class="btn btn-info btn-sm" onclick="synchroneAnnonate()" data-toggle="modal" data-target="#popSuccess">SYNC</button>
 	</div>
 
@@ -42,6 +42,9 @@
             @csrf
             <input id="dokumen" name="dokumen"  type="text" value="{{ $laporan[0]->id }}" hidden>
             <input id="annotateJson" name="annotateJson" type="text" hidden>
+            <input id="signature_pertama" name="signature_pertama" type="text" hidden>
+            <input id="bgImage" name="bgImage" type="file" hidden>
+            <input id="bgJson" name="bgJson" type="text" hidden>
             <input id="dokumen" name="fileId" type="text" value="{{ $laporan[0]->id }}" hidden>
             <input id="dokumenName" name="dokumenName"  type="text" value="{{ $laporan[0]->dokumen_name }}" hidden>
             <input name="dokumenPath"  type="text" value="{{ $laporan[0]->dokumen_path }}" hidden>
@@ -109,6 +112,9 @@
     var appUrl = '{{ env('APP_URL') }}';
     var dokumen = {!! json_encode($laporan[0]) !!};
     var inputJson = document.getElementById("annotateJson");
+    var inputSignaturePertama = document.getElementById("signature_pertama");
+    var inputBgJson = document.getElementById("bgJson");
+    var inputBgImage = document.getElementById("bgImage");
 
     var syncDataBaru = "";
     var syncPageBaru = 0;
@@ -122,55 +128,65 @@
 			downloadLink.click();
 	}
 
+  function fileListFrom (files) {
+    const b = new ClipboardEvent("").clipboardData || new DataTransfer()
+    for (const file of files) b.items.add(file)
+    return b.files
+  }
+
     function synchroneAnnonate(status){
       pdf.serializePdf(function (string, defaultValue){
             var oldValue = {
               // version: defaultValue[0].version,
               // objects: []
             }
-            var data = JSON.parse(string);
             
-            // for(let i = 0; i < data.pages.length; i++ ){
-            //   var pagesDefault = data.pages[i];
-            //   pagesDefault['backgroundImage'] = pageContent;
-            //   console.log(pagesDefault);
-            // }
+            var data = JSON.parse(string);
+            var ttdPertama;
+            let dataJsonBg = pageContent;
 
             if(status == "Baru"){
-              data = JSON.parse(string);
+              // data = JSON.parse(string);
+              ttdPertama = data.pages[data.pages.length - 1];
+              ttdPertama['page'] = syncPageBaru;
               data.pages[data.pages.length - 1] = oldValue;
-              data.pages[syncPageBaru-1] = syncDataBaru;
-              
+
+              let dataBg = pageContent;
+              let baseBgImage = dataBg["src"];
+
+              const blob = new Blob([baseBgImage], { type: 'text/plain' });
+              const fileList = fileListFrom([
+                new File([blob], 'data.txt', { type: 'text/plain' })
+              ]);
+              inputBgImage.files = fileList;
             }else{
-              data = JSON.parse(string);
+              // data = JSON.parse(string);
               var dataSync = data.pages[data.pages.length - 1];
-              dataSync['backgroundImage'] = pageContent;
+              ttdPertama = dataSync;
+              ttdPertama['page'] = syncPageBaru;
               data.pages[data.pages.length - 1] = oldValue;
-              data.pages[syncPageBaru-1] = dataSync;  
-              
             }
-            
             var dynamicVariableName = "annotate";
 				    var variableValue = data;
 
+            dataJsonBg['src'] = ""; 
             // Create a variable with a dynamic name
             window[dynamicVariableName] = variableValue;
             inputJson.value = JSON.stringify(annotate);
-            console.log(inputJson.value);
-              
-            // let dataJson = JSON.stringify(annotate);
+            inputSignaturePertama.value = JSON.stringify(ttdPertama);
+            inputBgJson.value = JSON.stringify(dataJsonBg);
             });
       }
 
 
-//   var buttonImage = $('#imageButton').click(function(){
-//     $(this).hide();
-//   });
+  var buttonImage = $('#syncBtn').click(function(){
+    $(this).hide();
+  });
 
 
     var pdf = new PDFAnnotate('pdf-container', appUrl + '/storage/'  + dokumen.dokumen_path, {
     onPageUpdated(page, oldData, newData) {
-    console.log(page, oldData, newData);
+    // console.log(page, oldData, newData);
     // console.log(oldData['backgroundImage']);
       syncDataBaru = newData;
       syncPageBaru = page;

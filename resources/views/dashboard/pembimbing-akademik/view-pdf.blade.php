@@ -7,29 +7,64 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
 	<link rel="stylesheet" href="/css/pdfstyles.css">
 	<link rel="stylesheet" href="/css/pdfannotate.css">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-	<meta name="csrf-token" content="{{ csrf_token() }}">
-	<script src = "/js/jSignature.min.js"></script>
-	<script src = "/js/modernizr.js"></script> 
 
 </head>
 <body>
-	<input id="dokumen"  type="text" value="{{ $laporan[0]->id }}" hidden>
-	<input id="dokumenName"  type="text" value="{{ $laporan[0]->dokumen_name }}" hidden>
 <div class="toolbar">
 	<div class="tool">
-		<span>SIMBKM Signature</span>
+		<span>SIMBKM PNJ</span>
 	</div>
 
+    {{-- <div class="tool">
+        <div class="tool-button d-flex ">
+            <input type="text" id="txt" style="border-radius: 5px;" hidden>
+          <small>signpad-></small>
+        </div>
+    </div> --}}
 	
-	<div class="tool">
-		
+	{{-- <div class="tool">
+		<button  class="tool-button"><i class="fa fa-picture-o" title="Add an Image" onclick="addImage(event)"></i></button>
+	</div> --}}
+
+	{{-- <div class="tool">
+		<button class="btn btn-danger btn-sm" onclick="deleteSelectedObject(event)"><i class="fa fa-trash"></i></button>
+	</div> --}}
+	
+	{{-- <div class="tool">
+		<button class="btn btn-info btn-sm" onclick="showPdfData()">{}</button>
+	</div> --}}
+
+  <div class="tool" id="loadBtn">
+		<button class="btn btn-primary btn-sm" onclick="loadPdfData()">LOAD DATA SIGNATURE</button>
 	</div>
+
+  
+  {{-- <div class="tool" id="syncBtn">
+		<button class="btn btn-info btn-sm" onclick="synchroneAnnonate()" data-toggle="modal" data-target="#popSuccess">SYNC</button>
+	</div> --}}
+
+	<div class="tool" style="display: none">
+        <form action="/laporan/kps/detail/save-pdf" method="POST" enctype="multipart/form-data">
+            @csrf
+            <input id="dokumen" name="dokumen"  type="text" value="{{ $laporan[0]->id }}" hidden>
+            <input id="annotateJson" name="annotateJson" type="text" hidden>
+            <input id="signature_keempat" name="signature_keempat" type="text" hidden>
+            <input id="bgImage" name="bgImage" type="file" hidden>
+            <input id="bgJson" name="bgJson" type="text" hidden>
+            <input id="dokumen" name="fileId" type="text" value="{{ $laporan[0]->id }}" hidden>
+            <input id="dokumenName" name="dokumenName"  type="text" value="{{ $laporan[0]->dokumen_name }}" hidden>
+            <input name="dokumenPath"  type="text" value="{{ $laporan[0]->dokumen_path }}" hidden>
+            <button class="btn btn-light btn-sm" type="submit" ><i class="fa fa-save"></i> Save</button>    
+        </form>
+	</div>
+
+  <div class="tool">
+    <a href="{{ url()->previous() }}" class="btn btn-secondary me-2 mb-2">Back</a>
+  </div>
+
 </div>
 <div id="pdf-container"></div>
 
-{{-- Modal Pdf annotation data --}}
 <div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="dataModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
@@ -47,106 +82,59 @@
 	</div>
 </div>
 
-{{-- Modal Sign Pad --}}
-
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-lg">
-	  <div class="modal-content">
-		<div class="modal-header">
-		  <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-		</div>
-		<div class="modal-body">
-			<form method="POST" >
-				@csrf
-				<div class="col-md-12">
-					 <label class="" for="">Name:</label>
-					 <input type="text" name="name" class="form-group" value="" hidden>
-				</div>        
-				<div class="col-md-12">
-					<label>Signature:</label>
-					<br/>
-					<div id="sig"></div>
-					<br/><br/>
-					<button id="clear" class="btn btn-danger btn-sm">Clear</button>
-					<textarea id="signature" name="signed" style="display: none"></textarea>
-				</div>
-				<br/>
-				<button class="btn btn-primary">Save</button>
-			</form>
-		</div>
-		<div class="modal-footer">
-		  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-		  <button type="button" class="btn btn-primary">Save changes</button>
-		</div>
-	  </div>
-	</div>
+<div class="modal" id="popSuccess" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Sinkronisasi Berhasil</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {{-- <div class="modal-body">
+        <p>Modal body text goes here.</p>
+      </div> --}}
+      <div class="modal-footer">
+        {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
   </div>
+</div>
 
-  @include('dashboard.signpad')
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
 <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min.js';</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.3.0/fabric.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.2.0/jspdf.umd.min.js"></script>
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.debug.js"></script> --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js"></script>
-
 <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
 <script src="/js/arrow.fabric.js"></script>
 <script src="/js/sample_output.js"></script>
-<script src="/js/sample_output_2.js"></script>
 {{-- <script src="/js/pdfannotate.min.js"></script> --}}
 <script src="/js/pdfannotate.js"></script>
-<script src="/js/pdfscript.js"></script>
+<script src="/js/script.js"></script>
+<script src = "/js/jSignature.min.js"></script>
+<script src = "/js/modernizr.js"></script>  
 <script src="/js/sketch.js"></script>
-
-
 <script>
-	var pdf;
-	var canvas;
-	var CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+    var appUrl = '{{ env('APP_URL') }}';
+    var dokumen = {!! json_encode($laporan[0]) !!};
+    var signature = {!! json_encode($signature[0]) !!};
+    var inputJson = document.getElementById("annotateJson");
+    var inputSignaturePertama = document.getElementById("signature_keempat");
+    var inputBgJson = document.getElementById("bgJson");
+    var inputBgImage = document.getElementById("bgImage");
 
-	var dokValue = $("#dokumen").val();
-	var dokName = $("#dokumenName").val();
-	var appUrl = '{{ env('APP_URL') }}';
-	// var source = window.document.getElementById('pdf-container')[0];
-	var sourceBody = window.document.getElementsByTagName("body")[0];
+    var annotateFromDb = [];
 
-	async function fetchAnnonate() {
-	try {
-		const response = await fetch('your-api-endpoint');
-		const data = await response.json();
-		
-		// Process the fetched data
-		
-		return data; // Return the fetched data
-		} catch (error) {
-			console.error('Error:', error);
-			throw error; // Throw the error to indicate failure
-		}
-	}
+    var syncDataBaru = "";
+    var syncPageBaru = 0;
+    var pageContent = "";
 
-	async function performFetch() {
-		try {
-			const result = await fetchData();
-			
-			// Do something with the fetched data
-			
-			console.log('Fetch completed successfully');
-			// Set the "done" state or trigger the next action
-		} catch (error) {
-			// Handle the error case
-			console.error('Fetch failed:', error);
-			// Set the "done" state or trigger an error handling action
-		}
-	}
-
-
-	function downloadBase64File(base64Data, fileName) {		
+    function downloadBase64File(base64Data, fileName) {		
 			const linkSource = base64Data;
 			const downloadLink = document.createElement("a");
 			downloadLink.href = linkSource;
@@ -154,337 +142,338 @@
 			downloadLink.click();
 	}
 
-	async function getData() {
-  try {
-    const response = await $.ajax({
-      url: 'https://example.com/api/data',
-      method: 'GET',
-      dataType: 'json'
+  async function fetchDataJson(url) {
+    try {
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error while fetching data:', error);
+      throw error;
+    }
+  }
+
+  async function fetchDataText(url) {
+    try {
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.text();
+      return data;
+    } catch (error) {
+      console.error('Error while fetching data:', error);
+      throw error;
+    }
+  }
+
+  async function fetchDataAndHandle(data) {
+    try {
+      const dataAnnonate = await fetchDataJson(appUrl + '/storage/'  + dokumen.json_annotate);
+      // console.log('DataAnnonate: ', dataAnnonate);
+      
+      const signPertama = await fetchDataJson(appUrl + '/storage/' + signature.json_sign_pertama);
+      console.log('DataSign: ', signPertama);
+      
+      const dataBgJsonPertama = await fetchDataJson(appUrl + '/storage/' + signature.json_background_pertama);
+      // console.log('DataJsonBg: ', dataBgJsonPertama);
+
+      const dataBgBase64Pertama = await fetchDataText(appUrl + '/storage/' + signature.file_background_pertama);
+      // console.log('DataBase64Bg: ', dataBgBase64Pertama);
+
+      const signKedua = await fetchDataJson(appUrl + '/storage/' + signature.json_sign_kedua);
+      // console.log('DataSign: ', signPertama);
+
+      const dataBgJsonKedua = await fetchDataJson(appUrl + '/storage/' + signature.json_background_kedua);
+      // console.log('DataJsonBg: ', dataBgJsonPertama);
+
+      const dataBgBase64Kedua = await fetchDataText(appUrl + '/storage/' + signature.file_background_kedua);
+      // console.log('DataJsonBg: ', dataBgJsonPertama);
+
+      const signKetiga = await fetchDataJson(appUrl + '/storage/' + signature.json_sign_ketiga);
+      // console.log('DataSign: ', signKetiga);
+
+      const dataBgJsonKetiga = await fetchDataJson(appUrl + '/storage/' + signature.json_background_ketiga);
+      // console.log('DataJsonBg: ', dataBgJsonKetiga);
+
+      const dataBgBase64Ketiga = await fetchDataText(appUrl + '/storage/' + signature.file_background_ketiga);
+      // console.log('DataBase64: ', dataBgBase64Ketiga);
+
+      const signKeempat = await fetchDataJson(appUrl + '/storage/' + signature.json_sign_keempat);
+      // console.log('DataSign: ', signKetiga);
+
+      const dataBgJsonKeempat = await fetchDataJson(appUrl + '/storage/' + signature.json_background_keempat);
+      // console.log('DataSign: ', signKetiga);
+
+      const dataBgBase64Keempat = await fetchDataText(appUrl + '/storage/' + signature.file_background_keempat);
+      // console.log('DataSign: ', signKetiga);
+
+      // GET DATA ROLE KPS 
+      var jsonBgKeempat = dataBgJsonKeempat;
+      jsonBgKeempat['src'] = dataBgBase64Keempat;
+
+      let valueSignKeempat = signKeempat;
+      valueSignKeempat['backgroundImage'] = jsonBgKeempat;
+
+      // GET DATA ROLE PEMBIMBING AKADEMIK
+      var jsonBgKetiga = dataBgJsonKetiga;
+      jsonBgKetiga['src'] = dataBgBase64Ketiga;
+
+      let valueSignKetiga = signKetiga;
+      valueSignKetiga['backgroundImage'] = jsonBgKetiga;
+
+      // GET DATA ROLE DOSBING
+      var jsonBgKedua = dataBgJsonKedua;
+      jsonBgKedua['src'] = dataBgBase64Kedua;
+
+      let valueSignKedua = signKedua;
+      valueSignKedua['backgroundImage'] = jsonBgKedua;
+
+      // GET DATA ROLE MAHASISWA
+      var jsonBgPertama = dataBgJsonPertama;
+      jsonBgPertama['src'] = dataBgBase64Pertama;
+
+      let valueSignPertama = signPertama;
+      valueSignPertama['backgroundImage'] = jsonBgPertama;
+
+      var dataSignPertama = dataAnnonate;
+      let listPages = dataSignPertama['pages'];
+
+      let dataDefault = JSON.parse(data);
+      for(let i = 0 ; i < listPages.length ; i++){
+        listPages[i] = {
+          backgroundImage: dataDefault.src[i]
+        }
+      }
+      
+      listPages[signPertama['page'] - 1] = valueSignPertama;
+      if(signKedua['page'] == signKetiga['page']){
+        listPages[signKedua['page'] - 1] = {
+            backgroundImage: valueSignKedua['backgroundImage'],
+            objects: [valueSignKedua.objects[0], valueSignKetiga, valueSignKeempat]
+        }
+      }else{
+        listPages[signKedua['page'] - 1] = valueSignKedua;
+        listPages[signKetiga['page'] - 1] = valueSignKetiga;
+        listPages[signKeempat['page'] - 1] = valueSignKeempat;
+      }
+      
+      // console.log(dataSignPertama);
+      console.log(listPages);
+      console.log('---Finish---');
+      pdf.loadFromJSON(dataSignPertama);
+      // Do more operations with the fetched data
+    } catch (error) {
+      // Handle errors, if any
+    }
+  }
+
+  function fileListFrom (files) {
+    const b = new ClipboardEvent("").clipboardData || new DataTransfer()
+    for (const file of files) b.items.add(file)
+    return b.files
+  }
+
+    function synchroneAnnonate(status){
+      pdf.serializePdf(function (string, defaultValue){
+            var oldValue = {
+              // version: defaultValue[0].version,
+              // objects: []
+            }
+            
+            var data = JSON.parse(string);
+            var ttdPertama;
+            let dataJsonBg = pageContent;
+
+            if(status == "Baru"){
+              // data = JSON.parse(string);
+              ttdPertama = data.pages[data.pages.length - 1];
+              ttdPertama['page'] = syncPageBaru;
+              data.pages[data.pages.length - 1] = oldValue;
+
+              let dataBg = pageContent;
+              let baseBgImage = dataBg['src'];
+
+              const blob = new Blob([baseBgImage], { type: 'text/plain' });
+              const fileList = fileListFrom([
+                new File([blob], 'data.txt', { type: 'text/plain' })
+              ]);
+              inputBgImage.files = fileList;
+            }else{
+              // data = JSON.parse(string);
+              if(data.pages[data.pages.length - 3].objects !== null ||  data.pages[data.pages.length - 3].objects.length !== 0){
+                var dataSync = data.pages[data.pages.length - 3];
+              }
+              // console.log(data.pages[data.pages.length - 3])
+              var dataSync = data.pages[data.pages.length - 2].objects[2];
+              ttdPertama = dataSync;
+              ttdPertama['page'] = syncPageBaru;
+              data.pages[data.pages.length - 1] = oldValue;
+            }
+            var dynamicVariableName = "annotate";
+				    var variableValue = data;
+
+            dataJsonBg['src'] = ""; 
+            // Create a variable with a dynamic name
+            window[dynamicVariableName] = variableValue;
+            inputJson.value = JSON.stringify(annotate);
+            inputSignaturePertama.value = JSON.stringify(ttdPertama);
+            inputBgJson.value = JSON.stringify(dataJsonBg);
+            });
+      }
+
+
+  var buttonImage = $('#syncBtn').click(function(){
+    $(this).hide();
+  });
+
+  var buttonLoad = $('#loadBtn').click(function(){
+    $(this).hide();
+  });
+  
+
+    var pdf = new PDFAnnotate('pdf-container', appUrl + '/storage/'  + dokumen.dokumen_path, {
+    onPageUpdated(page, oldData, newData) {
+    console.log(page, oldData, newData);
+    // console.log(oldData['backgroundImage']);
+      syncDataBaru = newData;
+      syncPageBaru = page;
+      pageContent = oldData['backgroundImage'];
+      synchroneAnnonate("Baru");
+    },
+    ready() {
+        console.log('Plugin initialized successfully');
+        // fetchDataAndHandle();
+		
+    },
+    scale: 1.5,
+    pageImageCompression: 'MEDIUM', // FAST, MEDIUM, SLOW(Helps to control the new PDF file size)
     });
 
-    // Process the response data
-    console.log(response);
-    return response; // Return the response for further use
-  } catch (error) {
-    console.error('Error:', error);
-    throw error; // Throw the error to indicate failure
-  }
+function changeActiveTool(event) {
+  var element = $(event.target).hasClass('tool-button')
+    ? $(event.target)
+    : $(event.target).parents('.tool-button').first();
+  $('.tool-button.active').removeClass('active');
+  $(element).addClass('active');
 }
 
-	async function getDataPdf(){
-		try{
-			const response = await $.ajax({
-				url: "{{url('/api/fetch-dokumen')}}",
-				type: "POST",
-				data: {
-				dokumen: dokValue,
-				_token: '{{csrf_token()}}'
-				},
-				dataType: 'json',
-			});
-			return response;
-		}catch(error){
-			console.log('Error: ', error);
-		}
-	}
+function enableSelector(event) {
+  event.preventDefault();
+  changeActiveTool(event);
+  pdf.enableSelector();
+}
 
-	$(document).ready(function () {
+function enablePencil(event) {
+  event.preventDefault();
+  changeActiveTool(event);
+  pdf.enablePencil();
+}
 
-		getDataPdf();
-		var dataAnnotate;
+function enableAddText(event) {
+  event.preventDefault();
+  changeActiveTool(event);
+  pdf.enableAddText();
+}
 
-		function fetchSaveData(page, oldData, newData){
-			if(dataAnnotate != undefined || dataAnnotate != null){
-				var dynamicVariableName = "annotate";
-				var variableValue = dataAnnotate;
+function enableAddArrow(event) {
+  event.preventDefault();
+  changeActiveTool(event);
+  pdf.enableAddArrow(function () {
+    $('.tool-button').first().find('i').click();
+  });
+}
 
-				// Create a variable with a dynamic name
-				window[dynamicVariableName] = variableValue;
-				let lastIndex = annotate.pages.length - 1;
-				annotate.pages[page - 1] = newData;
-				annotate.pages[lastIndex] = oldData;
+function addImage(event) {
+  event.preventDefault();
+  pdf.addImageToCanvas();
+}
 
-				let dataJson = JSON.stringify(annotate);
-				$('#saveFile').click(function(){
-					pdf.saveToServer('{{url('/laporan/dosbing/sign-pdf/save')}}', CSRF_TOKEN, dokName, dokValue, dataJson);
-					window.location.href = '/laporan/dosbing';
-				});
-			}
-			
-			// pdf.saveToServer('{{url('/dashboard/laporan/save-document')}}', CSRF_TOKEN, dokName, dokValue, string);
-			
-			
-		}		
+function enableRectangle(event) {
+  event.preventDefault();
+  changeActiveTool(event);
+  pdf.setColor('rgba(255, 0, 0, 0.3)');
+  pdf.setBorderColor('blue');
+  pdf.enableRectangle();
+}
 
-		$.ajax({
-			url: "{{url('/api/fetch-dokumen')}}",
-			type: "POST",
-			data: {
-				dokumen: dokValue,
-				_token: '{{csrf_token()}}'
-			},
-			dataType: 'json',
-			success: function (result) {
-				if(result.dokumen[0]['json_annotate'] != null){
-					fetch(appUrl + '/storage/'  + result.dokumen[0]['json_annotate'])
-								.then(response => response.json())
-								.then(data => {
-									console.log(data); // Process the retrieved JSON data
-									
+function deleteSelectedObject(event) {
+  event.preventDefault();
+  pdf.deleteSelectedObject();
+}
 
-									dataAnnotate = data;
+function savePDF() {
+  // pdf.savePdf();
+  pdf.savePdf('output.pdf'); // save with given file name
+}
 
-									// Access the dynamically created variable
-									// console.log(window[dynamicVariableName]); // Output: 42
-									// console.log(myVariable);
-									// const jsonString = JSON.stringify(data, null, 4);
-									// const test = JSON.stringify(data);
-									// console.log(JSON.stringify(data, null, 4));
-									// pdf.loadFromJSON(annotate);
-									// pdf.savePdf();
-								})
-								.catch(error => {
-									console.error('Error:', error);
-							});
-				}
-				
-				var basicData;
-				pdf = new PDFAnnotate('pdf-container', appUrl + '/storage/'  + result.dokumen[0]['dokumen_path'], {
-						onPageUpdated(page, oldData, newData) {
-							console.log(page, oldData, newData);
+function clearPage() {
+  pdf.clearActivePage();
+}
 
-							if(basicData == undefined){
-								basicData = oldData	
-							}
-							// console.log($('.canvas-container'));
+function showPdfData() {
+  pdf.serializePdf(function (string, defaultValue, defaultBg) {
+    console.log(JSON.parse(string));
+    console.log(JSON.parse(defaultBg));
+    $('#dataModal .modal-body pre')
+      .first()
+      .text(JSON.stringify(JSON.parse(string), null, 4));
+    PR.prettyPrint();
+    $('#dataModal').modal('show');
+  });
+}
 
-							fetchSaveData(page, basicData, newData);
+function loadPdfData(){
+  pdf.serializePdf(function(string, defaultValue, defaultBg){
+    let bgImage = defaultBg;
+    fetchDataAndHandle(defaultBg);
+  });
+}
 
-							if(dataAnnotate == null || dataAnnotate == undefined){
-								pdf.serializePdf(function(string){
-									let json = JSON.parse(string);
-									let lastIndex = json.pages.length - 1;
-									json.pages[page - 1] = newData;
-									json.pages[lastIndex] = oldData;
+$(function () {
+  $('.color-tool').click(function () {
+    $('.color-tool.active').removeClass('active');
+    $(this).addClass('active');
+    color = $(this).get(0).style.backgroundColor;
+    pdf.setColor(color);
+  });
 
-									let dataJson = JSON.stringify(json);
-									// pdf.saveToServer('{{url('/dashboard/laporan/save-document')}}', CSRF_TOKEN, dokName, dokValue, dataJson);
-									// pdf.saveToServer('{{url('/dashboard/laporan/save-document')}}', CSRF_TOKEN, dokName, dokValue, string);
-								});
-								$('#saveFile').click(function(){
-									pdf.saveToServer('{{url('/laporan/dosbing/sign-pdf/save')}}', CSRF_TOKEN, dokName, dokValue, dataJson);
-									window.location.href = '/laporan/dosbing';
-								});
-							}
-							
+  $('#brush-size').change(function () {
+    var width = $(this).val();
+    pdf.setBrushSize(width);
+  });
 
-							// $('#saveFile').click(function(){
-								
-							// 	// 
-							// 	// pdf.saveToServer('{{url('/dashboard/laporan/save-document')}}', CSRF_TOKEN, dokName, dokValue);
-							// 	// console.log(pdf.serializePdf());
-							// 	// pdf.saveToServer('{{url('/dashboard/laporan/save-document')}}');
-							// 	// var source = window.document.getElementById('pdf-container');
-							// 	// var imgData = source.toDataURL("image/jpeg", 1.0);
-							// 	// var pdfDoc = new jsPDF();
+  $('#font-size').change(function () {
+    var font_size = $(this).val();
+    pdf.setFontSize(font_size);
+  });
+});
 
-							// 	// pdfDoc.addImage(imgData, 'JPEG', 0, 0);
-							// 	// pdfDoc.save("download.pdf");
-							// 	// doc.fromHTML(
-							// 	// 	$('.canvas-container'), 15, 15,
-							// 	// 	{width: 170},
-							// 	// 	function(){
-							// 	// 		var blob = doc.output('blob');
-							// 	// 		// var blob = doc.output('datauri');
-							// 	// 		// var blob = doc.output('base64');
-							// 	// 		var formData = new FormData();
-							// 	// 		var blobPDF = new Blob([doc.output('blob')], {type : 'application/pdf'});
-							// 	// 		var blobUrl = URL.createObjectURL(blobPDF);
-							// 	// 		// formData.append('pdf', blob);
-							// 	// 		formData.append('pdf', blobUrl);
-							// 	// 		formData.append('_token', CSRF_TOKEN);
-							// 	// 		formData.append('dokumen', dokValue);
-							// 	// 		formData.append('dokumenName', dokName);
-							// 	// 		// $.ajax({
-							// 	// 		// 	url: "{{url('/dashboard/laporan/save-document')}}",
-							// 	// 		// 	type: "POST",
-							// 	// 		// 	data: formData,
-							// 	// 		// 	processData: false,
-							// 	// 		// 	contentType: false,
-							// 	// 		// 	success: function(data){console.log(data)},
-							// 	// 		// 	error: function(data){console.log(data)}
-							// 	// 		// })
-							// 	// 		console.log('clicked');
-										
-							// 	// 	}
-							// 	// )
-							// });
-							// var doc = new jsPDF();
-							
-							// $('#saveFile').click(function(){
-							// 	var canvas = $('.canvas-container');
-							// 	var imgData = canvas.toDataURL("image/jpeg", 1.0);
-							// 	var pdfDoc = new jsPDF();
 
-							// 	pdfDoc.addImage(imgData, 'JPEG', 0, 0);
-							// 	pdfDoc.save("download.pdf");
-							// 	doc.fromHTML(
-							// 		$('.canvas-container'), 15, 15,
-							// 		{width: 170},
-							// 		function(){
-							// 			var blob = doc.output('blob');
-							// 			// var blob = doc.output('datauri');
-							// 			// var blob = doc.output('base64');
-							// 			var formData = new FormData();
-							// 			var blobPDF = new Blob([doc.output('blob')], {type : 'application/pdf'});
-							// 			var blobUrl = URL.createObjectURL(blobPDF);
-							// 			// formData.append('pdf', blob);
-							// 			formData.append('pdf', blobUrl);
-							// 			formData.append('_token', CSRF_TOKEN);
-							// 			formData.append('dokumen', dokValue);
-							// 			formData.append('dokumenName', dokName);
-							// 			// $.ajax({
-							// 			// 	url: "{{url('/dashboard/laporan/save-document')}}",
-							// 			// 	type: "POST",
-							// 			// 	data: formData,
-							// 			// 	processData: false,
-							// 			// 	contentType: false,
-							// 			// 	success: function(data){console.log(data)},
-							// 			// 	error: function(data){console.log(data)}
-							// 			// })
-							// 			console.log('clicked');
-										
-							// 		}
-							// 	)
-							// });
-							
-							
-						},
-						ready() {
-							// let json;
-							
-							
-							console.log('Plugin initialized successfully');
-							if(dataAnnotate != undefined || dataAnnotate != null){
-								var dynamicVariableName = "annotate";
-								var variableValue = dataAnnotate;
-
-								// Create a variable with a dynamic name
-								window[dynamicVariableName] = variableValue;
-								
-								pdf.loadFromJSON(annotate);
-							}
-							
-							
-							// console.log(result.dokumen[0]['json_annotate']);
-							// console.log(appUrl + '/storage/'  + result.dokumen[0]['json_annotate'])
-							// var json = appUrl + '/storage/'  + result.dokumen[0]['json_annotate'];
-							// console.log(json);
-							// pdf.loadFromJSON(appUrl + '/storage/'  + result.dokumen[0]['json_annotate']);
-							var doc = new jsPDF();
-							
-						},
-						scale: 1.5,
-						pageImageCompression: 'FAST', // FAST, MEDIUM, SLOW(Helps to control the new PDF file size)
-						});
-				// console.log("pdf: " + pdf);
-				// pdf.forEach((element, index) => console.log(element));
-				// for(const element in pdf){
-				// 	console.log("test: " + element);
-				// }
-				// console.log("test: " + pdf.savePdf())
-				
-			}
-		});
-
-		var sign = $('#txt').SignaturePad({
+$('#txt').SignaturePad({
                 allowToSign: true,
                 img64: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
                 border: '1px solid #c7c8c9',
                 width: '40px',
                 height: '20px',
                 callback: function (data, action) {
-                    console.log(data);
-					downloadBase64File(data, 'SIMBKM-signature.png');					
-					pdf.addImageToCanvas();
+                    console.log(action);
+                    if(action === 'clear'){
+
+                    }else{
+                        downloadBase64File(data, 'SIMBKM-signature.png');					
+					    pdf.addImageToCanvas();
+                    }
                 }
             });
-
-			// $('#savepdf').click(function(){
-			// 	$.ajax({
-			// 		url: "{{url('/dashboard/laporan/save-document')}}",
-			// 		type: "POST",
-			// 		data: {
-			// 			_token: '{{csrf_token()}}'
-			// 		},
-			// 		dataType: 'json',
-			// 		success: function(result){
-			// 			console.log(result);
-			// 			console.log(pdf);
-			// 			var input = document.createElement('input');
-			// 			input.name = 'dokumen_name';
-			// 			input.value = pdf;
-			// 		}
-			// 	});
-			// });
-    });
-
-	
-	function showSignPad() {
-  	pdf.serializePdf(function (string) {
-    	$('#exampleModal .modal-body ')
-    	//   .first()
-    	//   .text(JSON.stringify(JSON.parse(string), null, 4));
-    	// PR.prettyPrint();
-    	$('#exampleModal').modal('show');
-  });
-
-  
-  
-  function saveFile(){
-	console.log("Terpanggil");
-	var doc = new jsPDF();
-							$('#saveFile').click(function(){
-								doc.fromHTML(
-									$('.canvas-container'), 15, 15,
-									{width: 170},
-									function(){
-										var blob = doc.output('blob');
-										// var blob = doc.output('datauri');
-										// var blob = doc.output('base64');
-										var formData = new FormData();
-										var blobPDF = new Blob([doc.output('blob')], {type : 'application/pdf'});
-										var blobUrl = URL.createObjectURL(blobPDF);
-										// formData.append('pdf', blob);
-										formData.append('pdf', blobUrl);
-										formData.append('_token', CSRF_TOKEN);
-										formData.append('dokumen', dokValue);
-										formData.append('dokumenName', dokName);
-										// $.ajax({
-										// 	url: "{{url('/dashboard/laporan/save-document')}}",
-										// 	type: "POST",
-										// 	data: formData,
-										// 	processData: false,
-										// 	contentType: false,
-										// 	success: function(data){console.log(data)},
-										// 	error: function(data){console.log(data)}
-										// })
-										console.log('clicked');
-										doc.save();
-									}
-								)
-								
-								// console.log(doc);
-								// console.log(source);
-								
-							});
-  }
-
-
-  
-}
 
 </script>
 </body>
 </html>
-

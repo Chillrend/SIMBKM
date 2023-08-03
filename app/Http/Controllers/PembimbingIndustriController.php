@@ -7,8 +7,10 @@ use App\Models\User;
 use App\Models\Laporan;
 use App\Models\Logbook;
 use App\Models\LogLogbook;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\CommentLaporan;
+use App\Models\LogSignaturePdf;
 use Illuminate\Support\Facades\Storage;
 
 class PembimbingIndustriController extends Controller
@@ -117,11 +119,12 @@ class PembimbingIndustriController extends Controller
     }
 
     public function listLaporan($id){
+        $laporan = Laporan::where('mbkm', $id)->get();
         return view('dashboard.pembimbing-industri.list-laporan', [
             'title' => 'List Laporan',
             'title_page' => 'Laporan / List Laporan',
             'active' => 'Laporan Pembimbing Industri',
-            'laporans' => CommentLaporan::with('dataLaporan')->where('user', $id)->get()
+            'laporans' => CommentLaporan::with('dataLaporan')->where('laporan', $laporan[0]->id)->get()
         ]);
     }
 
@@ -131,46 +134,50 @@ class PembimbingIndustriController extends Controller
             'title' => 'Laporan',
             'title_page' => 'Laporan / Detail',
             'active' => 'Laporan Pembimbing Industri',
-            'laporan' => Laporan::find($id)->with('listMbkm')->get(),
+            'laporan' => Laporan::where('id',$id)->with('listMbkm')->get(),
             'logcomment' => CommentLaporan::all()->where('laporan', $id)
         ]);
     }
 
     public function signPdf($id){
         return view('dashboard.pembimbing-industri.sign-pdf',[
-            'laporan' => Laporan::find($id)->get()
+            'laporan' => Laporan::find($id)->get(),
+            'signature' => LogSignaturePdf::where('laporan_id', $id)->get()
         ]);
     }
 
-    // public function savePdf(Request $request){
-    //     Storage::makeDirectory('dokumen-annotate');
-    //     $data = json_decode($request->file, true);
-    //     Storage::put('dokumen-annotate/'.$request->name.'.json', json_encode($data));
-
-    //     $rules['json_annotate'] = 'dokumen-annotate/'.$request->name.'.json';
-    //     $rules['sign_third'] = '1';
-
-    //     $pdf = Laporan::find($request->fileId);
-    //     $pdf->update($rules);
-
-    //     return $pdf;
-    // }
-
     public function savePdf(Request $request){
         $fileName = pathinfo($request->dokumenPath, PATHINFO_FILENAME);
-        // dd($test);
+        $newFileName = Str::random(10);
+
+        // dd($request);
         Storage::makeDirectory('dokumen-annotate');
-        $data = json_decode($request->annotateJson, true);
-        // $data = json_encode($request->annotateJson, true);
-        Storage::put('dokumen-annotate/'. $fileName .'.json', json_encode($data));
+        Storage::makeDirectory('dokumen-signature');
+        Storage::makeDirectory('dokumen-signature-background');
+        Storage::makeDirectory('dokumen-json-signature-background');
+
+        $dataAnnotate = json_encode($request->annotateJson, true);
+        $dataSignaturePertama = json_encode($request->signature_ketiga, true);
+        $dataJsonBackgroundSignature = json_encode($request->bgJson, true);
+        
+        Storage::put('dokumen-annotate/' . $fileName . '.json', json_decode($dataAnnotate));
+        Storage::put('dokumen-signature/' . $newFileName . '_ketiga.json', json_decode($dataSignaturePertama));
+        Storage::put('dokumen-json-signature-background/' . $newFileName . '_ketiga.json', json_decode($dataJsonBackgroundSignature));
 
         $rules['json_annotate'] = 'dokumen-annotate/'. $fileName .'.json';
         $rules['sign_third'] = '1';
 
+        $rulesSignature['json_sign_ketiga'] = 'dokumen-signature/' . $newFileName . '_ketiga.json';
+        $rulesSignature['json_background_ketiga'] = 'dokumen-json-signature-background/' . $newFileName . '_ketiga.json';
+        $rulesSignature['file_background_ketiga'] = $request->file('bgImage')->store('dokumen-signature-background');
+
         $pdf = Laporan::find($request->fileId);
         $pdf->update($rules);
 
+        $signatureData = LogSignaturePdf::where('laporan_id', $request->fileId);
+        $signatureData->update($rulesSignature);
+
         // return $pdf;
-        return redirect('/laporan/dosbing')->with('success', 'Dokumen Laporan Berhasil ditandatangan!');       
+        return redirect('/laporan/pi')->with('success', 'Dokumen Laporan Berhasil ditandatangan!');       
     }
 }

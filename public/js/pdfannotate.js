@@ -105,7 +105,6 @@ var PDFAnnotate = function (container_id, url, options = {}) {
           inst.fabricObjectsData[index] = fabricObj.toJSON();
           fabricObj.off('after:render');
         });
-  
         if (index === canvases.length - 1 && typeof options.ready === 'function') {
           options.ready();
         }
@@ -316,8 +315,18 @@ var PDFAnnotate = function (container_id, url, options = {}) {
   PDFAnnotate.prototype.serializePdf = function (callback) {
     var inst = this;
     var pageAnnotations = [];
+    let i = 0;
+    let defaultBackground = [];
+    
     inst.fabricObjects.forEach(function (fabricObject) {
+      var fabricObj = inst.fabricObjects[i];
+        var bg = fabricObj.backgroundImage;
+        defaultBackground.push(bg);
+        // console.log(bg);
+        // console.log(i);
+        i++
       fabricObject.clone(function (fabricObjectCopy) {
+        
         fabricObjectCopy.setBackgroundImage(null);
         fabricObjectCopy.setBackgroundColor('');
         pageAnnotations.push(fabricObjectCopy);
@@ -330,35 +339,16 @@ var PDFAnnotate = function (container_id, url, options = {}) {
             },
             pages: pageAnnotations,
           };
-          callback(JSON.stringify(data), pageAnnotations);
+          var dataBg = {
+            src: defaultBackground
+          }
+          callback(JSON.stringify(data), pageAnnotations, JSON.stringify(dataBg));
         }
       });
     });
     // console.log("---PEMBATAS---");
   };
-
-  // PDFAnnotate.prototype.serializePdf = function (callback) {
-  //   var inst = this;
-  //   var pageAnnotations = [];
-  //   inst.fabricObjects.forEach(function (fabricObject) {
-  //       fabricObject.setBackgroundImage(null);
-  //       fabricObject.setBackgroundColor('');
-  //       pageAnnotations.push(fabricObject);
-  //     if (pageAnnotations.length === inst.fabricObjects.length) {
-  //         var data = {
-  //           page_setup: {
-  //             format: inst.format,
-  //             orientation: inst.orientation,
-  //           },
-  //           pages: pageAnnotations,
-  //         };
-  //         callback(JSON.stringify(data));
-  //       }
-  //   });
-  // };
-
-  
-  
+    
   PDFAnnotate.prototype.loadFromJSON = function (jsonData) {
     var inst = this;
     var { page_setup, pages } = jsonData;
@@ -389,4 +379,30 @@ var PDFAnnotate = function (container_id, url, options = {}) {
     }
   };
   
+  PDFAnnotate.prototype.getData = function (callback) {
+    var inst = this;
+    var pageAnnotations = [];
+    let i = 0;
+    
+    inst.fabricObjects.forEach(function (fabricObject) {
+      
+      fabricObject.clone(function (fabricObjectCopy) {
+        fabricObjectCopy.setBackgroundImage(null);
+        fabricObjectCopy.setBackgroundColor('');
+        pageAnnotations.push(fabricObjectCopy);
+        // console.log(fabricObjectCopy);
+        if (pageAnnotations.length === inst.fabricObjects.length) {
+          var data = {
+            page_setup: {
+              format: inst.format,
+              orientation: inst.orientation,
+            },
+            pages: pageAnnotations,
+          };
+          callback(JSON.stringify(data), pageAnnotations);
+        }
+      });
+    });
+    // console.log("---PEMBATAS---");
+  };
   

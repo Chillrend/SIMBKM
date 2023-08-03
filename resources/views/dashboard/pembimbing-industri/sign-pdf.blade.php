@@ -22,18 +22,22 @@
         </div>
     </div>
 	
-	<div class="tool" id="imageButton">
+	<div class="tool">
 		<button  class="tool-button"><i class="fa fa-picture-o" title="Add an Image" onclick="addImage(event)"></i></button>
 	</div>
 	<div class="tool">
 		<button class="btn btn-danger btn-sm" onclick="deleteSelectedObject(event)"><i class="fa fa-trash"></i></button>
 	</div>
 	
-	{{-- <div class="tool">
+	<div class="tool">
 		<button class="btn btn-info btn-sm" onclick="showPdfData()">{}</button>
-	</div> --}}
+	</div>
 
-  <div class="tool">
+  <div class="tool" id="loadBtn">
+		<button class="btn btn-primary btn-sm" onclick="loadPdfData()">LOAD DATA SIGNATURE</button>
+	</div>
+
+  <div class="tool" id="syncBtn">
 		<button class="btn btn-info btn-sm" onclick="synchroneAnnonate()" data-toggle="modal" data-target="#popSuccess">SYNC</button>
 	</div>
 
@@ -42,6 +46,9 @@
             @csrf
             <input id="dokumen" name="dokumen"  type="text" value="{{ $laporan[0]->id }}" hidden>
             <input id="annotateJson" name="annotateJson" type="text" hidden>
+            <input id="signature_ketiga" name="signature_ketiga" type="text" hidden>
+            <input id="bgImage" name="bgImage" type="file" hidden>
+            <input id="bgJson" name="bgJson" type="text" hidden>
             <input id="dokumen" name="fileId" type="text" value="{{ $laporan[0]->id }}" hidden>
             <input id="dokumenName" name="dokumenName"  type="text" value="{{ $laporan[0]->dokumen_name }}" hidden>
             <input name="dokumenPath"  type="text" value="{{ $laporan[0]->dokumen_path }}" hidden>
@@ -108,7 +115,13 @@
 <script>
     var appUrl = '{{ env('APP_URL') }}';
     var dokumen = {!! json_encode($laporan[0]) !!};
+    var signature = {!! json_encode($signature[0]) !!};
     var inputJson = document.getElementById("annotateJson");
+    var inputSignaturePertama = document.getElementById("signature_ketiga");
+    var inputBgJson = document.getElementById("bgJson");
+    var inputBgImage = document.getElementById("bgImage");
+
+    var annotateFromDb = [];
 
     var syncDataBaru = "";
     var syncPageBaru = 0;
@@ -122,48 +135,159 @@
 			downloadLink.click();
 	}
 
+  async function fetchDataJson(url) {
+    try {
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error while fetching data:', error);
+      throw error;
+    }
+  }
+
+  async function fetchDataText(url) {
+    try {
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.text();
+      return data;
+    } catch (error) {
+      console.error('Error while fetching data:', error);
+      throw error;
+    }
+  }
+
+  async function fetchDataAndHandle(data) {
+    try {
+      const dataAnnonate = await fetchDataJson(appUrl + '/storage/'  + dokumen.json_annotate);
+      // console.log('DataAnnonate: ', dataAnnonate);
+      
+      const signPertama = await fetchDataJson(appUrl + '/storage/' + signature.json_sign_pertama);
+      // console.log('DataSign: ', signPertama);
+      
+      const dataBgJsonPertama = await fetchDataJson(appUrl + '/storage/' + signature.json_background_pertama);
+      // console.log('DataJsonBg: ', dataBgJsonPertama);
+
+      const dataBgBase64Pertama = await fetchDataText(appUrl + '/storage/' + signature.file_background_pertama);
+      // console.log('DataBase64Bg: ', dataBgBase64Pertama);
+
+      const signKedua = await fetchDataJson(appUrl + '/storage/' + signature.json_sign_kedua);
+      // console.log('DataSign: ', signPertama);
+
+      const dataBgJsonKedua = await fetchDataJson(appUrl + '/storage/' + signature.json_background_kedua);
+      // console.log('DataJsonBg: ', dataBgJsonPertama);
+
+      const dataBgBase64Kedua = await fetchDataText(appUrl + '/storage/' + signature.file_background_kedua);
+
+      var jsonBgKedua = dataBgJsonKedua;
+      jsonBgKedua['src'] = dataBgBase64Kedua;
+
+      let valueSignKedua = signKedua;
+      valueSignKedua['backgroundImage'] = jsonBgKedua;
+
+      var jsonBgPertama = dataBgJsonPertama;
+      jsonBgPertama['src'] = dataBgBase64Pertama;
+
+      let valueSignPertama = signPertama;
+      valueSignPertama['backgroundImage'] = jsonBgPertama;
+
+      var dataSignPertama = dataAnnonate;
+      let listPages = dataSignPertama['pages'];
+
+      let dataDefault = JSON.parse(data);
+      for(let i = 0 ; i < listPages.length ; i++){
+        listPages[i] = {
+          backgroundImage: dataDefault.src[i]
+        }
+      }
+      
+      listPages[signPertama['page'] - 1] = valueSignPertama;
+      listPages[signKedua['page'] - 1] = valueSignKedua;
+      
+      // console.log(dataSignPertama);
+      // console.log(listPages);
+      console.log('---Finish---');
+      pdf.loadFromJSON(dataSignPertama);
+      // Do more operations with the fetched data
+    } catch (error) {
+      // Handle errors, if any
+    }
+  }
+
+  function fileListFrom (files) {
+    const b = new ClipboardEvent("").clipboardData || new DataTransfer()
+    for (const file of files) b.items.add(file)
+    return b.files
+  }
+
     function synchroneAnnonate(status){
       pdf.serializePdf(function (string, defaultValue){
             var oldValue = {
               // version: defaultValue[0].version,
               // objects: []
             }
+            
             var data = JSON.parse(string);
-            // for(let i = 0; i < data.pages.length; i++ ){
-            //   var pagesDefault = data.pages[i];
-            //   pagesDefault['backgroundImage'] = pageContent;
-            //   console.log(pagesDefault);
-            // }
+            var ttdPertama;
+            let dataJsonBg = pageContent;
 
             if(status == "Baru"){
-              data = JSON.parse(string);
+              // data = JSON.parse(string);
+              ttdPertama = data.pages[data.pages.length - 1];
+              ttdPertama['page'] = syncPageBaru;
               data.pages[data.pages.length - 1] = oldValue;
-              data.pages[syncPageBaru-1] = syncDataBaru;
-              
+
+              let dataBg = pageContent;
+              let baseBgImage = dataBg['src'];
+
+              const blob = new Blob([baseBgImage], { type: 'text/plain' });
+              const fileList = fileListFrom([
+                new File([blob], 'data.txt', { type: 'text/plain' })
+              ]);
+              inputBgImage.files = fileList;
             }else{
-              data = JSON.parse(string);
-              var dataSync = data.pages[data.pages.length - 1];
-              dataSync['backgroundImage'] = pageContent;
-              data.pages[data.pages.length - 1] = oldValue;
-              data.pages[syncPageBaru-1] = dataSync;  
+              // data = JSON.parse(string);
+              if(data.pages[data.pages.length - 3].objects !== null ||  data.pages[data.pages.length - 3].objects.length !== 0){
+                var dataSync = data.pages[data.pages.length - 3];
+              }
+              // console.log(data.pages[data.pages.length - 3])
+              var dataSync = data.pages[data.pages.length - 2].objects[1];
               
+              ttdPertama = dataSync;
+              ttdPertama['page'] = syncPageBaru;
+              data.pages[data.pages.length - 1] = oldValue;
             }
-            
             var dynamicVariableName = "annotate";
 				    var variableValue = data;
 
+            dataJsonBg['src'] = ""; 
             // Create a variable with a dynamic name
             window[dynamicVariableName] = variableValue;
             inputJson.value = JSON.stringify(annotate);
-            // let dataJson = JSON.stringify(annotate);
+            inputSignaturePertama.value = JSON.stringify(ttdPertama);
+            inputBgJson.value = JSON.stringify(dataJsonBg);
             });
       }
 
 
-//   var buttonImage = $('#imageButton').click(function(){
-//     $(this).hide();
-//   });
+  var buttonImage = $('#syncBtn').click(function(){
+    $(this).hide();
+  });
 
+  var buttonLoad = $('#loadBtn').click(function(){
+    $(this).hide();
+  });
+  
 
     var pdf = new PDFAnnotate('pdf-container', appUrl + '/storage/'  + dokumen.dokumen_path, {
     onPageUpdated(page, oldData, newData) {
@@ -176,15 +300,7 @@
     },
     ready() {
         console.log('Plugin initialized successfully');
-		console.log(dokumen.json_annotate);
-		if(dokumen.json_annotate !== null && dokumen.json_annotate !== undefined && dokumen.json_annotate !== ''){
-			fetch(appUrl + '/storage/'  + dokumen.json_annotate)
-			.then(response => response.json())
-			.then(data =>{
-				pdf.loadFromJSON(data);
-			});
-		}
-    // pdf.loadFromJSON(sampleOutput)
+        // fetchDataAndHandle();
 		
     },
     scale: 1.5,
@@ -253,12 +369,21 @@ function clearPage() {
 }
 
 function showPdfData() {
-  pdf.serializePdf(function (string) {
+  pdf.serializePdf(function (string, defaultValue, defaultBg) {
+    console.log(JSON.parse(string));
+    console.log(JSON.parse(defaultBg));
     $('#dataModal .modal-body pre')
       .first()
       .text(JSON.stringify(JSON.parse(string), null, 4));
     PR.prettyPrint();
     $('#dataModal').modal('show');
+  });
+}
+
+function loadPdfData(){
+  pdf.serializePdf(function(string, defaultValue, defaultBg){
+    let bgImage = defaultBg;
+    fetchDataAndHandle(defaultBg);
   });
 }
 

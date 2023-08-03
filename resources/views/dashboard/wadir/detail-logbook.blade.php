@@ -24,12 +24,12 @@
                         <input class="form-control" type="datetime-local" name="tanggal_dibuat" value="{{  date('Y-m-d\TH:i', strtotime($logbook[0]->tanggal_dibuat)) }}" disabled>
                       </div>
                     </div>
-                    <div class="col-md-4">
+                    {{-- <div class="col-md-4">
                       <div class="form-group">
                         <label for="lokasi" class="form-control-label">Lokasi</label>
                         <input class="form-control" type="text" name="lokasi" value="{{ $logbook[0]->lokasi }}" disabled>
                       </div>
-                    </div>
+                    </div> --}}
                   </div>
 
                   <div class="row">

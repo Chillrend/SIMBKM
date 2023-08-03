@@ -10,6 +10,7 @@ use App\Models\Logbook;
 use App\Models\LogLogbook;
 use App\Models\ProgramMbkm;
 use Illuminate\Http\Request;
+use App\Models\LogSignaturePdf;
 use Illuminate\Support\Facades\DB;
 
 class PembimbingAkademikController extends Controller
@@ -70,7 +71,8 @@ class PembimbingAkademikController extends Controller
 
     public function viewPdf($id){
         return view('dashboard.pembimbing-akademik.view-pdf',[
-            'laporan' => Laporan::find($id)->get()
+            'laporan' => Laporan::find($id)->get(),
+            'signature' => LogSignaturePdf::where('laporan_id', $id)->get()
         ]);
     }
 }
