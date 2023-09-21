@@ -29,7 +29,7 @@ class KpsController extends Controller
     }
 
     public function detailMahasiswa($id){
-        
+
         return view('dashboard.kps.detail-mahasiswa', [
             'title' => 'Dashboard',
             'title_page' => 'Dashboard / Detail Mahasiswa',
@@ -79,8 +79,8 @@ class KpsController extends Controller
         $logbook = Logbook::find($log_logbook->logbook);
         $mbkm = Mbkm::find($logbook->mbkm);
         // dd($mbkm->id);
-        
-        return redirect('/logbook/kps/list/'.$mbkm->id)->with('success', 'Logbook Mahasiswa sudah dibaca');        
+
+        return redirect('/logbook/kps/list/'.$mbkm->id)->with('success', 'Logbook Mahasiswa sudah dibaca');
     }
 
     public function laporan(){
@@ -130,9 +130,7 @@ class KpsController extends Controller
     public function savePdf(Request $request){
         $fileName = pathinfo($request->dokumenPath, PATHINFO_FILENAME);
         $newFileName = Str::random(10);
-
         
-
         Storage::makeDirectory('dokumen-annotate');
         Storage::makeDirectory('dokumen-signature');
         Storage::makeDirectory('dokumen-signature-background');
@@ -141,7 +139,7 @@ class KpsController extends Controller
         $dataAnnotate = json_encode($request->annotateJson, true);
         $dataSignaturePertama = json_encode($request->signature_keempat, true);
         $dataJsonBackgroundSignature = json_encode($request->bgJson, true);
-        
+
         Storage::put('dokumen-annotate/' . $fileName . '.json', json_decode($dataAnnotate));
         Storage::put('dokumen-signature/' . $newFileName . '_keempat.json', json_decode($dataSignaturePertama));
         Storage::put('dokumen-json-signature-background/' . $newFileName . '_keempat.json', json_decode($dataJsonBackgroundSignature));
@@ -160,18 +158,18 @@ class KpsController extends Controller
         $signatureData->update($rulesSignature);
 
         // return $pdf;
-        return redirect('/laporan/kps')->with('success', 'Dokumen Laporan Berhasil ditandatangan!');       
+        return redirect('/laporan/kps')->with('success', 'Dokumen Laporan Berhasil ditandatangan!');
     }
-    
+
     public function konversi(){
         $user = User::where('jurusan_id', auth()->user()->jurusan_id)->where('role', 7)->get('id')->toArray();
         $konversi = HasilKonversi::whereIn('owner', $user)->where('status', 'dalam pemeriksaan')->with('dataOwner')->get();
-        
+
         return view('dashboard.kps.konversi',[
             'title' => 'Konversi',
             'title_page' => 'Konversi',
             'active' => 'Konversi KPS',
-            'konversis' => $konversi, 
+            'konversis' => $konversi,
         ]);
     }
 
@@ -197,7 +195,7 @@ class KpsController extends Controller
         $konversi = HasilKonversi::find($logcomment->hasil_konversi);
         $konversi['status'] = "Sudah Dikonversi";
         $konversi->update();
-        
+
         return redirect('/konversi/kps')->with('success', 'Konversi Berhasil');
     }
 
@@ -206,7 +204,7 @@ class KpsController extends Controller
         $matkul['status'] = 1;
         $matkul->update();
 
-        return redirect('/konversi/kps/'.$matkul->kurikulum);        
+        return redirect('/konversi/kps/'.$matkul->kurikulum);
     }
 
     public function incorrect($id){
@@ -214,9 +212,9 @@ class KpsController extends Controller
         $matkul['status'] = 0;
         $matkul->update();
 
-        return redirect('/konversi/kps/'.$matkul->kurikulum);        
+        return redirect('/konversi/kps/'.$matkul->kurikulum);
     }
-    
+
     public function hasilKonversi(){
         $user = User::where('jurusan_id', auth()->user()->jurusan_id)->where('role', 7)->get('id')->toArray();
         $konversi = HasilKonversi::whereIn('owner', $user)->where('status', 'Sudah Dikonversi')->with('dataOwner')->get();
@@ -224,7 +222,7 @@ class KpsController extends Controller
             'title' => 'Konversi / Hasil Konversi',
             'title_page' => 'Konversi',
             'active' => 'Konversi KPS',
-            'konversis' => $konversi, 
+            'konversis' => $konversi,
         ]);
     }
 
@@ -232,7 +230,7 @@ class KpsController extends Controller
         $kurikulum = Kurikulum::find($id);
         $matakuliah = LogMatakuliah::where('kurikulum', $kurikulum->id)->get();
         $logcomment = CommentKonversi::where('hasil_konversi', $id)->get();
-        
+
         return view('dashboard.kps.detail-hasil-konversi', [
             'title' => 'Konversi / Hasil Konversi / Detail',
             'title_page' => 'Konversi',
@@ -252,8 +250,8 @@ class KpsController extends Controller
     public function fetchDokumen(Request $request){
         $data['dokumen'] = Kurikulum::where("id", $request->dokumen)
                             ->get();
-                            
+
         return response()->json($data);
     }
-    
+
 }

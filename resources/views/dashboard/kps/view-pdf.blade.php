@@ -10,16 +10,16 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 	<script src = "/js/jSignature.min.js"></script>
-	<script src = "/js/modernizr.js"></script> 
+	<script src = "/js/modernizr.js"></script>
 
 </head>
 <body>
-	<input id="dokumen" type="text" value="{{ $laporan[0]->id }}" hidden>
+	<input id="dokumen" type="text" value="{{ $laporan->id }}" hidden>
 <div class="toolbar">
 	<div class="tool">
 		<span>SIMBKM Signature</span>
 	</div>
-	
+
 	<div class="tool d-flex justify-content-between">
 		<a href="{{ url()->previous() }}" class="btn btn-light btn-sm"><i class="fa fa-save"></i> Back</a>
 	</div>
@@ -85,7 +85,7 @@
 				<div class="col-md-12">
 					 <label class="" for="">Name:</label>
 					 <input type="text" name="name" class="form-group" value="">
-				</div>        
+				</div>
 				<div class="col-md-12">
 					<label>Signature:</label>
 					<br/>
@@ -133,7 +133,7 @@
 			downloadLink.click();
 	}
 	$(document).ready(function () {
-		
+
 		var dokValue = $("#dokumen").val();
 		console.log(dokValue);
 		var appUrl = '{{ env('APP_URL') }}';
@@ -159,7 +159,7 @@
 						scale: 1.5,
 						pageImageCompression: 'MEDIUM', // FAST, MEDIUM, SLOW(Helps to control the new PDF file size)
 						});
-						
+
 			}
 		});
 
@@ -171,14 +171,14 @@
                 height: '20px',
                 callback: function (data, action) {
                     console.log(data);
-					downloadBase64File(data, 'SIMBKM-signature.png');					
+					downloadBase64File(data, 'SIMBKM-signature.png');
 					pdf.addImageToCanvas();
                 }
             });
 
-			
-		
- 
+
+
+
     });
 
 	function showSignPad() {
