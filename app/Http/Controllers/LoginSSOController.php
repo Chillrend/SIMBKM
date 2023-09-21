@@ -18,7 +18,7 @@ use Laravel\Socialite\Facades\Socialite;
 class LoginSSOController extends Controller
 {
     public function redirectToSSOPNJ(){
-        
+
 
         return Socialite::driver('pnj')->redirect();
     }
@@ -28,21 +28,24 @@ class LoginSSOController extends Controller
 
         // check if they're an existing user
         $existingUserSSO = SSOUser::where('email', $user->attributes['email'])->first();
-        
-        if($existingUserSSO){
+
+        // Check also if they're an existing user DIRECTLY via user table
+        $existingUserFromUser = User::where('email', $user->attributes['email'])->first();
+
+        if($existingUserFromUser){
             // log them in
-            $existingUser = User::where('sso_pnj', $existingUserSSO->id)->first();
-            Auth::login($existingUser);
+//            $existingUser = User::where('sso_pnj', $existingUserSSO->id)->first();
+            Auth::login($existingUserFromUser);
             request()->session()->regenerate();
-            if(is_null($existingUser->jurusan_id) || empty($existingUser->jurusan_id) ){
+            if(is_null($existingUserFromUser->jurusan_id) || empty($existingUserFromUser->jurusan_id) ){
                 return redirect()->intended('/dashboard/first-create/1');
             }
-            
+
             return redirect()->intended('/dashboard/index');
         } else {
             // create a new user
             $newUser                 = new SSOUser();
-            
+
             $newUser->sub            = $user->attributes['sub'];
             $newUser->ident          = $user->attributes['ident'];
             $newUser->name           = $user->attributes['name'];
@@ -64,15 +67,13 @@ class LoginSSOController extends Controller
                 $newDepartment->department = $user->attributes['department_and_level'][0]['department'];
                 $newDepartment->department_short_name = $user->attributes['department_and_level'][0]['department_short_name'];
                 $newDepartment->save();
-
-                
             }
 
             $lastIdDepartment = DB::table('departement_and_levels')
                             ->orderByDesc('id')
                             ->limit(1)
                             ->get();
-                            
+
             $newUser->department_and_level = $lastIdDepartment[0]->id;
             $newUser->save();
 
@@ -93,7 +94,7 @@ class LoginSSOController extends Controller
                 'email' => $user->attributes['email'],
                 'nim' => $user->attributes['ident'],
                 'sso_pnj' => $lastIdSSOUser[0]->id,
-                'role' => $role[0]->id, 
+                'role' => $role[0]->id,
             ]);
 
             Auth::login($newUserLogin, true);
@@ -111,7 +112,7 @@ class LoginSSOController extends Controller
         ->orderByDesc('id')
         ->limit(1)
         ->get();
-        
+
         $user = null;
         $departementAndLevelData = 'Selain Mahasiswa';
         if($sso == 1){
@@ -136,7 +137,7 @@ class LoginSSOController extends Controller
             'dosbing' => User::where('role', '3')->orWhere('role_kedua', '3')->get()
         ]);
     }
-    
+
     public function storeFirstLogin(Request $request, $id){
 
         $user = User::find($id);
