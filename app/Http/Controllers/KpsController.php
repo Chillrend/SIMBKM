@@ -130,7 +130,7 @@ class KpsController extends Controller
     public function savePdf(Request $request){
         $fileName = pathinfo($request->dokumenPath, PATHINFO_FILENAME);
         $newFileName = Str::random(10);
-        
+
         Storage::makeDirectory('dokumen-annotate');
         Storage::makeDirectory('dokumen-signature');
         Storage::makeDirectory('dokumen-signature-background');
@@ -243,7 +243,7 @@ class KpsController extends Controller
 
     public function viewPdf($id){
         return view('dashboard.kps.view-pdf',[
-            'laporan' => Kurikulum::find($id)->get()
+            'laporan' => Kurikulum::where('id', $id)->first(),
         ]);
     }
 

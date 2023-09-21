@@ -55,7 +55,7 @@
 		  </button>
 		</div>
 		<div class="modal-body">
-		  <form action="/laporan/dosbing/view-pdf/canceled/{{  $laporan[0]->id  }}" method="post" id="canceled">
+		  <form action="/laporan/dosbing/view-pdf/canceled/{{  $laporan->id  }}" method="post" id="canceled">
 			@csrf
 			<div class="form-group">
 			  <label for="body" class="col-form-label">Pesan:</label>
