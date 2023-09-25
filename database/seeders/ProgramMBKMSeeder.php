@@ -14,12 +14,12 @@ class ProgramMBKMSeeder extends Seeder
     public function run(): void
     {
         ProgramMbkm::create([
-            'name' => 'Bangkit',
+            'name' => 'Kampus Mengajar',
             'status' => 'Aktif'
         ]);
 
         ProgramMbkm::create([
-            'name' => 'Kampus Merdeka',
+            'name' => 'Magang Bersertifikat',
             'status' => 'Aktif'
         ]);
 
@@ -29,22 +29,17 @@ class ProgramMBKMSeeder extends Seeder
         ]);
 
         ProgramMbkm::create([
-            'name' => 'Kampus Mengajar',
-            'status' => 'Aktif'
-        ]);
-
-        ProgramMbkm::create([
             'name' => 'Pertukaran Mahasiswa Merdeka (PMM)',
             'status' => 'Aktif'
         ]);
 
         ProgramMbkm::create([
-            'name' => 'IISMA',
+            'name' => 'Wirausaha Merdeka',
             'status' => 'Aktif'
         ]);
 
         ProgramMbkm::create([
-            'name' => 'Wirausaha Merdeka Kemendikbudristek (WMK)',
+            'name' => 'IISMA',
             'status' => 'Aktif'
         ]);
     }
