@@ -26,15 +26,10 @@ class LoginSSOController extends Controller
     public function callback(){
         $user = Socialite::driver('pnj')->user();
 
-        // check if they're an existing user
-        $existingUserSSO = SSOUser::where('email', $user->attributes['email'])->first();
-
-        // Check also if they're an existing user DIRECTLY via user table
+        // Check if they're an existing user DIRECTLY via user table
         $existingUserFromUser = User::where('email', $user->attributes['email'])->first();
 
         if($existingUserFromUser){
-            // log them in
-//            $existingUser = User::where('sso_pnj', $existingUserSSO->id)->first();
             Auth::login($existingUserFromUser);
             request()->session()->regenerate();
             if(is_null($existingUserFromUser->jurusan_id) || empty($existingUserFromUser->jurusan_id) ){
