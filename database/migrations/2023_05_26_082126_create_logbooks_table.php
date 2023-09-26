@@ -14,9 +14,12 @@ return new class extends Migration
         Schema::create('logbooks', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('mbkm');
-            $table->string('user');
+            $table->unsignedBigInteger('mbkm');
+            $table->unsignedBigInteger('user');
             $table->timestamps();
+
+            $table->foreign('mbkm')->references('id')->on('mbkms')->cascadeOnDelete();
+            $table->foreign('user')->references('id')->on('users')->cascadeOnDelete();
         });
     }
 

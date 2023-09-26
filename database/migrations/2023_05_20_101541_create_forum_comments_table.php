@@ -15,9 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('body');
             $table->string('is_delete')->default(0);
-            $table->string('created_by');
-            $table->string('forum_post');
+            $table->unsignedBigInteger('created_by');
+            $table->unsignedBigInteger('forum_post');
             $table->timestamps();
+
+            $table->foreign('created_by')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('forum_post')->references('id')->on('forum_posts')->cascadeOnDelete();
         });
     }
 

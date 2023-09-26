@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('log_signature_pdfs', function (Blueprint $table) {
             $table->id();
-            $table->string('laporan_id')->unique();
+            $table->unsignedBigInteger('laporan_id')->unique();
             $table->string('json_sign_pertama')->nullable();
             $table->string('json_background_pertama')->nullable();
             $table->string('file_background_pertama')->nullable();
@@ -27,6 +27,8 @@ return new class extends Migration
             $table->string('json_background_keempat')->nullable();
             $table->string('file_background_keempat')->nullable();
             $table->timestamps();
+
+            $table->foreign('laporan_id')->references('id')->on('laporans')->cascadeOnDelete();
         });
     }
 

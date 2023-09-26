@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('file_name')->nullable();
             $table->string('file_path')->nullable();
-            $table->string('forum_id')->nullable();
+            $table->unsignedBigInteger('forum_id')->nullable();
             $table->timestamps();
+
+            $table->foreign('forum_id')->references('id')->on('forum_posts')->cascadeOnDelete();
         });
     }
 

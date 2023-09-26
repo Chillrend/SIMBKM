@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('comment_konversis', function (Blueprint $table) {
             $table->id();
-            $table->string('hasil_konversi');
+            $table->unsignedBigInteger('hasil_konversi');
             $table->text('body')->nullable();
-            $table->string('owner');
+            $table->unsignedBigInteger('owner');
             $table->timestamps();
+
+            $table->foreign('hasil_konversi')->references('id')->on('hasil_konversis')->cascadeOnDelete();
+            $table->foreign('owner')->references('id')->on('users')->cascadeOnDelete();
         });
     }
 

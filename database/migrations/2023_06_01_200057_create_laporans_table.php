@@ -20,10 +20,14 @@ return new class extends Migration
             $table->string('sign_second')->nullable();
             $table->string('sign_third')->nullable();
             $table->string('sign_fourth')->nullable();
-            $table->string('mbkm');
+            $table->unsignedBigInteger('mbkm');
             $table->string('status')->default('sedang berjalan');
-            $table->string('owner');
+            $table->unsignedBigInteger('owner');
             $table->timestamps();
+
+            $table->foreign('mbkm')->references('id')->on('mbkms')->cascadeOnDelete();
+            $table->foreign('owner')->references('id')->on('users')->cascadeOnDelete();
+
         });
     }
 

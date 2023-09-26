@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('dokumen_path')->nullable();
             $table->string('dokumen_name')->nullable();
-            $table->string('owner');
+            $table->unsignedBigInteger('owner');
             $table->timestamps();
+
+            $table->foreign('owner')->references('id')->on('users')->cascadeOnDelete();
         });
     }
 

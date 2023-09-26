@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('nim');
-            $table->string('fakultas');
-            $table->string('jurusan');
+            $table->unsignedBigInteger('fakultas');
+            $table->unsignedBigInteger('jurusan');
             $table->string('semester');
-            $table->string('program');
+            $table->unsignedBigInteger('program');
             $table->date('tanggal_mulai');
             $table->date('tanggal_selesai');
             $table->string('tempat_program_perusahaan');
@@ -26,11 +26,20 @@ return new class extends Migration
             $table->string('lokasi_mobilisasi')->nullable();
             $table->string('program_keberapa');
             $table->string('mobilisasi')->nullable();
-            $table->string('dosen_pembimbing')->nullable();
-            $table->string('pembimbing_industri')->nullable();
+            $table->unsignedBigInteger('dosen_pembimbing')->nullable();
+            $table->unsignedBigInteger('pembimbing_industri')->nullable();
             $table->string('informasi_tambahan')->nullable();
-            $table->string('user');
+            $table->unsignedBigInteger('user');
             $table->timestamps();
+
+
+            $table->foreign('fakultas')->references('id')->on('fakultas')->cascadeOnDelete();
+            $table->foreign('jurusan')->references('id')->on('jurusan')->cascadeOnDelete();
+            $table->foreign('program')->references('id')->on('program_mbkms')->cascadeOnDelete();
+            $table->foreign('dosen_pembimbing')->references('id')->on('users');
+            $table->foreign('pembimbing_industri')->references('id')->on('users');
+            $table->foreign('user')->references('id')->on('users')->cascadeOnDelete();
+
         });
     }
 

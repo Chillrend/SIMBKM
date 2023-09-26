@@ -14,9 +14,13 @@ return new class extends Migration
         Schema::create('comment_laporans', function (Blueprint $table) {
             $table->id();
             $table->text('body');
-            $table->string('laporan');
-            $table->string('user');
+            $table->unsignedBigInteger('laporan');
+            $table->unsignedBigInteger('user');
             $table->timestamps();
+
+            $table->foreign('laporan')->references('id')->on('laporans')->cascadeOnDelete();
+            $table->foreign('user')->references('id')->on('users')->cascadeOnDelete();
+
         });
     }
 

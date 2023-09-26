@@ -15,9 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('mata_kuliah');
             $table->string('sks');
-            $table->string('kurikulum');
+            $table->unsignedBigInteger('kurikulum');
             $table->string('status')->nullable();
             $table->timestamps();
+
+            $table->foreign('kurikulum')->references('id')->on('kurikulums')->cascadeOnDelete();
+
         });
     }
 
