@@ -25,7 +25,7 @@
                         @else
                             <form action="/dashboard/informasi-mbkm/create" method="post">
                                 @csrf
-                                <div class="row">   
+                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="name" class="form-control-label">Nama</label>
@@ -78,15 +78,33 @@
                                         <label for="semester" class="form-label">Semester</label>
                                         <select class="form-select @error('semester') is-invalid @enderror" id="semester" name="semester" required>
                                             <option value="" disabled selected>Pilih Semester</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
                                             <option value="3">3</option>
                                             <option value="4">4</option>
                                             <option value="5">5</option>
                                             <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
                                         </select>
                                         @error('semester')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
                                             </div>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="tahun_ajaran" class="form-label">Tahun Ajaran</label>
+                                        <select class="form-select @error('fakultas') is-invalid @enderror" id="tahun_ajaran" name="tahun_ajaran" required>
+                                            <option value="" disabled selected>Pilih Jurusan</option>
+                                            @foreach($tahun_ajaran as $data)
+                                                <option value="{{ $data->id }}">{{ $data->tahun_ajaran }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('$tahun_ajaran')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
                                         @enderror
                                     </div>
                                     <div class="col-md-6 mb-3">
@@ -236,13 +254,13 @@
                                     </div>
                                 </div>
                                 <hr class="horizontal dark">
-                                <button type="submit" class="btn btn-primary ms-md-auto me-3 d-flex">Buat Formulir Mbkm</button>      
+                                <button type="submit" class="btn btn-primary ms-md-auto me-3 d-flex">Buat Formulir Mbkm</button>
                             </form>
                         @endif
                     @else
                     <form action="/dashboard/informasi-mbkm/create" method="post">
                         @csrf
-                        <div class="row">   
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="name" class="form-control-label">Nama</label>
@@ -454,10 +472,10 @@
                             </div>
                         </div>
                         <hr class="horizontal dark">
-                        <button type="submit" class="btn btn-primary ms-md-auto me-3 d-flex">Buat Formulir Mbkm</button>      
+                        <button type="submit" class="btn btn-primary ms-md-auto me-3 d-flex">Buat Formulir Mbkm</button>
                     </form>
                     @endif
-                    
+
                 </div>
             </div>
         </div>
@@ -466,7 +484,7 @@
 
     {{-- <button type="reset" id="reset-btn" class="btn btn-secondary m-btn m-btn--air m-btn--custom"> --}}
 
-        
+
     <script>
         $( "#reset-btn-dosbing" ).click(function() {
             // $('#m_select2_3').val('').change();
@@ -494,17 +512,17 @@
 
             case '0':
                 lokasiProgram.setAttribute("hidden", true);
-                lokasiProgramValue.value = '' 
+                lokasiProgramValue.value = ''
                 break;
 
             default:
-                
+
             }
         };
 
         radioClicked()
          $(document).ready(function () {
-            
+
             $('#fakultas').on('change', function () {
                 var idFakultas = this.value;
                 $("#jurusan").html('');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TahunAjaranMbkm;
 use App\Models\User;
 use App\Models\Jurusan;
 use App\Models\Fakultas;
@@ -35,7 +36,7 @@ class DashboardController extends Controller
     public function pendaftaranMBKM(){
         // $test = Laporan::where('owner', auth()->user()->id)->get();
         // dd($test->count());
-        
+
         return view('dashboard.informasi-mbkm', [
             'title' => 'Pendaftaran MBKM',
             'title_page' => 'Informasi MBKM',
@@ -43,6 +44,7 @@ class DashboardController extends Controller
             'name' => auth()->user()->name,
             'fakultas' => Fakultas::where('status', 'Aktif')->get(),
             'programs' => ProgramMbkm::where('status', 'Aktif')->get(),
+            'tahun_ajaran' => TahunAjaranMbkm::all()->sortByDesc('id'),
             'dosbing' => User::where('role', '4')->orWhere('role_kedua', '4')->orWhere('role_ketiga', '4')->get(),
             'pembimbing_industri' => User::where('role', '6')->orWhere('role_kedua', '6')->orWhere('role_ketiga', '6')->get(),
             'mbkm' => Laporan::where('owner', auth()->user()->id)->latest()->limit(1)->get()
