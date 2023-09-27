@@ -12,8 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('mbkms', function (Blueprint $table){
-            $table->string('tahun_ajaran')->default('2023/2024 Ganjil');
+            $table->unsignedBigInteger('tahun_ajaran')->nullable();
             $table->string('konsentrasi')->nullable();
+
+            $table->foreign('tahun_ajaran')->references('id')->on('tahun_ajaran_mbkms');
         });
     }
 

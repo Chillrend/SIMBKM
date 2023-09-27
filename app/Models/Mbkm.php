@@ -30,12 +30,14 @@ class Mbkm extends Model
                         $program->where('name', 'like', '%' . $search . '%');
                     });
                 });
-            });     
+            });
         });
     }
 
-    
 
+    public function tahun_ajaran(){
+        $this->belongsTo(TahunAjaranMbkm::class, 'tahun_ajaran');
+    }
 
     public function dataFakultas(){
         return $this->belongsTo(Fakultas::class, 'fakultas');
