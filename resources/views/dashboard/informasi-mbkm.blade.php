@@ -51,7 +51,7 @@
                                     <div class="col-md-6 mb-3">
                                         <label for="fakultas" class="form-label">Jurusan</label>
                                         <select class="form-select @error('fakultas') is-invalid @enderror" id="fakultas" name="fakultas" required>
-                                            <option value="" disabled selected>Pilih Jurusan</option>
+                                            <option value="" disabled>Pilih Jurusan</option>
                                             @foreach($fakultas as $data)
                                                 <option value="{{ $data->id }}">{{ $data->name }}</option>
                                             @endforeach
@@ -96,7 +96,7 @@
                                     <div class="col-md-6 mb-3">
                                         <label for="tahun_ajaran" class="form-label">Tahun Ajaran</label>
                                         <select class="form-select @error('fakultas') is-invalid @enderror" id="tahun_ajaran" name="tahun_ajaran" required>
-                                            <option value="" disabled selected>Pilih Jurusan</option>
+                                            <option value="" disabled selected>Pilih Tahun Ajaran</option>
                                             @foreach($tahun_ajaran as $data)
                                                 <option value="{{ $data->id }}">{{ $data->tahun_ajaran }}</option>
                                             @endforeach
@@ -313,15 +313,33 @@
                                 <label for="semester" class="form-label">Semester</label>
                                 <select class="form-select @error('semester') is-invalid @enderror" id="semester" name="semester" required>
                                     <option value="" disabled selected>Pilih Semester</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
                                     <option value="3">3</option>
                                     <option value="4">4</option>
                                     <option value="5">5</option>
                                     <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
                                 </select>
                                 @error('semester')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="tahun_ajaran" class="form-label">Tahun Ajaran</label>
+                                <select class="form-select @error('fakultas') is-invalid @enderror" id="tahun_ajaran" name="tahun_ajaran" required>
+                                    <option value="" disabled selected>Pilih Tahun Ajaran</option>
+                                    @foreach($tahun_ajaran as $data)
+                                        <option value="{{ $data->id }}">{{ $data->tahun_ajaran }}</option>
+                                    @endforeach
+                                </select>
+                                @error('$tahun_ajaran')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
                                 @enderror
                             </div>
                             <div class="col-md-6 mb-3">
@@ -404,21 +422,6 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="program_keberapa" class="form-control-label">Pengambilan Program Ke-Berapa</label>
-                                    <select class="form-select @error('program_keberapa') is-invalid @enderror" id="program_keberapa" name="program_keberapa" required>
-                                        <option value="" disabled selected>Program Ke-</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                    </select>
-                                    @error('program_keberapa')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-                            </div>
                             <div class="col-md-6 ">
                                 <label for="dosen_pembimbing" class="form-label">Dosen Pembimbing</label>
                                 <select id="dosen_pembimbing" class="form-select @error('dosen_pembimbing') is-invalid @enderror" name="dosen_pembimbing">
@@ -458,6 +461,22 @@
                                         {{ $message }}
                                     </div>
                                 @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="program_keberapa" class="form-control-label">Pengambilan Program Ke-Berapa</label>
+                                    <select class="form-select @error('program_keberapa') is-invalid @enderror" id="program_keberapa" name="program_keberapa" required>
+                                        <option value="" disabled selected>Program Ke-</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="2">3</option>
+                                    </select>
+                                    @error('program_keberapa')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                    @enderror
+                                </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
