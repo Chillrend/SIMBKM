@@ -38,8 +38,8 @@ return new class extends Migration
             $table->foreign('program')->references('id')->on('program_mbkms')->cascadeOnDelete();
             $table->foreign('dosen_pembimbing')->references('id')->on('users');
             $table->foreign('pembimbing_industri')->references('id')->on('users');
+            $table->foreign('tahun_ajaran')->references('id')->on('tahun_ajaran_mbkms');
             $table->foreign('user')->references('id')->on('users')->cascadeOnDelete();
-
         });
     }
 
