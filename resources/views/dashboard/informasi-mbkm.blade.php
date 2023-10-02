@@ -500,10 +500,6 @@
         </div>
     </div>
 
-
-    {{-- <button type="reset" id="reset-btn" class="btn btn-secondary m-btn m-btn--air m-btn--custom"> --}}
-
-
     <script>
         $( "#reset-btn-dosbing" ).click(function() {
             // $('#m_select2_3').val('').change();
