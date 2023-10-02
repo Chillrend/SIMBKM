@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('nim');
             $table->unsignedBigInteger('fakultas');
             $table->unsignedBigInteger('jurusan');
+            $table->unsignedBigInteger('tahun_ajaran');
             $table->string('semester');
             $table->unsignedBigInteger('program');
             $table->date('tanggal_mulai');
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->string('lokasi_mobilisasi')->nullable();
             $table->string('program_keberapa');
             $table->string('mobilisasi')->nullable();
+            $table->string('konsentrasi')->nullable();
             $table->unsignedBigInteger('dosen_pembimbing')->nullable();
             $table->unsignedBigInteger('pembimbing_industri')->nullable();
             $table->string('informasi_tambahan')->nullable();
