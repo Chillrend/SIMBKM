@@ -124,7 +124,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="tanggal_mulai" class="form-control-label">Input Tanggal Mulai</label>
-                                            <input class="form-control @error('tanggal_mulai') is-invalid @enderror" id="tanggal_mulai" type="datetime-local" name="tanggal_mulai" required>
+                                            <input class="form-control @error('tanggal_mulai') is-invalid @enderror" id="tanggal_mulai" type="date" name="tanggal_mulai" required>
                                             @error('tanggal_mulai')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
@@ -135,7 +135,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="tanggal_selesai" class="form-control-label">Input Tanggal Selesai</label>
-                                            <input class="form-control @error('tanggal_selesai') is-invalid @enderror" id="tanggal_selesai" type="datetime-local" name="tanggal_selesai" required>
+                                            <input class="form-control @error('tanggal_selesai') is-invalid @enderror" id="tanggal_selesai" type="date" name="tanggal_selesai" required>
                                             @error('tanggal_selesai')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
@@ -359,7 +359,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="tanggal_mulai" class="form-control-label">Input Tanggal Mulai</label>
-                                    <input class="form-control @error('tanggal_mulai') is-invalid @enderror" id="tanggal_mulai" type="datetime-local" name="tanggal_mulai" required>
+                                    <input class="form-control @error('tanggal_mulai') is-invalid @enderror" id="tanggal_mulai" type="date" name="tanggal_mulai" required>
                                     @error('tanggal_mulai')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -370,7 +370,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="tanggal_selesai" class="form-control-label">Input Tanggal Selesai</label>
-                                    <input class="form-control @error('tanggal_selesai') is-invalid @enderror" id="tanggal_selesai" type="datetime-local" name="tanggal_selesai" required>
+                                    <input class="form-control @error('tanggal_selesai') is-invalid @enderror" id="tanggal_selesai" type="date" name="tanggal_selesai" required>
                                     @error('tanggal_selesai')
                                         <div class="invalid-feedback">
                                             {{ $message }}
