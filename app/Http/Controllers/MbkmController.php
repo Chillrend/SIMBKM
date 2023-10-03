@@ -180,15 +180,15 @@ class MbkmController extends Controller
             'program' => 'required',
             'tanggal_mulai' => 'required',
             'tanggal_selesai' => 'required',
-            'tempat_program_perusahaan' => 'required',
+            'mobilisasi' => 'nullable',
             'lokasi_program' => 'nullable',
             'lokasi_mobilisasi' => 'nullable',
-            'mobilisasi' => 'nullable',
             'pembimbing_industri' => 'nullable',
-            'program_keberapa' => 'required',
-            'dosen_pembimbing' => 'nullable',
+            'dosen_pembimbing' => 'required',
             'informasi_tambahan' => 'nullable',
             'tahun_ajaran' => 'required',
+            'tempat_program_perusahaan' => 'required',
+            'program_keberapa' => 'required',
         ];
 
         $form->update($request->validate($rules));
