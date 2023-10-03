@@ -83,6 +83,7 @@ class MbkmController extends Controller
             'lokasi_program' => 'nullable',
             'lokasi_mobilisasi' => 'nullable',
             'pembimbing_industri' => 'nullable',
+            'dosen_pembimbing' => 'required',
             'informasi_tambahan' => 'nullable',
             'tanggal_selesai' => 'required',
             'tahun_ajaran' => 'required',
@@ -91,7 +92,6 @@ class MbkmController extends Controller
         ]);
 
         $validatedData['user'] = auth()->user()->id;
-        $validatedData['dosen_pembimbing'] = $request['dosen_pembimbing'];
 
         Mbkm::create($validatedData);
 
