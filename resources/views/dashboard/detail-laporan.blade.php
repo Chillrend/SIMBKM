@@ -143,6 +143,8 @@
                             <input class="form-control" id="informasi_tambahan" type="text" name="informasi_tambahan" value="{{ $laporan[0]->listMbkm->informasi_tambahan }}" disabled>
                         </div>
                     </div>
+
+                {{-- Form Submit Laporan --}}
                 @if($laporan[0]->dokumen_path != null)
                     <div class="row mt-5">
                         <div class="d-flex">
@@ -235,6 +237,34 @@
                 </form>
                 @endif
                 
+                {{-- Form Submit Sertifikat --}}
+                @if($laporan[0]->dokumen_sertifikat_path != null)
+                    <div class="row mt-5">
+                        <div class="d-flex">
+                            <div class="col-md-8 ">
+                                <label for="dokumen_sertifikat" class="form-label">Post Sertifikat</label>
+                                <h4>{{ $laporan[0]->dokumen_sertifikat_name }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                @else
+                    <form action="/dashboard/laporan/update-sertifikat/{{ $laporan[0]->id }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                    <div class="row mt-5">
+                        <div class="col-md-8  d-flex">
+                            <label for="dokumen_sertifikat" class="form-label">Post Sertifikat</label>
+                            <input class="form-control @error('dokumen_sertifikat') is-invalid @enderror" type="file" id="dokumen_sertifikat" name="dokumen_sertifikat">  
+                                @error('dokumen_sertifikat')
+                                    <div class="invalid-feedback">
+                                    {{ $message }}
+                                    </div>
+                                @enderror
+                        </div>
+                    </div>
+                        <Button class="btn btn-primary align-items-center d-flex m-4" onclick="return confirm('Apakah sertifikat sudah benar?')">Submit</Button>
+                        <hr class="horizontal dark">
+                    </form>
+                @endif
 
                 @foreach($logcomment as $comment)
                         <div class="row mt-4">

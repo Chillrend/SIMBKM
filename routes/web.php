@@ -106,6 +106,10 @@ Route::post('/api/fetch-dokumen', [LaporanController::class, 'fetchDokumen']);
 Route::post('/dashboard/laporan/revisi/{id}', [LaporanController::class, 'revisi'])->middleware('auth');
 // Route::post('/api/save-document', [LaporanController::class, 'savePdf'])->middleware('auth');
 
+// Sertifikat Route
+Route::post('/dashboard/laporan/update-sertifikat/{id}', [LaporanController::class, 'updateSertifikat'])->middleware('auth');
+
+
 // Register Route
 Route::get('/dashboard/register', [RegisterController::class, 'index'])->middleware('auth');
 Route::get('/dashboard/register/kelola-akun', [RegisterController::class, 'kelolaAkun'])->middleware('auth');

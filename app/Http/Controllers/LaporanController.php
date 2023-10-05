@@ -10,6 +10,8 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\File;
 
+use function Deployer\download;
+
 class LaporanController extends Controller
 {
     public function index($id){
@@ -60,6 +62,23 @@ class LaporanController extends Controller
         ]);
 
         return redirect('/dashboard/laporan/'.$id)->with('success', 'Dokumen Laporan berhasil ditambahkan!');       
+    }
+
+    public function updateSertifikat(Request $request, $id) {
+        $rules = $request->validate([
+            'dokumen_sertifikat' => 'required|mimes:pdf'            
+        ]);
+
+        $rules['dokumen_sertifikat_name'] = $request->dokumen_sertifikat->getClientOriginalName();
+        $rules['dokumen_sertifikat_path'] = $request->file('dokumen_sertifikat')->store('dokumen-sertifikat');
+
+
+        $laporan = Laporan::find($id);
+
+        $laporan->update($rules);
+
+        
+        return redirect('/dashboard/laporan/'.$id)->with('success', 'Dokumen Sertifikat berhasil ditambahkan!');       
     }
     
     public function revisi(Request $request, $id){
