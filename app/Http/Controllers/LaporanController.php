@@ -43,11 +43,19 @@ class LaporanController extends Controller
     public function update(Request $request, $id){
 
         $rules = $request->validate([
-            'dokumen' => 'required|mimes:pdf'            
+            'dokumen' => 'nullable|mimes:pdf',
+            'dokumen_sertifikat' => 'nullable|mimes:pdf'            
         ]);
 
-        $rules['dokumen_name'] = $request->dokumen->getClientOriginalName();
-        $rules['dokumen_path'] = $request->file('dokumen')->store('dokumen-laporan');
+        if ($request->hasFile('dokumen')) {
+            $rules['dokumen_name'] = $request->dokumen->getClientOriginalName();
+            $rules['dokumen_path'] = $request->file('dokumen')->store('dokumen-laporan');
+        }
+        if ($request->hasFile('dokumen_sertifikat')) {
+            $rules['dokumen_sertifikat_name'] = $request->dokumen_sertifikat->getClientOriginalName();
+            $rules['dokumen_sertifikat_path'] = $request->file('dokumen_sertifikat')->store('dokumen-sertifikat');
+        }
+       
         // $rules['sign_first'] = 1;
         // $rules['sign_second']= 0;
 
@@ -57,28 +65,14 @@ class LaporanController extends Controller
 
         $laporan->update($rules);
 
-        LogSignaturePdf::create([
-            'laporan_id' => $id
-        ]);
-
-        return redirect('/dashboard/laporan/'.$id)->with('success', 'Dokumen Laporan berhasil ditambahkan!');       
-    }
-
-    public function updateSertifikat(Request $request, $id) {
-        $rules = $request->validate([
-            'dokumen_sertifikat' => 'required|mimes:pdf'            
-        ]);
-
-        $rules['dokumen_sertifikat_name'] = $request->dokumen_sertifikat->getClientOriginalName();
-        $rules['dokumen_sertifikat_path'] = $request->file('dokumen_sertifikat')->store('dokumen-sertifikat');
+        if(LogSignaturePdf::where('laporan_id',$id)->doesntExist()){
+            LogSignaturePdf::create([
+                'laporan_id' => $id
+            ]);
+        };
 
 
-        $laporan = Laporan::find($id);
-
-        $laporan->update($rules);
-
-        
-        return redirect('/dashboard/laporan/'.$id)->with('success', 'Dokumen Sertifikat berhasil ditambahkan!');       
+        return redirect('/dashboard/laporan/'.$id)->with('success', 'Dokumen berhasil ditambahkan!');       
     }
     
     public function revisi(Request $request, $id){
