@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('nim');
             $table->unsignedBigInteger('fakultas');
             $table->unsignedBigInteger('jurusan');
-            $table->unsignedBigInteger('tahun_ajaran');
+            $table->unsignedBigInteger('tahun_ajaran')->nullable();
             $table->string('semester');
             $table->unsignedBigInteger('program');
             $table->date('tanggal_mulai');

@@ -81,7 +81,9 @@ class LoginSSOController extends Controller
 
             $role = null;
             if($lastIdDepartment[0]->access_level_name == 'Mahasiswa'){
-                $role = Role::where('name', $lastIdDepartment[0]->access_level_name)->get();
+                $role = Role::where('name', $lastIdDepartment[0]->access_level_name)->first();
+            }else{
+                $role = Role::where('id', 4)->first();
             }
 
             $newUserLogin = User::create([
@@ -89,7 +91,7 @@ class LoginSSOController extends Controller
                 'email' => $user->attributes['email'],
                 'nim' => $user->attributes['ident'],
                 'sso_pnj' => $lastIdSSOUser[0]->id,
-                'role' => $role[0]->id,
+                'role' => $role->id,
             ]);
 
             Auth::login($newUserLogin, true);
