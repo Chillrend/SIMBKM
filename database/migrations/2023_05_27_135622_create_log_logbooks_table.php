@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('lokasi')->nullable();
             $table->text('excerpt');
             $table->string('logbook');
+            $table->string('dokumen_logbook_path');
+            $table->string('dokumen_logbook_name');
             $table->string('status_dosbing')->default('0');
             $table->string('status_pi')->default('0');
             $table->timestamps();
