@@ -35,6 +35,14 @@
                       <trix-editor input="body"></trix-editor>
                     </div>                    
                   </div>
+
+                  <div class="row">
+                    <div class="col-12 mb-3">
+                      <label for="formFileSm" class="form-label">Logbook File</label>
+                      <input class="form-control @error('dokumen') is-invalid @enderror" type="file" id="dokumen" name="dokumen">  
+                    </div> 
+                  </div>
+                  
                   <div class="d-flex align-items-center">
                     <div class="ms-md-auto d-flex">
                       {{-- <a href="#" class="btn btn-primary align-items-center d-flex m-2">Submit</a> --}}
