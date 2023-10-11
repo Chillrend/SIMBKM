@@ -37,14 +37,26 @@ class LogbookController extends Controller
 
     public function store(Request $request){
 
+        // dd($request->all());
+
         $validatedData = $request->validate([
             'tanggal_dibuat' => 'required',
             'body' => 'required',
             // 'lokasi' => 'required',
-            'logbook' => 'required'
+            'logbook' => 'required',
+            'dokumen_logbook' => 'nullable|mimes:pdf'
         ]);
+        
+        // $debug = $request->hasFile('dokumen_logbook');
+        // dd($debug);
+        // dd($validatedData);
+
         $validatedData['owner'] = auth()->user()->id;
         $validatedData['excerpt'] = Str::limit(strip_tags($validatedData['body'], 100));
+
+        if ($request->hasFile('dokumen_logbook')) {
+            $validatedData['dokumen_logbook_path'] = $request->file('dokumen_logbook')->store('dokumen-logbook');
+        }
 
         LogLogbook::create($validatedData);
 
