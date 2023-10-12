@@ -143,87 +143,87 @@
                         <div class="d-flex">
                             <div class="col-sm-5 col-md-6">
                                 <div class="row">
-                                    <div class="col-sm-5 col-md-6">
-                                        <label for="dokumen" class="form-label">Post Dokumen</label>
-    
-                                    </div>
-                                    <div class="col-sm-5 col-md-6">
-                                        @if($laporan[0]->status == "Diterima")
+                                    <div class="col-md-6">
                                         <div class="row">
+                                            <div class="d-flex">
+                                                <div class="col" >
+                                                    <label for="dokumen" class="form-label">Post Dokumen</label>
+                                                </div>
+                                                <div class="col mx-3">
+                                                    @if($laporan[0]->status == "Diterima")
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <span class="badge bg-gradient-success">Laporan Diterima</span>
+                                                        </div>
+                                                    </div>
+                                                    @endif
+                                                    @if($laporan[0]->status == "Ditolak")
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <span class="badge bg-gradient-danger">Laporan Ditolak</span>
+                                                        </div>
+                                                    </div>
+                                                    @endif
+                                                    @if($laporan[0]->status == "sedang berjalan")
+                                                    <div class="row">
+                                                        <div class="col mx-5">
+                                                            <span class="badge bg-gradient-secondary">Sedang Ditinjau</span>
+                                                        </div>
+                                                    </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class=d-flex>
+                                                <div class="col">
+                                                    @if($laporan[0]->status == "sedang berjalan")
+                                                    <a href="/laporan/dosbing/view-pdf/{{ $laporan[0]->id }}" class="btn btn-outline-gray900">View Dokumen</a>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class=row>
+                                        <div class="d-flex">
                                             <div class="col">
-                                                <span class="badge bg-gradient-success">Laporan Diterima</span>
+                                                @if($laporan[0]->status == "Diterima" && $laporan[0]->sign_first == 0)
+                                                <a class="btn btn-outline-secondary col-12" disabled>Sign Dokumen</a>
+                                                <i>Mahasiswa Belum Tanda Tangan</i>
+                                                @endif
+                                                @if($laporan[0]->sign_first == 1 && $laporan[0]->sign_second == 0 && $laporan[0]->status == "Diterima")
+                                                    <a  class="btn btn-outline-secondary col-12" disabled>View & Download</a> 
+                                                    <a href="/laporan/dosbing/view-pdf/{{ $laporan[0]->id }}" class="btn btn-outline-gray900">View Dokumen</a>
+                                                    /* <a href="/laporan/dosbing/sign-pdf/{{ $laporan[0]->id }}" class="btn btn-outline-primary col-12">Sign Dokumen</a> */
+                                                    <i>Dosen Pembimbing Belum Tanda Tangan </i>
+                                                 @endif
+                                                @if($laporan[0]->sign_second == 1 && $laporan[0]->sign_third == 0)
+                                                    <a class="btn btn-outline-secondary col-12" disabled>View & Download</a>
+                                                    <i>Pembimbing Industri Belum Tanda Tangan </i>
+                                                @endif
+                                                @if($laporan[0]->sign_third == 1 && $laporan[0]->sign_fourth == 0)
+                                                    <a class="btn btn-outline-secondary col-12" disabled>View & Download</a>
+                                                    <i>KPS Belum Tanda Tangan </i>
+                                                @endif
+                                                @if($laporan[0]->sign_first == 1 && $laporan[0]->sign_second == 1 && $laporan[0]->sign_third == 1 && $laporan[0]->sign_fourth == 1)
+                                                    <a href="/dashboard/laporan/preview/{{ $laporan[0]->id }}" class="btn btn-outline-primary col-12" disabled>View & Download</a>
+                                                @endif  
                                             </div>
                                         </div>
-                                        @endif
-                                        @if($laporan[0]->status == "Ditolak")
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <span class="badge bg-gradient-danger">Laporan Ditolak</span>
-                                            </div>
-                                        </div>
-                                        @endif
-                                        @if($laporan[0]->status == "sedang berjalan")
-                                        <div class="row">
-                                            <div class="col mx-5">
-                                                <span class="badge bg-gradient-secondary">Sedang Ditinjau</span>
-                                            </div>
-                                        </div>
-                                        @endif
-            
-                                        @if($laporan[0]->status == "Diterima" && $laporan[0]->sign_first == 0)
-                                        <a class="btn btn-outline-secondary col-12" disabled>Sign Dokumen</a>
-                                        <i>Mahasiswa Belum Tanda Tangan</i>
-                                        @endif
-                                        @if($laporan[0]->sign_first == 1 && $laporan[0]->sign_second == 0 && $laporan[0]->status == "Diterima")
-                                            <a  class="btn btn-outline-secondary col-12" disabled>View & Download</a> 
-                                            <a href="/laporan/dosbing/view-pdf/{{ $laporan[0]->id }}" class="btn btn-outline-gray900">View Dokumen</a>
-                                            /* <a href="/laporan/dosbing/sign-pdf/{{ $laporan[0]->id }}" class="btn btn-outline-primary col-12">Sign Dokumen</a> */
-                                            <i>Dosen Pembimbing Belum Tanda Tangan </i>
-                                         @endif
-                                        @if($laporan[0]->sign_second == 1 && $laporan[0]->sign_third == 0)
-                                            <a class="btn btn-outline-secondary col-12" disabled>View & Download</a>
-                                            <i>Pembimbing Industri Belum Tanda Tangan </i>
-                                        @endif
-                                        @if($laporan[0]->sign_third == 1 && $laporan[0]->sign_fourth == 0)
-                                            <a class="btn btn-outline-secondary col-12" disabled>View & Download</a>
-                                            <i>KPS Belum Tanda Tangan </i>
-                                        @endif
-                                        @if($laporan[0]->sign_first == 1 && $laporan[0]->sign_second == 1 && $laporan[0]->sign_third == 1 && $laporan[0]->sign_fourth == 1)
-                                            <a href="/dashboard/laporan/preview/{{ $laporan[0]->id }}" class="btn btn-outline-primary col-12" disabled>View & Download</a>
-                                        @endif  
                                     </div>
+                                 </div>
                                 </div>
-                              
+                                <div class="row">
+                                    <div class="col-sm-5 col-md-6">
+                                        <label for="sertifikat" class="form-label">Sertifikat</label>
+                                    </div>
+                                </div> 
                             </div>
-                            <div class="col-sm-5 col-md-6">
-                                <label for="sertifikat" class="form-label">Sertifikat</label>
-                            </div>
-
                         </div> 
-
-                        <div class="row mt-3">
-                            <div class='d-flex'>
-                                <div class="col-md-6 ">
-                                    @if($laporan[0]->status == "sedang berjalan")
-                                    <a href="/laporan/dosbing/view-pdf/{{ $laporan[0]->id }}" class="btn btn-outline-gray900">View Dokumen</a>
-                                    @endif
-                                </div>
-                                {{-- // button untuk sertif  --}}
-                             <div class="col-md-6 ">
-                                @if($laporan[0]->dokumen_sertifikat_path != null)
-                                <a href="/laporan/dosbing/view-pdf/{{ $laporan[0]->id }}" class="btn btn-outline-gray900">View Dokumen</a>
-                                @else
-                              <p class="font-weight-bold">Belum Ada Sertifikat</p>
-                                @endif
-                            </div>
-                            </div>
-
-
-                            
-                            
-    
-                        </div>
-            
+                        @if($laporan[0]->dokumen_sertifikat_path != null)
+                        <a href="/laporan/dosbing/view-Sertifikatpdf/{{ $laporan[0]->id }}" class="btn btn-outline-gray900">View Sertifikat</a>
+                        @else
+                      <p class="font-weight-bold">Belum Ada Sertifikat</p>
+                        @endif
                 @else
                   <div class="row mt-5">
                     <div class="col-md-8 ">
@@ -233,8 +233,6 @@
                   </div>
                   <hr class="horizontal dark">
                 @endif
-                
-
                 @foreach($logcomment as $comment)
                         <div class="row mt-2">
                             <label for="comment" class="form-control-label">Comment</label>
