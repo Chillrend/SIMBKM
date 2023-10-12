@@ -10,7 +10,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <form  action="/dashboard/logbook/create" method="POST">
+                <form  action="/dashboard/logbook/create" enctype="multipart/form-data" method="POST">
                   @csrf
                   <input class="form-control" type="text" name="logbook" value="{{ $idLogbook }}" hidden>
                   <div class="row">
@@ -36,12 +36,30 @@
                     </div>                    
                   </div>
 
+                  <div class="row mt-5">
+                    <div class="col-md-8  d-flex">
+                        <label for="dokumen_logbook" class="form-label">Dokumen Logbook</label>
+                        <input class="form-control @error('dokumen_logbook') is-invalid @enderror" type="file" id="dokumen_logbook" name="dokumen_logbook">  
+                            @error('dokumen_logbook')
+                                <div class="invalid-feedback">
+                                {{ $message }}
+                                </div>
+                            @enderror
+                    </div>
+                  </div>
+
+                  {{-- @csrf
                   <div class="row">
                     <div class="col-12 mb-3">
-                      <label for="formFileSm" class="form-label">Logbook File</label>
-                      <input class="form-control @error('dokumen') is-invalid @enderror" type="file" id="dokumen" name="dokumen">  
+                      <label for="dokumen_logbook" class="form-label">Logbook File</label>
+                      <input class="form-control @error('dokumen_logbook') is-invalid @enderror" type="file" id="dokumen_logbook" name="dokumen_logbook" required>
+                      @error('dokumen')
+                        <div class="invalid-feedback">
+                          {{ $message }}
+                        </div>
+                      @enderror     
                     </div> 
-                  </div>
+                  </div> --}}
                   
                   <div class="d-flex align-items-center">
                     <div class="ms-md-auto d-flex">
