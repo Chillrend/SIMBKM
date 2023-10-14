@@ -6,6 +6,8 @@ use App\Models\Logbook;
 use App\Models\LogLogbook;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Response;
+use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 class LogbookController extends Controller
 {
@@ -37,8 +39,6 @@ class LogbookController extends Controller
 
     public function store(Request $request){
 
-        // dd($request->all());
-
         $validatedData = $request->validate([
             'tanggal_dibuat' => 'required',
             'body' => 'required',
@@ -46,10 +46,6 @@ class LogbookController extends Controller
             'logbook' => 'required',
             'dokumen_logbook' => 'nullable|mimes:pdf'
         ]);
-        
-        // $debug = $request->hasFile('dokumen_logbook');
-        // dd($debug);
-        // dd($validatedData);
 
         $validatedData['owner'] = auth()->user()->id;
         $validatedData['excerpt'] = Str::limit(strip_tags($validatedData['body'], 100));
@@ -114,6 +110,10 @@ class LogbookController extends Controller
         }
         $dataLogbook['excerpt'] = Str::limit(strip_tags($dataLogbook['body'], 100));
 
+       if ($request->hasFile('dokumen_logbook')) {
+            $dataLogbook['dokumen_logbook_path'] = $request->file('dokumen_logbook')->store('dokumen-logbook');
+       }
+
         $dataLogbook->update($request->all());
         return redirect('/dashboard/logbook')->with('success', 'Data Logbook has been updated!');
     }
@@ -125,5 +125,16 @@ class LogbookController extends Controller
         }
         LogLogbook::destroy($id);
         return redirect('/dashboard/logbook')->with('success', 'Data Logbook Berhasil di Hapus');
+    }
+
+    public function showLogbookPdf($id) {
+            
+        $logLogbook = LogLogbook::find($id);
+
+        $pdfPath = $logLogbook->dokumen_logbook_path;
+
+        $pdfUrl = Storage::url('app/public/'.$pdfPath);
+
+        return redirect($pdfUrl);
     }
 }

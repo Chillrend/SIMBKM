@@ -89,6 +89,7 @@ Route::get('/dashboard/logbook/create/{id}', [LogbookController::class, 'create'
 Route::get('/dashboard/logbook/{id}', [LogbookController::class, 'myLogbook'])->middleware('auth');
 Route::get('/dashboard/logbook', [LogbookController::class, 'index'])->middleware('auth');
 Route::get('/dashboard/logbook/{id}/edit', [LogbookController::class, 'edit'])->middleware('auth');
+Route::get('/dashboard/logbook/show-logbook-pdf/{id}', [LogbookController::class, 'showLogbookPdf'])->middleware('auth');
 Route::post('/dashboard/logbook/create', [LogbookController::class, 'store'])->middleware('auth');
 Route::post('/dashboard/logbook/{id}/update', [LogbookController::class, 'update'])->middleware('auth');
 Route::post('/dashboard/logbook/{id}/delete', [LogbookController::class, 'destroy'])->middleware('auth');
