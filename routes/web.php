@@ -159,6 +159,7 @@ Route::post('/laporan/dosbing/view-pdf/approve/{file}', [DosbingController::clas
 Route::post('/laporan/dosbing/view-pdf/canceled/{file}', [DosbingController::class, 'canceled'])->middleware('auth');
 Route::get('/laporan/dosbing/sign-pdf/{id}', [DosbingController::class, 'signPdf'])->middleware('auth');
 Route::post('/laporan/dosbing/sign-pdf/save', [DosbingController::class, 'savePdf'])->middleware('auth');
+Route::get('/laporan/dosbing/view-Sertifikatpdf/{id}', [DosbingController::class, 'showSertifikat'])->middleware('auth');
 // End Route Dosen Pembimbing
 
 // Route KPS
