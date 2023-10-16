@@ -133,7 +133,7 @@ class LogbookController extends Controller
 
         $pdfPath = $logLogbook->dokumen_logbook_path;
 
-        $pdfUrl = Storage::url('app/public/'.$pdfPath);
+        $pdfUrl = Storage::url($pdfPath);
 
         return redirect($pdfUrl);
     }
