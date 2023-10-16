@@ -43,6 +43,48 @@ class RegisterController extends Controller
         return redirect('/dashboard/register');
     }
 
+    public function editUser($id) {
+
+        return view('dashboard.edit-user', [
+            'title' => 'Edit Akun',
+            'title_page' => 'Edit Akun',
+            'name' => auth()->user()->name,
+            'active' => 'Edit Akun',
+            'user' => User::find($id),
+        ]);
+    }
+
+    public function updateUser(Request $request, $id) {
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'required|unique:users|email',
+            'password' => 'required|min:5|max:255',
+            'role' => 'required',
+            'role_kedua' => 'nullable',
+            'role_ketiga' => 'nullable',
+            'fakultas_id' => 'required',
+            'jurusan_id' => 'required',
+        ]);
+
+        $validatedData['password'] = Hash::make($validatedData['password']);
+
+        $user = User::find($id);
+
+        $user::update($validatedData);
+
+        session()->flash('success', 'Edit account successfull!');
+        
+        return redirect('/dashboard/register/');
+    }
+
+    public function removeUser($id) {
+        User::destroy($id);
+
+        session()->flash('success', 'Edit account successfull!');
+
+        return redirect('/dashboard/register/kelola-akun/');
+    }
+
     public function kelolaAkun(){
         return view('dashboard.kelola-akun', [
             'title' => 'Buat Akun / Kelola Akun',
