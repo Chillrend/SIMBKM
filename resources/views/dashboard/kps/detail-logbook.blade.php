@@ -57,10 +57,13 @@
                   <div class="row">
                     <div class="col-12 mb-3">
                       <label for="logBookFile" class="form-label">Logbook File</label>
-                      {{-- @if($laporan[0]->dokumen_logbook_path != null) --}}
+                      @if($logbook->dokumen_logbook_path != null)
                         <div class="row">
-                          <a href="/logbook/kps/list/detail/{{ $logbook->id }}" class="btn btn-outline-gray900">View Dokumen</a>
+                          <a href="/dashboard/logbook/show-logbook-pdf/{{$logbook->id}}" class="btn btn-outline-gray900">View Dokumen</a>
                         </div>
+                      @else
+                        <p class="font-weight-bold">Belum Dokumen Logbook</p>
+                      @endif
                     </div>
 
                       {{-- @else

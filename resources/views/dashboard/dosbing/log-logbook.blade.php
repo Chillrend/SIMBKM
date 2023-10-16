@@ -42,13 +42,14 @@
 
                   <div class="row">
                     <div class="col-12 mb-3">
-                      <label for="logBookFileKPS" class="form-label">Logbook File</label>
-                      {{-- @if($laporan[0]->dokumen_logbook_path != null) --}}
+                      <label for="logBookFileKPS" class="form-label">Dokumen Logbook</label>
+                      @if($logbook[0]->dokumen_logbook_path != null)
                         <div class="row">
-                          <a href="#" class="btn btn-outline-gray900">View Dokumen</a>
+                          <a href="/dashboard/logbook/show-logbook-pdf/{{$logbook[0]->id}}" class="btn btn-outline-gray900">View Dokumen</a>
                         </div>
-                      {{-- @else
-                    <p class="font-weight-bold">Belum Ada Sertifikat</p> --}}
+                      @else
+                        <p class="font-weight-bold">Belum Dokumen Logbook</p>
+                      @endif
                     </div>
 
 

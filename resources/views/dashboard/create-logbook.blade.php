@@ -47,19 +47,6 @@
                             @enderror
                     </div>
                   </div>
-
-                  {{-- @csrf
-                  <div class="row">
-                    <div class="col-12 mb-3">
-                      <label for="dokumen_logbook" class="form-label">Logbook File</label>
-                      <input class="form-control @error('dokumen_logbook') is-invalid @enderror" type="file" id="dokumen_logbook" name="dokumen_logbook" required>
-                      @error('dokumen')
-                        <div class="invalid-feedback">
-                          {{ $message }}
-                        </div>
-                      @enderror     
-                    </div> 
-                  </div> --}}
                   
                   <div class="d-flex align-items-center">
                     <div class="ms-md-auto d-flex">
