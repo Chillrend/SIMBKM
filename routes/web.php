@@ -116,6 +116,8 @@ Route::get('/dashboard/register/kelola-akun/{id}', [RegisterController::class, '
 Route::post('/dashboard/register/kelola-akun/{id}/delete', [RegisterController::class, 'destroy'])->middleware('auth');
 Route::post('/dashboard/register/kelola-akun/{id}/update', [RegisterController::class, 'destroy'])->middleware('auth');
 
+ 
+
 //Fakultas Route
 Route::get('/dashboard/fakultas', [FakultasController::class , 'index'])->middleware('auth');
 Route::get('/dashboard/fakultas/create', [FakultasController::class, 'create'])->middleware('auth');
