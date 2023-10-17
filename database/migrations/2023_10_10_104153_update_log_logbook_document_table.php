@@ -11,17 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tahun_ajaran_mbkms', function (Blueprint $table){
-            $table->id();
-            $table->string('tahun_ajaran');
-            $table->timestamps();
+        Schema::table("log_logbooks", function(Blueprint $table){
+            $table->string("dokumen_logbook_path")->nullable();
         });
     }
+
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('tahun_ajaran_mbkms');
+        Schema::table("log_logbooks", function(Blueprint $table){
+            $table->dropColumn("dokumen_logbook_path")->nullable();
+        });
     }
 };

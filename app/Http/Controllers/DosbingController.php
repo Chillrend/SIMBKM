@@ -225,4 +225,15 @@ class DosbingController extends Controller
         return redirect('/laporan/dosbing')->with('success', 'Dokumen Laporan Berhasil ditandatangan!');       
     }
 
+    public function showSertifikat($id) {
+        $laporan = Laporan::find($id);
+
+        $sertifikatPath = $laporan->dokumen_sertifikat_path;
+
+
+        $sertifikatUrl = Storage::url($sertifikatPath);
+
+        return redirect($sertifikatUrl);
+    }
+
 }

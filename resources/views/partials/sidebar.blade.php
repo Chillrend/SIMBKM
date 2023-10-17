@@ -95,6 +95,7 @@
           <span class="nav-link-text ms-1">Laporan</span>
         </a>
       </li>
+
       <li class="nav-item">
         <a class="nav-link @if($active == 'Forum') active @endif" href="/dashboard/forum">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
