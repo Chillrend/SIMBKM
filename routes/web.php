@@ -112,9 +112,9 @@ Route::post('/dashboard/laporan/revisi/{id}', [LaporanController::class, 'revisi
 Route::get('/dashboard/register', [RegisterController::class, 'index'])->middleware('auth');
 Route::get('/dashboard/register/kelola-akun', [RegisterController::class, 'kelolaAkun'])->middleware('auth');
 Route::post('/dashboard/register', [RegisterController::class, 'store'])->middleware('auth');
-Route::get('/dashboard/register/kelola-akun/{id}', [RegisterController::class, 'index'])->middleware('auth');
-Route::post('/dashboard/register/kelola-akun/{id}/delete', [RegisterController::class, 'destroy'])->middleware('auth');
-Route::post('/dashboard/register/kelola-akun/{id}/update', [RegisterController::class, 'destroy'])->middleware('auth');
+Route::get('/dashboard/register/kelola-akun/{id}', [RegisterController::class, 'editUser'])->middleware('auth');
+Route::post('/dashboard/register/kelola-akun/{id}/delete', [RegisterController::class, 'deleteUser'])->middleware('auth');
+Route::post('/dashboard/register/kelola-akun/{id}/update', [RegisterController::class, 'updateUser'])->middleware('auth');
 
  
 
