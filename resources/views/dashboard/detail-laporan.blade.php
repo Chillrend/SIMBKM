@@ -143,66 +143,96 @@
                             <input class="form-control" id="informasi_tambahan" type="text" name="informasi_tambahan" value="{{ $laporan[0]->listMbkm->informasi_tambahan }}" disabled>
                         </div>
                     </div>
+                    
+                {{-- Display laporan name if laporan != null --}}
                 @if($laporan[0]->dokumen_path != null)
+                    <div class="d-flex">
+                        <div class="col-md-8 ">
+                            <label for="dokumen" class="form-label">Post Dokumen</label>
+                            <h4>{{ $laporan[0]->dokumen_name }}</h4>
+                        </div>
+                        @if($laporan[0]->status == "Diterima")
+                        <div class="row">
+                            <div class="col">
+                                <span class="badge bg-gradient-success">Laporan Diterima</span>
+                            </div>
+                        </div>
+                        @endif
+                        @if($laporan[0]->status == "Ditolak")
+                        <div class="row">
+                            <div class="col-12">
+                                <span class="badge bg-gradient-danger">Laporan Ditolak</span>
+                            </div>
+                        </div>
+                        @endif
+                        @if($laporan[0]->status == "sedang berjalan")
+                        <div class="row">
+                            <div class="col">
+                                <span class="badge bg-gradient-secondary">Sedang Ditinjau</span>
+                            </div>
+                        </div>
+                        @endif
+                    </div>
+                @endif
+
+                {{-- Display sertifikat name if sertifikat != null --}}
+                @if($laporan[0]->dokumen_sertifikat_path != null)
                     <div class="row mt-5">
                         <div class="d-flex">
                             <div class="col-md-8 ">
-                                <label for="dokumen" class="form-label">Post Dokumen</label>
-                                <h4>{{ $laporan[0]->dokumen_name }}</h4>
+                                <label for="dokumen_sertifikat" class="form-label">Post Sertifikat</label>
+                                <h4>{{ $laporan[0]->dokumen_sertifikat_name }}</h4>
                             </div>
-                            @if($laporan[0]->status == "Diterima")
-                            <div class="row">
-                                <div class="col">
-                                    <span class="badge bg-gradient-success">Laporan Diterima</span>
-                                </div>
-                            </div>
-                            @endif
-                            @if($laporan[0]->status == "Ditolak")
-                            <div class="row">
-                                <div class="col-12">
-                                    <span class="badge bg-gradient-danger">Laporan Ditolak</span>
-                                </div>
-                            </div>
-                            @endif
-                            @if($laporan[0]->status == "sedang berjalan")
-                            <div class="row">
-                                <div class="col">
-                                    <span class="badge bg-gradient-secondary">Sedang Ditinjau</span>
-                                </div>
-                            </div>
-                            @endif
                         </div>
-                        @if($laporan[0]->status == "Diterima" && $laporan[0]->sign_first == 0)
-                        <a href="/dashboard/laporan/view-pdf/{{ $laporan[0]->id }}" class="btn btn-outline-primary col-12">Sign Dokumen</a>
-                        @endif
-                        
-                        @if($laporan[0]->sign_first == 1 && $laporan[0]->sign_second == 0)
-                            @if($laporan[0]->status != "sedang berjalan")
-                                <a  class="btn btn-outline-secondary col-12" disabled>View & Download</a>
-                                <i>Dosen Pembimbing Belum Tanda Tangan </i>
-                            @else
-                                <i>Dalam Pemeriksaan Dosen Pembimbing</i>
-                            @endif
-                        @endif
-                        @if($laporan[0]->sign_second == 1 && $laporan[0]->sign_third == 0)
-                            <a class="btn btn-outline-secondary col-12" disabled>View & Download</a>
-                            <i>Pembimbing Industri Belum Tanda Tangan </i>
-                        @endif
-                        @if($laporan[0]->sign_third == 1 && $laporan[0]->sign_fourth == 0)
-                            <a class="btn btn-outline-secondary col-12" disabled>View & Download</a>
-                            <i>KPS Belum Tanda Tangan </i>
-                        @endif
-                        @if($laporan[0]->sign_first == 1 && $laporan[0]->sign_second == 1 && $laporan[0]->sign_third == 1 && $laporan[0]->sign_fourth == 1)
-                            <a href="/dashboard/laporan/preview/{{ $laporan[0]->id }}" class="btn btn-outline-primary col-12" disabled>View & Download</a>
-                        @endif
                     </div>
-                    @if($laporan[0]->status == "Ditolak")
+                @endif
+                
+                {{-- File Submit Form, only display if at least one of laporan or sertifikat document is null --}}
+                @if($laporan[0]->dokumen_path == null || $laporan[0]->dokumen_sertifikat_path == null)
+                    <form action="/dashboard/laporan/{{ $laporan[0]->id }}" method="POST" enctype="multipart/form-data">
+                        @if($laporan[0]->dokumen_path == null)
+                            @csrf
+                            <div class="row mt-5">
+                                <div class="col-md-8  d-flex">
+                                    <label for="dokumen" class="form-label">Post Laporan</label>
+                                    <input class="form-control @error('dokumen') is-invalid @enderror" type="file" id="dokumen" name="dokumen">  
+                                        @error('dokumen')
+                                            <div class="invalid-feedback">
+                                            {{ $message }}
+                                            </div>
+                                        @enderror
+                                </div>
+                            </div>
+                        @endif
+
+                        @if($laporan[0]->dokumen_sertifikat_path == null)
+                            @csrf
+                            <div class="row mt-5">
+                                <div class="col-md-8  d-flex">
+                                    <label for="dokumen_sertifikat" class="form-label">Post Sertifikat</label>
+                                    <input class="form-control @error('dokumen_sertifikat') is-invalid @enderror" type="file" id="dokumen_sertifikat" name="dokumen_sertifikat">  
+                                        @error('dokumen_sertifikat')
+                                            <div class="invalid-feedback">
+                                            {{ $message }}
+                                            </div>
+                                        @enderror
+                                </div>
+                            </div>
+                        @endif
+
+                        <Button class="btn btn-primary align-items-center d-flex m-4" onclick="return confirm('Apakah data Laporan sudah benar?')">Submit</Button>
+                        <hr class="horizontal dark">
+                    </form>
+                @endif
+
+                {{-- Revision Form, only displays if laporan status = "Ditolak" --}}
+                @if($laporan[0]->status == "Ditolak")
                     <div class="row">
                         <form action="/dashboard/laporan/revisi/{{ $laporan[0]->id }}" method="POST" enctype="multipart/form-data">
                             @csrf
                           <div class="row mt-5">
                             <div class="col-md-8  d-flex">
-                                <label for="dokumen" class="form-label">Posting Ulang Dokumen</label>
+                                <label for="dokumen" class="form-label">Posting Ulang Laporan</label>
                                 <input class="form-control @error('dokumen') is-invalid @enderror" type="file" id="dokumen" name="dokumen">  
                                     @error('dokumen')
                                         <div class="invalid-feedback">
@@ -216,25 +246,6 @@
                         </form>
                     </div>
                     @endif
-                @else
-                <form action="/dashboard/laporan/{{ $laporan[0]->id }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                  <div class="row mt-5">
-                    <div class="col-md-8  d-flex">
-                        <label for="dokumen" class="form-label">Post Dokumen</label>
-                        <input class="form-control @error('dokumen') is-invalid @enderror" type="file" id="dokumen" name="dokumen">  
-                            @error('dokumen')
-                                <div class="invalid-feedback">
-                                   {{ $message }}
-                                </div>
-                            @enderror
-                    </div>
-                  </div>
-                    <Button class="btn btn-primary align-items-center d-flex m-4" onclick="return confirm('Apakah data Laporan sudah benar?')">Submit</Button>
-                      <hr class="horizontal dark">
-                </form>
-                @endif
-                
 
                 @foreach($logcomment as $comment)
                         <div class="row mt-4">

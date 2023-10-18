@@ -91,6 +91,7 @@ Route::get('/dashboard/logbook/create/{id}', [LogbookController::class, 'create'
 Route::get('/dashboard/logbook/{id}', [LogbookController::class, 'myLogbook'])->middleware('auth');
 Route::get('/dashboard/logbook', [LogbookController::class, 'index'])->middleware('auth');
 Route::get('/dashboard/logbook/{id}/edit', [LogbookController::class, 'edit'])->middleware('auth');
+Route::get('/dashboard/logbook/show-logbook-pdf/{id}', [LogbookController::class, 'showLogbookPdf'])->middleware('auth');
 Route::post('/dashboard/logbook/create', [LogbookController::class, 'store'])->middleware('auth');
 Route::post('/dashboard/logbook/{id}/update', [LogbookController::class, 'update'])->middleware('auth');
 Route::post('/dashboard/logbook/{id}/delete', [LogbookController::class, 'destroy'])->middleware('auth');
@@ -108,10 +109,16 @@ Route::post('/api/fetch-dokumen', [LaporanController::class, 'fetchDokumen']);
 Route::post('/dashboard/laporan/revisi/{id}', [LaporanController::class, 'revisi'])->middleware('auth');
 // Route::post('/api/save-document', [LaporanController::class, 'savePdf'])->middleware('auth');
 
+
 // Register Route
 Route::get('/dashboard/register', [RegisterController::class, 'index'])->middleware('auth');
 Route::get('/dashboard/register/kelola-akun', [RegisterController::class, 'kelolaAkun'])->middleware('auth');
 Route::post('/dashboard/register', [RegisterController::class, 'store'])->middleware('auth');
+Route::get('/dashboard/register/kelola-akun/{id}', [RegisterController::class, 'index'])->middleware('auth');
+Route::post('/dashboard/register/kelola-akun/{id}/delete', [RegisterController::class, 'destroy'])->middleware('auth');
+Route::post('/dashboard/register/kelola-akun/{id}/update', [RegisterController::class, 'destroy'])->middleware('auth');
+
+ 
 
 //Fakultas Route
 Route::get('/dashboard/fakultas', [FakultasController::class , 'index'])->middleware('auth');
@@ -159,6 +166,7 @@ Route::post('/laporan/dosbing/view-pdf/approve/{file}', [DosbingController::clas
 Route::post('/laporan/dosbing/view-pdf/canceled/{file}', [DosbingController::class, 'canceled'])->middleware('auth');
 Route::get('/laporan/dosbing/sign-pdf/{id}', [DosbingController::class, 'signPdf'])->middleware('auth');
 Route::post('/laporan/dosbing/sign-pdf/save', [DosbingController::class, 'savePdf'])->middleware('auth');
+Route::get('/laporan/dosbing/view-Sertifikatpdf/{id}', [DosbingController::class, 'showSertifikat'])->middleware('auth');
 // End Route Dosen Pembimbing
 
 // Route KPS

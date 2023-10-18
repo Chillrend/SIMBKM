@@ -63,6 +63,7 @@ class KpsController extends Controller
 
     public function logLogbook($id){
         $logbook = LogLogbook::find($id);
+        
         return view('dashboard.kps.detail-logbook',[
             'active' => 'Logbook KPS',
             'title_page' => 'Logbook / List Logbook / Detail',
