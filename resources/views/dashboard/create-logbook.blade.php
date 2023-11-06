@@ -10,7 +10,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <form  action="/dashboard/logbook/create" method="POST">
+                <form  action="/dashboard/logbook/create" enctype="multipart/form-data" method="POST">
                   @csrf
                   <input class="form-control" type="text" name="logbook" value="{{ $idLogbook }}" hidden>
                   <div class="row">
@@ -35,6 +35,19 @@
                       <trix-editor input="body"></trix-editor>
                     </div>                    
                   </div>
+
+                  <div class="row mt-5">
+                    <div class="col-md-8  d-flex">
+                        <label for="dokumen_logbook" class="form-label">Dokumen Logbook</label>
+                        <input class="form-control @error('dokumen_logbook') is-invalid @enderror" type="file" id="dokumen_logbook" name="dokumen_logbook">  
+                            @error('dokumen_logbook')
+                                <div class="invalid-feedback">
+                                {{ $message }}
+                                </div>
+                            @enderror
+                    </div>
+                  </div>
+                  
                   <div class="d-flex align-items-center">
                     <div class="ms-md-auto d-flex">
                       {{-- <a href="#" class="btn btn-primary align-items-center d-flex m-2">Submit</a> --}}

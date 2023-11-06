@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('laporans', function (Blueprint $table){
+            $table->string('dokumen_sertifikat_name')->default('belum ada file sertifikat')->nullable();
             $table->string('dokumen_sertifikat_path')->nullable();
         });
     }
@@ -23,6 +24,7 @@ return new class extends Migration
     {
         Schema::table('laporans', function (Blueprint $table){
             $table->dropColumn('dokumen_sertifikat_path');
+            $table->dropColumn('dokumen_sertifikat_name');
         });
     }
 };
