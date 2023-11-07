@@ -37,30 +37,15 @@
                   </div>
 
                   <div class="row mt-5">
-                    @if($log_logbooks->dokumen_logbook_path != null)
-                      <input class="form-control" type="text" name="dokumen_logbook" id="dokumen_logbook" value="{{ $log_logbooks->dokumen_logbook_path }}" hidden>
-                      <div class="col-12 mb-3">
-                        <label for="logBookFileKPS" class="form-label">Dokumen Logbook</label>
-                        @if($log_logbooks->dokumen_logbook_path != null)
-                          <div class="row">
-                            <a href="/dashboard/logbook/show-logbook-pdf/{{ $log_logbooks->id }}" class="btn btn-outline-gray900">View Dokumen</a>
-                          </div>
-                        @else
-                          <p class="font-weight-bold">Belum Dokumen Logbook</p>
-                        @endif
-                      </div>
-                    @else
-                      <div class="col-md-8  d-flex">
-                        <label for="dokumen_logbook" class="form-label">Dokumen Logbook</label>
+                    <div class="col-md-8  d-flex">
+                        <label for="dokumen_logbook" class="form-label">Update Dokumen Logbook</label>
                         <input class="form-control @error('dokumen_logbook') is-invalid @enderror" type="file" id="dokumen_logbook" name="dokumen_logbook">  
                             @error('dokumen_logbook')
                                 <div class="invalid-feedback">
                                 {{ $message }}
                                 </div>
                             @enderror
-                      </div>
-                    @endif
-                    
+                    </div>
                   </div>
 
                   <div class="d-flex align-items-center">

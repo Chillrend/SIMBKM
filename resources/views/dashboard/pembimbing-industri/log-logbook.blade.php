@@ -48,7 +48,7 @@
                           <a href="/dashboard/logbook/show-logbook-pdf/{{$logbook[0]->id}}" class="btn btn-outline-gray900">View Dokumen</a>
                         </div>
                       @else
-                        <p class="font-weight-bold">Belum Dokumen Logbook</p>
+                        <p class="font-weight-bold">Belum Ada Dokumen Logbook</p>
                       @endif
                     </div>
 
