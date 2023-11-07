@@ -12,15 +12,16 @@
                 <form action="/dashboard/program-mbkm/{{ $program->id }}/edit" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="row"> 
-                    <div class="mb-3 col-10">
-                            <label for="fotoikon">Pilih Gambar</label><br>
-                            <input type="file" id="fotoikon" name="fotoikon" accept="image/*">
+                        <div class="col-md-10">
+                            <label for="fotoikon" class="form-label">Logo</label><br>
+                            <img src="{{ asset('storage/' . $program['fotoikon']) }}" class="img-thumbnail" alt="gambar" style="width: 150px; height: 150px;">
+                            <input class="form-control @error('fotoikon') is-invalid @enderror" type="file" id="fotoikon" name="fotoikon" accept="image/*">
                             @error('fotoikon')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
                             @enderror
-                        </div>         
+                        </div>
                         <div class="mb-3 col-10">
                             <label for="name" class="form-label">Nama</label>
                             <input class="form-control" type="text" id="name" name="name" placeholder="Masukan Nama Program" value="{{ old('name', $program->name) }}" autofocus required>  
@@ -36,8 +37,8 @@
                                 <label class="custom-control-label" for="status">Aktif</label>
                             </div>
                             <div class="form-check ms-3">
-                              <input class="form-check-input" type="radio" name="status" id="status" value="Tidak Aktif">
-                              <label class="custom-control-label" for="status">Tidak Aktif</label>
+                                <input class="form-check-input" type="radio" name="status" id="status" value="Tidak Aktif">
+                                <label class="custom-control-label" for="status">Tidak Aktif</label>
                             </div>
                         </div>
                         @else
@@ -47,8 +48,8 @@
                                 <label class="custom-control-label" for="status">Aktif</label>
                             </div>
                             <div class="form-check ms-3">
-                              <input class="form-check-input" type="radio" name="status" id="status" value="Tidak Aktif" checked="checked">
-                              <label class="custom-control-label" for="status">Tidak Aktif</label>
+                                <input class="form-check-input" type="radio" name="status" id="status" value="Tidak Aktif" checked="checked">
+                                <label class="custom-control-label" for="status">Tidak Aktif</label>
                             </div>
                         </div>
                         @endif
@@ -56,7 +57,7 @@
                         <hr class="horizontal dark">
                         <div class="d-flex align-items-center ">
                             <div class="ms-md-auto d-flex">
-                              <Button type="submit" class="btn btn-primary align-items-center d-flex m-4 ">Submit</Button>
+                                <Button type="submit" class="btn btn-primary align-items-center d-flex m-4 ">Submit</Button>
                             </div>
                         </div>
                     </div>

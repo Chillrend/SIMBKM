@@ -14,6 +14,8 @@ use App\Models\TahunAjaranMbkm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+
 
 class MbkmController extends Controller
 {
@@ -88,14 +90,22 @@ class MbkmController extends Controller
     
             if ($request->hasFile('fotoikon')) {
                 if ($request->file('fotoikon')->isValid()) {
-                    // Hapus file lama
-                    if ($mbkm->fotoikon) {
-                        Storage::disk('public')->delete('img/' . $mbkm->fotoikon);
+                    // Delete the old file
+                    if ($mbkm->fotoikon && Storage::disk('public')->exists('img/' . $mbkm->fotoikon)) {
+                        $deleteStatus = Storage::disk('public')->delete('img/' . $mbkm->fotoikon);
+            
+                        if (!$deleteStatus) {
+                            // Log an error message if the file couldn't be deleted
+                            Log::error("Could not delete image: public/img/" . $mbkm->fotoikon);
+                        }
                     }
-    
-                    // Simpan file baru
+            
+                    // Store the new file
                     $filename = $request->fotoikon->store('img', 'public');
                     $validatedData['fotoikon'] = $filename;
+                } else {
+                    // If no new image is uploaded, keep the old image
+                    $validatedData['fotoikon'] = $mbkm->fotoikon;
                 }
             }
     
