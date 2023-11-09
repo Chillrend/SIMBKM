@@ -18,7 +18,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form action="/dashboard/register" method="post">
+                    <form action="/dashboard/register/kelola-akun/{{ $user->id }}/update" method="post">
                         @csrf
                         <div class="row">   
                             <div class="col-md-6">
@@ -43,10 +43,12 @@
                                     @enderror
                                 </div>
                             </div>
+
+                            {{-- Create new password --}}
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="password" class="form-control-label">Password</label>
-                                    <input class="form-control @error('password') is-invalid @enderror" id="password" type="password" name="password" placeholder="Masukan password" value="{{old('password', $user->password)}}"required>
+                                    <label for="password" class="form-control-label">Ubah Password</label>
+                                    <input class="form-control @error('password') is-invalid @enderror" id="password" type="password" name="password" placeholder="Masukan password baru" value="{{old('password')}}">
                                     @error('password')
                                         <div class="invalid-feedback">
                                             {{ $message }}
