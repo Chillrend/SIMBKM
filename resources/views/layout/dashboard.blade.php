@@ -14,6 +14,7 @@
   <link href="/css/nucleo-icons.css" rel="stylesheet" />
   {{-- <link href="{{ asset('/css/nucleo-icons.css') }}" rel="stylesheet" /> --}}
   <link href="/css/nucleo-svg.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/dashboard-wadir.css">
   {{-- <link href="{{ asset('../public/css/nucleo-svg.css') }}" rel="stylesheet" /> --}}
   
   <!-- Font Awesome Icons -->
