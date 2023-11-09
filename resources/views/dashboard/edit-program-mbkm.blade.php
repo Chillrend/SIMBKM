@@ -11,7 +11,7 @@
             <div class="card-body">
                 <form action="/dashboard/program-mbkm/{{ $program->id }}/edit" method="post" enctype="multipart/form-data">
                     @csrf
-                    <div class="row"> 
+                    <div class="row">
                         <div class="col-md-10">
                             <label for="fotoikon" class="form-label">Logo</label><br>
                             <img src="{{ asset('storage/' . $program['fotoikon']) }}" class="img-thumbnail" alt="gambar" style="width: 150px; height: 150px;">
@@ -24,7 +24,7 @@
                         </div>
                         <div class="mb-3 col-10">
                             <label for="name" class="form-label">Nama</label>
-                            <input class="form-control" type="text" id="name" name="name" placeholder="Masukan Nama Program" value="{{ old('name', $program->name) }}" autofocus required>  
+                            <input class="form-control" type="text" id="name" name="name" placeholder="Masukan Nama Program" value="{{ old('name', $program->name) }}" autofocus required>
                         </div>
                         <div class="mb-3 col-10">
                             <label for="deskripsi" class="form-label">Deskripsi</label>
@@ -44,7 +44,7 @@
                         @else
                         <div class="col-4  d-flex">
                             <div class="form-check mb-3">
-                                <input class="form-check-input" type="radio" name="status" id="status" value="Aktif" >
+                                <input class="form-check-input" type="radio" name="status" id="status" value="Aktif">
                                 <label class="custom-control-label" for="status">Aktif</label>
                             </div>
                             <div class="form-check ms-3">
@@ -53,7 +53,7 @@
                             </div>
                         </div>
                         @endif
-                        
+
                         <hr class="horizontal dark">
                         <div class="d-flex align-items-center ">
                             <div class="ms-md-auto d-flex">
@@ -61,7 +61,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </form>
             </div>
         </div>

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('program_mbkms', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->string('deskripsi')->nullable();
+            $table->text('deskripsi')->nullable();
             $table->binary('fotoikon')->nullable();
             $table->string('status')->default('Aktif');
             $table->timestamps();
