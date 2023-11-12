@@ -116,10 +116,10 @@ Route::get('/dashboard/register/kelola-akun/{id}', [RegisterController::class, '
 Route::post('/dashboard/register/kelola-akun/{id}/delete', [RegisterController::class, 'deleteUser'])->middleware('auth');
 Route::post('/dashboard/register/kelola-akun/{id}/update', [RegisterController::class, 'updateUser'])->middleware('auth');
 
- 
+
 
 //Fakultas Route
-Route::get('/dashboard/fakultas', [FakultasController::class , 'index'])->middleware('auth');
+Route::get('/dashboard/fakultas', [FakultasController::class, 'index'])->middleware('auth');
 Route::get('/dashboard/fakultas/create', [FakultasController::class, 'create'])->middleware('auth');
 Route::get('/dashboard/fakultas/{id}', [FakultasController::class, 'edit'])->middleware('auth');
 Route::post('/dashboard/fakultas', [FakultasController::class, 'store'])->middleware('auth');
@@ -147,6 +147,12 @@ Route::get('/dashboard/program-mbkm/create', [MbkmController::class, 'create'])-
 Route::get('/dashboard/program-mbkm/{id}', [MbkmController::class, 'edit'])->middleware('auth');
 Route::post('/dashboard/program-mbkm', [MbkmController::class, 'storeProgram'])->middleware('auth');
 Route::post('/dashboard/program-mbkm/{id}/edit', [MbkmController::class, 'update'])->middleware('auth');
+
+// 
+Route::get('/dashboard/mbkm-mhsw', [MbkmController::class, 'getAllMBKM'])->middleware('auth');
+Route::get('/dashboard/mbkm-mhsw/{id}', [MbkmController::class, 'getMBKM'])->middleware('auth');
+
+
 
 // Route Dosen Pembimbing
 Route::get('/dashboard/dosbing/', [DosbingController::class, 'dashboard'])->middleware('auth');
@@ -228,10 +234,6 @@ Route::get('/dashboard/wadir/view-pdf/{id}', [WadirController::class, 'viewPdf']
 Route::post('/api/fetch-jurusan', [DashboardController::class, 'fetchJurusan']);
 Route::get('/export_excel', [LoginController::class, 'exportExcel']);
 Route::get('/api/fetch-chart-label', [PembimbingAkademikController::class, 'fetchChartLabel']);
-Route::get('/test/sign-pad', function(){
+Route::get('/test/sign-pad', function () {
     return view('dashboard.signpad');
 });
-
-
-
-

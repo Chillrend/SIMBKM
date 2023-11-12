@@ -194,4 +194,34 @@ class MbkmController extends Controller
         $form->update($request->validate($rules));
         return redirect('/dashboard/informasi-mbkm/personal')->with('success', 'Data Mbkm has been updated!');
     }
+
+
+    public function getAllMBKM()
+    {
+        return view('dashboard.list-mbkm-mhsw', [
+            'title' => 'Daftar MBKM Mahasiswa',
+            'title_page' => 'MBKM Mahasiswa',
+            'active' => 'Mbkm Mahasiswa',
+            'name' => auth()->user()->name,
+            'programMbkm' => Mbkm::all()
+        ]);
+    }
+
+
+    public function getMBKM($mbkm)
+    {
+        return view('dashboard.get-mbkm-mhsw', [
+            'title' => 'Lihat',
+            'title_page' => 'Informasi Mbkm Mahasiswa',
+            'active' => 'Informasi MBKM',
+            'name' => auth()->user()->name,
+            'mbkm' => Mbkm::find($mbkm),
+            'fakultas' => Fakultas::where('status', 'Aktif')->get(),
+            'programs' => ProgramMbkm::where('status', 'Aktif')->get(),
+            'tahun_ajaran' => TahunAjaranMbkm::all()->sortByDesc('id'),
+            'jurusans' => Jurusan::where('status', 'Aktif')->get(),
+            'dosbing' => User::where('role', '4')->orWhere('role_kedua', '4')->orWhere('role_ketiga', '4')->get(),
+            'pembimbing_industri' => User::where('role', '6')->orWhere('role_kedua', '6')->orWhere('role_ketiga', '6')->get(),
+        ]);
+    }
 }
