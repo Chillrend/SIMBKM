@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Laporan;
 use App\Models\Logbook;
 use App\Models\LogLogbook;
+use App\Models\Fakultas;
 use Illuminate\Http\Request;
 use App\Models\LogSignaturePdf;
 use Illuminate\Support\Facades\DB;
@@ -14,17 +15,35 @@ use Illuminate\Support\Facades\DB;
 class WadirController extends Controller
 {
     public function dashboard(){
-        
-        $data = DB::select('SELECT pm.name as label, count(pm.name) as total FROM 
-        mbkms m left join program_mbkms pm on pm.id=m.program GROUP BY pm.name');
-        
+        $fakultas = request('fakultas');
+        $data = DB::select('SELECT pm.name as label, count(pm.name) as total
+        FROM mbkms m
+        LEFT JOIN program_mbkms pm on pm.id=m.program
+        GROUP BY pm.name;');
+
+$data1 = DB::select("SELECT f.name AS jurusan, COUNT(f.name) AS total
+FROM mbkms m
+LEFT JOIN fakultas f ON f.id = m.fakultas
+GROUP BY f.name");
+
+$data2 = DB::select("SELECT j.name AS program_studi, f.name AS jurusan ,COUNT(j.name) AS total
+FROM mbkms m
+LEFT JOIN fakultas f ON f.id = m.fakultas
+LEFT JOIN jurusan j ON j.id = m.jurusan
+GROUP BY f.name, j.name");
+       
+
+// dd($data, $data1, $data2);
+
+
         return view('dashboard.wadir.dashboard', [
             'active' => 'Dashboard Wadir',
             'title_page' => 'Dashboard',
             'title' => 'Dashboard',
+            'fakultas' => Fakultas::where('status', 'Aktif')->get(),
             'mahasiswa' => Mbkm::latest()->filter(request(['search']))
             ->paginate(7)->withQueryString(),
-            'jumlahData' => $data
+            'jumlahData' => [$data,$data1,$data2]
         ]);
     }
 
