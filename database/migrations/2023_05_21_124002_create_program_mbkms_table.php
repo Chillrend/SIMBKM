@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->text('deskripsi')->nullable();
-            $table->binary('fotoikon')->nullable();
+            $table->string('fotoikon')->nullable();
             $table->string('status')->default('Aktif');
             $table->timestamps();
         });
