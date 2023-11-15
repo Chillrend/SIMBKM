@@ -13,6 +13,9 @@ use App\Models\ProgramMbkm;
 use App\Models\TahunAjaranMbkm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+
 
 class MbkmController extends Controller
 {
@@ -40,10 +43,23 @@ class MbkmController extends Controller
 
     public function storeProgram(Request $request)
     {
+        
         $validatedData = $request->validate([
             'name' => 'required|unique:program_mbkms',
-            'status' => 'required'
+            'status' => 'required',
+            'deskripsi' => 'required',
+            'fotoikon' => 'required|image'
         ]);
+        if ($request->hasFile('fotoikon')) {
+            if ($request->file('fotoikon')->isValid()) {
+                $validatedData['fotoikon'] = $request->fotoikon->storeAs('img', 'public');
+            } else {
+                return redirect('/dashboard/program-mbkm')->with('error', 'Upload file gagal!');
+            }
+        } else {
+            return redirect('/dashboard/program-mbkm')->with('error', 'File tidak ditemukan!');
+        }
+        
         ProgramMbkm::create($validatedData);
 
         return redirect('/dashboard/program-mbkm')->with('success', 'Program MBKM Berhasil Dibuat!');
@@ -57,17 +73,63 @@ class MbkmController extends Controller
             'active' => 'Program Mbkm',
             'name' => auth()->user()->name,
             'program' => ProgramMbkm::find($id),
-
         ]);
     }
 
-    public function update(Request $request, $program)
+    public function update(Request $request, $id)
     {
-        $mbkm = ProgramMbkm::find($program);
-
-        $mbkm->update($request->all());
-        return redirect('/dashboard/program-mbkm')->with('success', 'Data Program Mbkm has been updated!');
+        $mbkm = ProgramMbkm::find($id);
+    
+        if ($mbkm) {
+            $validatedData = $request->validate([
+                'name' => 'required|unique:program_mbkms,name,' . $mbkm->id,
+                'status' => 'required',
+                'deskripsi' => 'required',
+                'fotoikon' => 'image'
+            ]);
+    
+            if ($request->hasFile('fotoikon')) {
+                if ($request->file('fotoikon')->isValid()) {
+                    // Delete the old file
+                    if ($mbkm->fotoikon && Storage::disk('public')->exists('img/' . $mbkm->fotoikon)) {
+                        $deleteStatus = Storage::disk('public')->delete('img/' . $mbkm->fotoikon);
+            
+                        if (!$deleteStatus) {
+                            // Log an error message if the file couldn't be deleted
+                            Log::error("Could not delete image: public/img/" . $mbkm->fotoikon);
+                        }
+                    }
+            
+                    // Store the new file
+                    $filename = $request->fotoikon->store('img', 'public');
+                    $validatedData['fotoikon'] = $filename;
+                } else {
+                    // If no new image is uploaded, keep the old image
+                    $validatedData['fotoikon'] = $mbkm->fotoikon;
+                }
+            }
+    
+            $mbkm->update($validatedData);
+    
+            return redirect('/dashboard/program-mbkm')->with('success', 'Data Program Mbkm has been updated!');
+        } else {
+            return redirect('/dashboard/program-mbkm')->with('error', 'Program Mbkm not found!');
+        }
     }
+
+    public function destroy($id)
+    {
+        $mbkm = ProgramMbkm::find($id);
+        if ($mbkm) {
+            $mbkm->delete();
+            return redirect('/dashboard/program-mbkm')->with('success', 'Program Mbkm has been deleted!');
+        } else {
+            return redirect('/dashboard/program-mbkm')->with('error', 'Program Mbkm not found!');
+        }
+    }
+
+    
+    
 
     public function store(Request $request)
     {

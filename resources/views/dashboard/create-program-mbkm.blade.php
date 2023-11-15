@@ -9,9 +9,18 @@
             </div>
 
             <div class="card-body">
-                <form action="/dashboard/program-mbkm" method="post">
+                <form action="/dashboard/program-mbkm" method="post" enctype="multipart/form-data">
                     @csrf
-                    <div class="row">            
+                    <div class="row">       
+                        <div class="mb-3 col-10">
+                                <label for="fotoikon">Pilih Gambar</label><br>
+                                <input type="file" id="fotoikon" name="fotoikon" accept="image/*">
+                                @error('fotoikon')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                        </div>     
                         <div class="mb-3 col-10">
                             <label for="name" class="form-label">Nama</label>
                             <input class="form-control @error('name') is-invalid @enderror" type="text" id="name" name="name" placeholder="Masukan Nama Program" autofocus required>  
@@ -20,6 +29,10 @@
                                     {{ $message }}
                                 </div>
                             @enderror
+                        </div>
+                        <div class="mb-3 col-10">
+                            <label for="deskripsi" class="form-label">Deskripsi</label>
+                            <textarea class="form-control @error('name') is-invalid @enderror" type="text" id="deskripsi" name="deskripsi" placeholder="Masukan Deskripsi Program" autofocus required style="resize: none;height: 200px;"></textarea>  
                         </div>
                         <div class="col-4 d-flex">
                             <div class="form-check mb-3">

@@ -74,6 +74,8 @@ Route::get('/dashboard/informasi-mbkm/personal', [MbkmController::class, 'myForm
 Route::get('/dashboard/informasi-mbkm/{id}', [MbkmController::class, 'editMyForm'])->middleware('auth');
 Route::post('/dashboard/informasi-mbkm/create', [MbkmController::class, 'store'])->middleware('auth');
 Route::post('/dashboard/informasi-mbkm/{id}/edit', [MbkmController::class, 'updateMyForm'])->middleware('auth');
+Route::delete('/dashboard/program-mbkm/{id}', [MbkmController::class, 'destroy'])->middleware('auth');
+
 
 // Upload Kurikulum Route
 Route::get('/dashboard/upload-kurikulum', [DashboardController::class, 'uploadKurikulum'])->middleware('auth');
