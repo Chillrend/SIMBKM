@@ -42,11 +42,7 @@
           </div>
         </div>
         @endforeach
-
-
       </div>
     </div>
   </div>
-
 </main>
-@endsection

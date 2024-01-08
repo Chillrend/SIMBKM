@@ -74,6 +74,8 @@ Route::get('/dashboard/informasi-mbkm/personal', [MbkmController::class, 'myForm
 Route::get('/dashboard/informasi-mbkm/{id}', [MbkmController::class, 'editMyForm'])->middleware('auth');
 Route::post('/dashboard/informasi-mbkm/create', [MbkmController::class, 'store'])->middleware('auth');
 Route::post('/dashboard/informasi-mbkm/{id}/edit', [MbkmController::class, 'updateMyForm'])->middleware('auth');
+Route::delete('/dashboard/program-mbkm/{id}', [MbkmController::class, 'destroy'])->middleware('auth');
+
 
 // Upload Kurikulum Route
 Route::get('/dashboard/upload-kurikulum', [DashboardController::class, 'uploadKurikulum'])->middleware('auth');
@@ -89,6 +91,7 @@ Route::get('/dashboard/logbook/create/{id}', [LogbookController::class, 'create'
 Route::get('/dashboard/logbook/{id}', [LogbookController::class, 'myLogbook'])->middleware('auth');
 Route::get('/dashboard/logbook', [LogbookController::class, 'index'])->middleware('auth');
 Route::get('/dashboard/logbook/{id}/edit', [LogbookController::class, 'edit'])->middleware('auth');
+Route::get('/dashboard/logbook/show-logbook-pdf/{id}', [LogbookController::class, 'showLogbookPdf'])->middleware('auth');
 Route::post('/dashboard/logbook/create', [LogbookController::class, 'store'])->middleware('auth');
 Route::post('/dashboard/logbook/{id}/update', [LogbookController::class, 'update'])->middleware('auth');
 Route::post('/dashboard/logbook/{id}/delete', [LogbookController::class, 'destroy'])->middleware('auth');
@@ -106,13 +109,19 @@ Route::post('/api/fetch-dokumen', [LaporanController::class, 'fetchDokumen']);
 Route::post('/dashboard/laporan/revisi/{id}', [LaporanController::class, 'revisi'])->middleware('auth');
 // Route::post('/api/save-document', [LaporanController::class, 'savePdf'])->middleware('auth');
 
+
 // Register Route
 Route::get('/dashboard/register', [RegisterController::class, 'index'])->middleware('auth');
 Route::get('/dashboard/register/kelola-akun', [RegisterController::class, 'kelolaAkun'])->middleware('auth');
 Route::post('/dashboard/register', [RegisterController::class, 'store'])->middleware('auth');
+Route::get('/dashboard/register/kelola-akun/{id}', [RegisterController::class, 'editUser'])->middleware('auth');
+Route::post('/dashboard/register/kelola-akun/{id}/delete', [RegisterController::class, 'deleteUser'])->middleware('auth');
+Route::post('/dashboard/register/kelola-akun/{id}/update', [RegisterController::class, 'updateUser'])->middleware('auth');
+
+
 
 //Fakultas Route
-Route::get('/dashboard/fakultas', [FakultasController::class , 'index'])->middleware('auth');
+Route::get('/dashboard/fakultas', [FakultasController::class, 'index'])->middleware('auth');
 Route::get('/dashboard/fakultas/create', [FakultasController::class, 'create'])->middleware('auth');
 Route::get('/dashboard/fakultas/{id}', [FakultasController::class, 'edit'])->middleware('auth');
 Route::post('/dashboard/fakultas', [FakultasController::class, 'store'])->middleware('auth');
@@ -141,6 +150,12 @@ Route::get('/dashboard/program-mbkm/{id}', [MbkmController::class, 'edit'])->mid
 Route::post('/dashboard/program-mbkm', [MbkmController::class, 'storeProgram'])->middleware('auth');
 Route::post('/dashboard/program-mbkm/{id}/edit', [MbkmController::class, 'update'])->middleware('auth');
 
+// 
+Route::get('/dashboard/mbkm-mhsw', [MbkmController::class, 'getAllMBKM'])->middleware('auth');
+Route::get('/dashboard/mbkm-mhsw/{id}', [MbkmController::class, 'getMBKM'])->middleware('auth');
+
+
+
 // Route Dosen Pembimbing
 Route::get('/dashboard/dosbing/', [DosbingController::class, 'dashboard'])->middleware('auth');
 Route::get('/dashboard/dosbing/detail/{id}', [DosbingController::class, 'detailMahasiswa'])->middleware('auth');
@@ -157,6 +172,7 @@ Route::post('/laporan/dosbing/view-pdf/approve/{file}', [DosbingController::clas
 Route::post('/laporan/dosbing/view-pdf/canceled/{file}', [DosbingController::class, 'canceled'])->middleware('auth');
 Route::get('/laporan/dosbing/sign-pdf/{id}', [DosbingController::class, 'signPdf'])->middleware('auth');
 Route::post('/laporan/dosbing/sign-pdf/save', [DosbingController::class, 'savePdf'])->middleware('auth');
+Route::get('/laporan/dosbing/view-Sertifikatpdf/{id}', [DosbingController::class, 'showSertifikat'])->middleware('auth');
 // End Route Dosen Pembimbing
 
 // Route KPS
@@ -220,10 +236,6 @@ Route::get('/dashboard/wadir/view-pdf/{id}', [WadirController::class, 'viewPdf']
 Route::post('/api/fetch-jurusan', [DashboardController::class, 'fetchJurusan']);
 Route::get('/export_excel', [LoginController::class, 'exportExcel']);
 Route::get('/api/fetch-chart-label', [PembimbingAkademikController::class, 'fetchChartLabel']);
-Route::get('/test/sign-pad', function(){
+Route::get('/test/sign-pad', function () {
     return view('dashboard.signpad');
 });
-
-
-
-

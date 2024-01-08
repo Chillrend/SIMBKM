@@ -43,6 +43,60 @@ class RegisterController extends Controller
         return redirect('/dashboard/register');
     }
 
+    public function editUser($id) {
+
+        return view('dashboard.edit-akun', [
+            'title' => 'Edit Akun',
+            'title_page' => 'Edit Akun',
+            'name' => auth()->user()->name,
+            'active' => 'Edit Akun',
+            'user' => User::find($id),
+            'roles' => Role::all(),
+            'fakultas' => Fakultas::all(),
+            'jurusans' => Jurusan::all(),
+        ]);
+    }
+
+    public function updateUser(Request $request, $id) {
+
+        $user = User::find($id);
+
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'required|email',
+            'password' => 'nullable|min:5|max:255',
+            'role' => 'required',
+            'role_kedua' => 'nullable',
+            'role_ketiga' => 'nullable',
+            'fakultas_id' => 'required',
+            'jurusan_id' => 'required',
+        ]);
+
+        if (isset($validatedData['password'])) {
+             $validatedData['password'] = Hash::make($validatedData['password']);
+        }
+    
+        if ($validatedData['email'] && $user->email !== $validatedData['email']) {
+            if (User::where('email', $validatedData['email'])->exists()) {
+                return redirect()->back()->withErrors(['email' => 'The email address is already in use.']);
+            }
+        }
+
+        $user->update($validatedData);
+
+        session()->flash('success', 'Edit account successfull!');
+        
+        return redirect('/dashboard/register/kelola-akun/');
+    }
+
+    public function deleteUser($id) {
+        User::destroy($id);
+
+        session()->flash('success', 'Account successfully removed!');
+
+        return redirect('/dashboard/register/kelola-akun/');
+    }
+
     public function kelolaAkun(){
         return view('dashboard.kelola-akun', [
             'title' => 'Buat Akun / Kelola Akun',
