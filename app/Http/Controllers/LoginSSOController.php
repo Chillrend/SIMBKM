@@ -18,8 +18,6 @@ use Laravel\Socialite\Facades\Socialite;
 class LoginSSOController extends Controller
 {
     public function redirectToSSOPNJ(){
-
-
         return Socialite::driver('pnj')->redirect();
     }
 
@@ -32,7 +30,7 @@ class LoginSSOController extends Controller
         if($existingUserFromUser){
             Auth::login($existingUserFromUser);
             request()->session()->regenerate();
-            if(is_null($existingUserFromUser->jurusan_id) || empty($existingUserFromUser->jurusan_id) ){
+            if(empty($existingUserFromUser->jurusan_id)){
                 return redirect()->intended('/dashboard/first-create/1');
             }
 
@@ -46,7 +44,6 @@ class LoginSSOController extends Controller
             $newUser->name           = $user->attributes['name'];
             $newUser->email          = $user->attributes['email'];
             $newUser->address        = $user->attributes['address'];
-            $newUser->date_of_birth  = $user->attributes['date_of_birth'];
             $newUser->date_of_birth  = $user->attributes['date_of_birth'];
 
             $existingDepartment = DepartementAndLevel::where('access_level_name', $user->attributes['department_and_level'][0]['access_level_name'])
@@ -100,7 +97,6 @@ class LoginSSOController extends Controller
             return redirect()->intended('/dashboard/first-create/1');
 
         }
-        return redirect()->intended('/dashboard/index');
     }
 
     public function firstLogin($sso){

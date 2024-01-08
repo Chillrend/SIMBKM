@@ -34,8 +34,6 @@ class DashboardController extends Controller
     }
 
     public function pendaftaranMBKM(){
-        // $test = Laporan::where('owner', auth()->user()->id)->get();
-        // dd($test->count());
 
         return view('dashboard.informasi-mbkm', [
             'title' => 'Pendaftaran MBKM',

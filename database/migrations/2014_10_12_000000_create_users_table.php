@@ -18,10 +18,9 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->unsignedBigInteger('role')->nullable();
-            $table->unsignedBigInteger('role_kedua')->nullable();
-            $table->unsignedBigInteger('role_ketiga')->nullable();
-            $table->unsignedBigInteger('fakultas_id')->nullable();
-            $table->unsignedBigInteger('jurusan_id')->nullable();
+            $table->unsignedBigInteger('additional_role')->nullable();
+            $table->string('api_jurusan_id')->nullable();
+            $table->string('api_prodi_id')->nullable();
             $table->string('status')->default('Aktif');
             $table->string('nim')->nullable();
             $table->string('sso_pnj')->nullable();
@@ -29,11 +28,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('role')->references('id')->on('roles')->noActionOnDelete();
-            $table->foreign('role_kedua')->references('id')->on('roles')->noActionOnDelete();
-            $table->foreign('role_ketiga')->references('id')->on('roles')->noActionOnDelete();
-            $table->foreign('fakultas_id')->references('id')->on('fakultas')->cascadeOnDelete();
-            $table->foreign('jurusan_id')->references('id')->on('jurusan')->cascadeOnDelete();
-
+            $table->foreign('additional_role')->references('id')->on('roles')->noActionOnDelete();
         });
     }
 
