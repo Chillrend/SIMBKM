@@ -13,10 +13,6 @@ return new class extends Migration
     {
         Schema::create('mbkms', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('nim');
-            $table->unsignedBigInteger('fakultas');
-            $table->unsignedBigInteger('jurusan');
             $table->unsignedBigInteger('tahun_ajaran')->nullable();
             $table->string('semester');
             $table->unsignedBigInteger('program');
@@ -34,9 +30,6 @@ return new class extends Migration
             $table->unsignedBigInteger('user');
             $table->timestamps();
 
-
-            $table->foreign('fakultas')->references('id')->on('fakultas')->cascadeOnDelete();
-            $table->foreign('jurusan')->references('id')->on('jurusan')->cascadeOnDelete();
             $table->foreign('program')->references('id')->on('program_mbkms')->cascadeOnDelete();
             $table->foreign('dosen_pembimbing')->references('id')->on('users');
             $table->foreign('pembimbing_industri')->references('id')->on('users');

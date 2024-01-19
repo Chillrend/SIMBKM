@@ -57,10 +57,10 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
-    // 'asset_url' => env('ASSET_URL', 'http://web-mbkm.test/public'),
-
     'asset_url' => env('ASSET_URL'),
-
+    'api_url' => env('API_BASE_URL'),
+    'api_user' => env('API_USER'),
+    'api_password' => env('API_PASSWORD'),
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
@@ -72,7 +72,6 @@ return [
     |
     */
 
-    // 'timezone' => 'UTC',
     'timezone' => 'Asia/Jakarta',
 
     /*
@@ -171,9 +170,9 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        Maatwebsite\Excel\ExcelServiceProvider::class,    
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ])->toArray(),
-    
+
 
     /*
     |--------------------------------------------------------------------------

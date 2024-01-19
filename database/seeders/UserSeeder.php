@@ -19,8 +19,6 @@ class UserSeeder extends Seeder
             'email' => 'admin@mail.com',
             'password' => Hash::make('123456'),
             'role' => '1',
-            'fakultas_id' => '1',
-            'jurusan_id' => '1',
             'status' => '1'
         ]);
 
@@ -29,8 +27,6 @@ class UserSeeder extends Seeder
             'email' => 'mhsw@gmail.com',
             'password' => Hash::make('123456'),
             'role' => '7',
-            'fakultas_id' => '1',
-            'jurusan_id' => '1',
             'status' => '1'
         ]);
 
@@ -39,8 +35,6 @@ class UserSeeder extends Seeder
             'email' => 'woodiechek@gmail.com',
             'password' => Hash::make('123456'),
             'role' => '1',
-            'fakultas_id' => '1',
-            'jurusan_id' => '1',
             'status' => '1'
         ]);
 
@@ -49,8 +43,6 @@ class UserSeeder extends Seeder
             'email' => 'einstein@gmail.com',
             'password' => Hash::make('123456'),
             'role' => '4',
-            'fakultas_id' => '1',
-            'jurusan_id' => '1',
             'status' => '1'
         ]);
 
@@ -59,8 +51,6 @@ class UserSeeder extends Seeder
             'email' => 'kps@gmail.com',
             'password' => Hash::make('123456'),
             'role' => '3',
-            'fakultas_id' => '1',
-            'jurusan_id' => '1',
             'status' => '1'
         ]);
 
@@ -69,8 +59,6 @@ class UserSeeder extends Seeder
             'email' => 'pi@gmail.com',
             'password' => Hash::make('123456'),
             'role' => '6',
-            'fakultas_id' => '1',
-            'jurusan_id' => '1',
             'status' => '1'
         ]);
 
@@ -79,8 +67,6 @@ class UserSeeder extends Seeder
             'email' => 'pa@gmail.com',
             'password' => Hash::make('123456'),
             'role' => '5',
-            'fakultas_id' => '1',
-            'jurusan_id' => '1',
             'status' => '1'
         ]);
 
@@ -89,8 +75,6 @@ class UserSeeder extends Seeder
             'email' => 'wadir@gmail.com',
             'password' => Hash::make('123456'),
             'role' => '2',
-            'fakultas_id' => '1',
-            'jurusan_id' => '1',
             'status' => '1'
         ]);
         User::create([
@@ -98,8 +82,6 @@ class UserSeeder extends Seeder
             'email' => 'mahasiswa@gmail.com',
             'password' => Hash::make('123456'),
             'role' => '7',
-            'fakultas_id' => '1',
-            'jurusan_id' => '1',
             'status' => '1'
         ]);
         User::create([
@@ -107,8 +89,6 @@ class UserSeeder extends Seeder
             'email' => 'dito@gmail.com',
             'password' => Hash::make('123456'),
             'role' => '7',
-            'fakultas_id' => '1',
-            'jurusan_id' => '1',
             'status' => '1'
         ]);
         User::create([
@@ -116,8 +96,6 @@ class UserSeeder extends Seeder
             'email' => 'galih@gmail.com',
             'password' => Hash::make('123456'),
             'role' => '7',
-            'fakultas_id' => '1',
-            'jurusan_id' => '1',
             'status' => '1'
         ]);
         User::create([
@@ -125,8 +103,6 @@ class UserSeeder extends Seeder
             'email' => 'mail@gmail.com',
             'password' => Hash::make('123456'),
             'role' => '7',
-            'fakultas_id' => '1',
-            'jurusan_id' => '1',
             'status' => '1'
         ]);
         User::create([
@@ -134,8 +110,6 @@ class UserSeeder extends Seeder
             'email' => 'radit@gmail.com',
             'password' => Hash::make('123456'),
             'role' => '7',
-            'fakultas_id' => '1',
-            'jurusan_id' => '1',
             'status' => '1'
         ]);
     }

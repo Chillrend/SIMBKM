@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ApiHelper;
 use App\Models\User;
 use App\Models\SSOUser;
 use App\Models\Fakultas;
-use App\Models\Jurusan;
 use App\Models\ProgramMbkm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\DepartementAndLevel;
 use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
 use Laravel\Socialite\Facades\Socialite;
 
 class LoginSSOController extends Controller
 {
+
     public function redirectToSSOPNJ(){
         return Socialite::driver('pnj')->redirect();
     }
@@ -30,72 +30,41 @@ class LoginSSOController extends Controller
         if($existingUserFromUser){
             Auth::login($existingUserFromUser);
             request()->session()->regenerate();
-            if(empty($existingUserFromUser->jurusan_id)){
-                return redirect()->intended('/dashboard/first-create/1');
-            }
 
             return redirect()->intended('/dashboard/index');
         } else {
-            // create a new user
-            $newUser                 = new SSOUser();
+            $client = new ApiHelper(config('app.api_url'), config('app.api_user'), config('app.api_password'));
 
-            $newUser->sub            = $user->attributes['sub'];
-            $newUser->ident          = $user->attributes['ident'];
-            $newUser->name           = $user->attributes['name'];
-            $newUser->email          = $user->attributes['email'];
-            $newUser->address        = $user->attributes['address'];
-            $newUser->date_of_birth  = $user->attributes['date_of_birth'];
+            $users_details = null;
 
-            $existingDepartment = DepartementAndLevel::where('access_level_name', $user->attributes['department_and_level'][0]['access_level_name'])
-                                                        ->where('department', $user->attributes['department_and_level'][0]['department'])
-                                                        ->first();
+            //Default role for Mahasiswa
+            $role = 7;
 
-            if($existingDepartment){
-                $newUser->department_and_level = $existingDepartment->id;
-            }else{
-                $newDepartment = new DepartementAndLevel();
-                $newDepartment->access_level = $user->attributes['department_and_level'][0]['access_level'];
-                $newDepartment->access_level_name = $user->attributes['department_and_level'][0]['access_level_name'];
-                $newDepartment->department = $user->attributes['department_and_level'][0]['department'];
-                $newDepartment->department_short_name = $user->attributes['department_and_level'][0]['department_short_name'];
-                $newDepartment->save();
+            if($user->attributes['department_and_level'][0]["access_level_name"] == "Mahasiswa"){
+                $users_details = $client->get('/mahasiswa/nim/'. $user->attributes['ident']);
+            }else if ($user->attributes['department_and_level'][0]["access_level_name"] == "Dosen"){
+                $role = 4;
+                $users_details = $client->get('/dosen/nim/'. $user->attributes['ident']);
             }
 
-            $lastIdDepartment = DB::table('departement_and_levels')
-                            ->orderByDesc('id')
-                            ->limit(1)
-                            ->get();
-
-            $newUser->department_and_level = $lastIdDepartment[0]->id;
-            $newUser->save();
-
-            $lastIdSSOUser = DB::table('s_s_o_users')
-                            ->select('id')
-                            ->where('sub', $user->attributes['sub'])
-                            ->orderByDesc('id')
-                            ->limit(1)
-                            ->get();
-
-            $role = null;
-            if($lastIdDepartment[0]->access_level_name == 'Mahasiswa'){
-                $role = Role::where('name', $lastIdDepartment[0]->access_level_name)->first();
-            }else{
-                $role = Role::where('id', 4)->first();
+            if($users_details == null || $users_details->getStatusCode() == 404){
+                return response()->json(['error' => 'Akun Anda tidak dapat digunakan untuk mendaftar MBKM, mohon hubungi Admin untuk daftar']);
             }
+
+            $user_details_response = json_decode($users_details->getBody()->getContents());
 
             $newUserLogin = User::create([
-                'name' => $user->attributes['name'],
+                'name' => ucwords(strtolower($user->attributes['name'])),
                 'email' => $user->attributes['email'],
                 'nim' => $user->attributes['ident'],
-                'sso_pnj' => $lastIdSSOUser[0]->id,
-                'role' => $role->id,
+                'api_prodi_id' => $user_details_response->id_program_studi ? : null,
+                'role' => $role
             ]);
 
             Auth::login($newUserLogin, true);
             request()->session()->regenerate();
 
-            return redirect()->intended('/dashboard/first-create/1');
-
+            return redirect()->intended('/dashboard');
         }
     }
 
