@@ -55,8 +55,6 @@ Route::post('/logout', [LoginController::class, 'logout']);
 Route::get('/auth/pnj', [LoginSSOController::class, 'redirectToSSOPNJ']);
 Route::get('/dashboard/', [LoginSSOController::class, 'callback']);
 Route::get('/dashboard/index', [DashboardController::class, 'welcome'])->middleware('auth');
-Route::get('/dashboard/first-create/{sso}', [LoginSSOController::class, 'firstLogin']);
-Route::post('/dashboard/first-create/{id}', [LoginSSOController::class, 'storeFirstLogin']);
 
 // Forum Route
 Route::resource('/dashboard/forum', ForumController::class)->middleware('auth');
@@ -150,7 +148,7 @@ Route::get('/dashboard/program-mbkm/{id}', [MbkmController::class, 'edit'])->mid
 Route::post('/dashboard/program-mbkm', [MbkmController::class, 'storeProgram'])->middleware('auth');
 Route::post('/dashboard/program-mbkm/{id}/edit', [MbkmController::class, 'update'])->middleware('auth');
 
-// 
+//
 Route::get('/dashboard/mbkm-mhsw', [MbkmController::class, 'getAllMBKM'])->middleware('auth');
 Route::get('/dashboard/mbkm-mhsw/{id}', [MbkmController::class, 'getMBKM'])->middleware('auth');
 

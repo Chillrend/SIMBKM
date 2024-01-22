@@ -25,78 +25,11 @@
                 @else
                 <form action="/dashboard/informasi-mbkm/create" method="post">
                     @csrf
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="name" class="form-control-label">Nama</label>
-                                <input class="form-control @error('name') is-invalid @enderror" id="name" type="text" name="name" value="{{ old('name', auth()->user()->name) }}" placeholder="Masukan Nama" autofocus required>
-                                @error('name')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="nim" class="form-control-label">NIM</label>
-                                <input class="form-control @error('nim') is-invalid @enderror" id="nim" type="text" value="{{ old('nim', auth()->user()->nim) }}" name="nim" placeholder="Masukan NIM" required>
-                                @error('nim')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                                @enderror
-                            </div>
-                        </div>
+
                         <div class="col-md-6 mb-3">
-                            <label for="fakultas" class="form-label">Jurusan</label>
-                            <select class="form-select @error('fakultas') is-invalid @enderror" id="fakultas" name="fakultas" required>
-                                <option value="" disabled>Pilih Jurusan</option>
-                                @foreach($fakultas as $data)
-                                <option value="{{ $data->id }}">{{ $data->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('fakultas')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                            @enderror
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="jurusan" class="form-label">Prodi</label>
-                            <select class="form-select @error('jurusan') is-invalid @enderror" id="jurusan" name="jurusan" required>
-                                <option value="" disabled selected>Pilih Prodi</option>
-                            </select>
-                            <small>*note:<i> pilih jurusan terlebih dahulu</i></small>
-                            @error('jurusan')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                            @enderror
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="semester" class="form-label">Semester</label>
-                            <select class="form-select @error('semester') is-invalid @enderror" id="semester" name="semester" required>
-                                <option value="" disabled selected>Pilih Semester</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                            </select>
-                            @error('semester')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                            @enderror
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="tahun_ajaran" class="form-label">Tahun Ajaran</label>
+                            <label for="tahun_ajaran" class="form-label">Periode MBKM</label>
                             <select class="form-select @error('fakultas') is-invalid @enderror" id="tahun_ajaran" name="tahun_ajaran" required>
-                                <option value="" disabled selected>Pilih Tahun Ajaran</option>
+                                <option value="" disabled selected>Pilih Periode MBKM</option>
                                 @foreach($tahun_ajaran as $data)
                                 <option value="{{ $data->id }}">{{ $data->tahun_ajaran }}</option>
                                 @endforeach
@@ -159,8 +92,6 @@
                             <div class="form-check mb-3">
                                 <input class="form-check-input" type="radio" name="mobilisasi" id="customRadio1" value="1">
                                 <label class="custom-control-label" for="customRadio1">Iya</label>
-                            </div>
-                            <div class="form-check">
                                 <input class="form-check-input" type="radio" name="mobilisasi" id="customRadio2" value="0" checked>
                                 <label class="custom-control-label" for="customRadio2">Tidak</label>
                             </div>
@@ -229,7 +160,7 @@
                                 <option value="{{ $pi->id }}">{{ $pi->name }}</option>
                                 @endforeach
                             </select>
-                            <small>*note: <i>bisa dipilih nanti</i></small>
+                            <small><i>Dapat dipilih nanti</i></small>
                             <div id="reset">
                                 <span id="reset-btn-pi" class="badge badge-pill badge-md bg-gradient-warning">Reset</span>
                                 {{-- <button type="reset" id="reset-btn" class="btn btn-secondary m-btn m-btn--air m-btn--custom">Reset</button> --}}
@@ -261,73 +192,6 @@
                 <form action="/dashboard/informasi-mbkm/create" method="post">
                     @csrf
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="name" class="form-control-label">Nama</label>
-                                <input class="form-control @error('name') is-invalid @enderror" id="name" type="text" name="name" value="{{ old('name', auth()->user()->name) }}" placeholder="Masukan Nama" autofocus required>
-                                @error('name')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="nim" class="form-control-label">NIM</label>
-                                <input class="form-control @error('nim') is-invalid @enderror" id="nim" type="text" value="{{ old('nim', auth()->user()->nim) }}" name="nim" placeholder="Masukan NIM" required>
-                                @error('nim')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="fakultas" class="form-label">Jurusan</label>
-                            <select class="form-select @error('fakultas') is-invalid @enderror" id="fakultas" name="fakultas" required>
-                                <option value="" disabled selected>Pilih Jurusan</option>
-                                @foreach($fakultas as $data)
-                                <option value="{{ $data->id }}">{{ $data->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('fakultas')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                            @enderror
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="jurusan" class="form-label">Prodi</label>
-                            <select class="form-select @error('jurusan') is-invalid @enderror" id="jurusan" name="jurusan" required>
-                                <option value="" disabled selected>Pilih Prodi</option>
-                            </select>
-                            <small>*note:<i> pilih jurusan terlebih dahulu</i></small>
-                            @error('jurusan')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                            @enderror
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="semester" class="form-label">Semester</label>
-                            <select class="form-select @error('semester') is-invalid @enderror" id="semester" name="semester" required>
-                                <option value="" disabled selected>Pilih Semester</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                            </select>
-                            @error('semester')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                            @enderror
-                        </div>
                         <div class="col-md-6 mb-3">
                             <label for="tahun_ajaran" class="form-label">Tahun Ajaran</label>
                             <select class="form-select @error('fakultas') is-invalid @enderror" id="tahun_ajaran" name="tahun_ajaran" required>
@@ -390,12 +254,12 @@
                             </div>
                         </div>
                         <div class="col-md-6" onload="radioClicked()" onclick="radioClicked()">
-                            <label for="">Mobilisasi</label>
-                            <div class="form-check mb-3">
+                            <label class="d-block" for="customRadio1">Mobilisasi</label>
+                            <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="mobilisasi" id="customRadio1" value="1">
                                 <label class="custom-control-label" for="customRadio1">Iya</label>
                             </div>
-                            <div class="form-check">
+                            <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="mobilisasi" id="customRadio2" value="0" checked>
                                 <label class="custom-control-label" for="customRadio2">Tidak</label>
                             </div>
@@ -430,8 +294,8 @@
                                 <option value="{{ $dosen->id }}">{{ $dosen->name }}</option>
                                 @endforeach
                             </select>
-                            <small>*note: <i>bisa dipilih nanti</i></small>
-                            <div id="reset">
+                            <small><i>Dapat dipilih nanti</i></small>
+                            <div class="cursor-pointer" id="reset">
                                 <span id="reset-btn-dosbing" class="badge badge-pill badge-md bg-gradient-warning">Reset</span>
                                 {{-- <button type="reset" id="reset-btn" class="btn btn-secondary m-btn m-btn--air m-btn--custom">Reset</button> --}}
                                 {{-- <button  id="reset-btn" class="badge badge-pill badge-md bg-gradient-warning m-btn--air m-btn--custom">Reset</button> --}}
@@ -451,7 +315,7 @@
                                 @endforeach
                             </select>
                             <small>*note: <i>bisa dipilih nanti</i></small>
-                            <div id="reset">
+                            <div class="cursor-pointer" id="reset">
                                 <span id="reset-btn-pi" class="badge badge-pill badge-md bg-gradient-warning">Reset</span>
                                 {{-- <button type="reset" id="reset-btn" class="btn btn-secondary m-btn m-btn--air m-btn--custom">Reset</button> --}}
                                 {{-- <button  id="reset-btn" class="badge badge-pill badge-md bg-gradient-warning m-btn--air m-btn--custom">Reset</button> --}}
@@ -534,30 +398,6 @@
         }
     };
 
-    radioClicked()
-    $(document).ready(function() {
-
-        $('#fakultas').on('change', function() {
-            var idFakultas = this.value;
-            $("#jurusan").html('');
-            $.ajax({
-                url: "{{url('/api/fetch-jurusan')}}",
-                type: "POST",
-                data: {
-                    fakultas_id: idFakultas,
-                    _token: '{{csrf_token()}}'
-                },
-                dataType: 'json',
-                success: function(result) {
-                    $('#jurusan').html('<option value="" disabled selected>Pilih Jurusan</option>');
-                    $.each(result.jurusan, function(key, value) {
-                        $("#jurusan").append('<option value="' + value
-                            .id + '">' + value.name + '</option>');
-                    });
-                    // $('#city-dropdown').html('<option value="">-- Select City --</option>');
-                }
-            });
-        });
-    });
+    radioClicked();
 </script>
 @endsection

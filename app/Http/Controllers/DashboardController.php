@@ -24,15 +24,6 @@ class DashboardController extends Controller
     //     ]);
     // }
 
-
-    public function fetchJurusan(Request $request){
-        $data['jurusan'] = Jurusan::where("fakultas_id", $request->fakultas_id)
-                            ->where('status', '=' , 'Aktif')
-                            ->get(["name", "id"]);
-
-        return response()->json($data);
-    }
-
     public function pendaftaranMBKM(){
 
         return view('dashboard.informasi-mbkm', [
@@ -40,11 +31,10 @@ class DashboardController extends Controller
             'title_page' => 'Informasi MBKM',
             'active' => 'Informasi MBKM',
             'name' => auth()->user()->name,
-            'fakultas' => Fakultas::where('status', 'Aktif')->get(),
             'programs' => ProgramMbkm::where('status', 'Aktif')->get(),
             'tahun_ajaran' => TahunAjaranMbkm::all()->sortByDesc('id'),
-            'dosbing' => User::where('role', '4')->orWhere('role_kedua', '4')->orWhere('role_ketiga', '4')->get(),
-            'pembimbing_industri' => User::where('role', '6')->orWhere('role_kedua', '6')->orWhere('role_ketiga', '6')->get(),
+            'dosbing' => User::where('role', '4')->orWhere('additional_role', '4')->get(),
+            'pembimbing_industri' => User::where('role', '6')->orWhere('additional_role', '6')->get(),
             'mbkm' => Laporan::where('owner', auth()->user()->id)->latest()->limit(1)->get()
 
         ]);
