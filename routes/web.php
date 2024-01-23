@@ -38,7 +38,6 @@ use App\Http\Controllers\LoginSSOController;
 // });
 
 
-
 Route::get('/', [HomeController::class, 'index']);
 
 Route::get('/about', [AboutController::class, 'index']);
@@ -117,7 +116,6 @@ Route::post('/dashboard/register/kelola-akun/{id}/delete', [RegisterController::
 Route::post('/dashboard/register/kelola-akun/{id}/update', [RegisterController::class, 'updateUser'])->middleware('auth');
 
 
-
 //Fakultas Route
 Route::get('/dashboard/fakultas', [FakultasController::class, 'index'])->middleware('auth');
 Route::get('/dashboard/fakultas/create', [FakultasController::class, 'create'])->middleware('auth');
@@ -128,11 +126,6 @@ Route::post('/dashboard/fakultas/{id}/edit', [FakultasController::class, 'update
 
 // Jurusan Route
 Route::get('/dashboard/jurusan', [JurusanController::class, 'index'])->middleware('auth');
-Route::get('/dashboard/jurusan/create', [JurusanController::class, 'create'])->middleware('auth');
-Route::get('/dashboard/jurusan/{id}', [JurusanController::class, 'edit'])->middleware('auth');
-Route::post('/dashboard/jurusan', [JurusanController::class, 'store'])->middleware('auth');
-Route::post('/dashboard/jurusan/{id}/delete', [JurusanController::class, 'destroy'])->middleware('auth');
-Route::post('/dashboard/jurusan/{id}/edit', [JurusanController::class, 'update'])->middleware('auth');
 
 // Role Route
 Route::get('/dashboard/role', [RoleController::class, 'index'])->middleware('auth');
@@ -151,7 +144,6 @@ Route::post('/dashboard/program-mbkm/{id}/edit', [MbkmController::class, 'update
 //
 Route::get('/dashboard/mbkm-mhsw', [MbkmController::class, 'getAllMBKM'])->middleware('auth');
 Route::get('/dashboard/mbkm-mhsw/{id}', [MbkmController::class, 'getMBKM'])->middleware('auth');
-
 
 
 // Route Dosen Pembimbing
