@@ -13,8 +13,7 @@
                 <div class="card-header">
                     <div class="ms-md-auto d-flex">
                         <h4>Data Prodi</h4>
-                        <a href="/dashboard/jurusan/create" class="btn btn-primary d-flex ms-md-auto ms-3">Buat
-                            Prodi</a>
+
                     </div>
                 </div>
 
@@ -32,10 +31,9 @@
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                     Jurusan
                                 </th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                     Status
                                 </th>
-                                <th class="text-secondary opacity-7"></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -54,28 +52,11 @@
                                         <span
                                             class="badge badge-sm {{($data->status == 'A') ? "bg-gradient-success" : "bg-gradient-danger"}}">{{ $data->status }}</span>
                                     </td>
-                                    <td class="align-middle text-center text-sm">
-                                    <td>
-                                        <a href="/dashboard/jurusan/{{ $data->id }}">
-                                            <span class="badge badge-primary"></span>
-                                            <i class="fa fa-regular fa-pen" style="color: #fecb3e;"></i>
-                                        </a>
-                                        <form action="/dashboard/jurusan/{{ $data->id }}/delete" method="post"
-                                              class="d-inline">
-                                            @csrf
-                                            <button class="border-0 bg-transparent"
-                                                    onclick="return confirm('Are you sure?')">
-                                                <span class="badge badge-danger"></span>
-                                                <i class="fa fa-solid fa-trash" style="color: #bf0040;"></i>
-                                            </button>
-                                        </form>
-                                    </td>
                                 </tr>
                             @endforeach
                             </tbody>
                         </table>
                     </div>
-
                 </div>
             </div>
         </div>
