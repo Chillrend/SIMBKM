@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
+use App\Helpers\ApiHelper;
 use App\Models\CommentLaporan;
 use App\Models\Mbkm;
 use App\Models\User;
@@ -128,24 +130,45 @@ class MbkmController extends Controller
         }
     }
 
-    
-    
-
     public function store(Request $request)
     {
+        $client = new ApiHelper(config('app.api_url'), config('app.api_user'), config('app.api_password'));
+        $nim = auth()->user()->nim;
+
+        $mhswresponse = $client->get("/mahasiswa/search/$nim"); 
+        $namamhsw = json_decode($mhswresponse->getBody()->getContents(), true)['0']['nama_mhs'];
+
+        $mhswresponse = $client->get("/mahasiswa/search/$nim"); 
+        $semestermhsw = substr(strval(json_decode($mhswresponse->getBody()->getContents(), true)['0']['id_tahun_akademik']), 0, 4);
+        
+        $startDate = DateTime::createFromFormat('Y-m', $semestermhsw.'-09');
+        $now = new DateTime();
+
+        $interval = $startDate->diff($now);
+
+        $totalMonths = $interval->y * 12 + $interval->m;
+        $semestercurr = ceil($totalMonths/6);
+        
+        $mhswresponse = $client->get("/mahasiswa/search/$nim");
+        $idprodimhsw = json_decode($mhswresponse->getBody()->getContents(), true)['0']['id_program_studi'];
+
+        $prodiresponse = $client->get("/prodi/find/$idprodimhsw");
+        $namaprodi = json_decode($prodiresponse->getBody()->getContents(), true)['nama_prodi'];
+        
+        $prodiresponse = $client->get("/prodi/find/$idprodimhsw");
+        $idjurusan = json_decode($prodiresponse->getBody()->getContents(), true)['id_jurusan'];
+
+        $jurusanresponse = $client->get("/jurusan/find/$idjurusan");
+        $namajurusan = json_decode($jurusanresponse->getBody()->getContents(), true)['nama_jurusan'];
+
         $validatedData = $request->validate([
-            'name' => 'required|max:255',
-            'nim' => 'required',
-            'fakultas' => 'required',
-            'jurusan' => 'required',
-            'semester' => 'required',
             'program' => 'required',
             'tanggal_mulai' => 'required',
             'mobilisasi' => 'nullable',
             'lokasi_program' => 'nullable',
             'lokasi_mobilisasi' => 'nullable',
             'pembimbing_industri' => 'nullable',
-            'dosen_pembimbing' => 'required',
+            'dosen_pembimbing' => 'nullable',
             'informasi_tambahan' => 'nullable',
             'tanggal_selesai' => 'required',
             'tahun_ajaran' => 'required',
@@ -154,6 +177,11 @@ class MbkmController extends Controller
         ]);
 
         $validatedData['user'] = auth()->user()->id;
+        $validatedData['name'] = auth()->user()->name = $namamhsw;
+        $validatedData['api_prodi_id'] = auth()->user()->api_prodi_id = $idprodimhsw;
+        $validatedData['api_jurusan_id'] = auth()->user()->api_jurusan_id = $idjurusan;
+        $validatedData['semester'] = auth()->user()->semester = $semestercurr;
+
 
         Mbkm::create($validatedData);
 
@@ -246,7 +274,7 @@ class MbkmController extends Controller
             'lokasi_program' => 'nullable',
             'lokasi_mobilisasi' => 'nullable',
             'pembimbing_industri' => 'nullable',
-            'dosen_pembimbing' => 'required',
+            'dosen_pembimbing' => 'nullable',
             'informasi_tambahan' => 'nullable',
             'tahun_ajaran' => 'required',
             'tempat_program_perusahaan' => 'required',
