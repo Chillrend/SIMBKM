@@ -131,12 +131,10 @@ class MbkmController extends Controller
             'active'              => 'Informasi MBKM',
             'name'                => auth()->user()->name,
             'mbkm'                => Mbkm::find($mbkm),
-            'fakultas'            => Fakultas::where('status', 'Aktif')->get(),
             'programs'            => ProgramMbkm::where('status', 'Aktif')->get(),
             'tahun_ajaran'        => TahunAjaranMbkm::all()->sortByDesc('id'),
-            'jurusans'            => Jurusan::where('status', 'Aktif')->get(),
-            'dosbing'             => User::where('role', '4')->orWhere('role_kedua', '4')->orWhere('role_ketiga', '4')->get(),
-            'pembimbing_industri' => User::where('role', '6')->orWhere('role_kedua', '6')->orWhere('role_ketiga', '6')->get(),
+            'dosbing'             => User::where('role', '4')->orWhere('additional_role', '4')->get(),
+            'pembimbing_industri' => User::where('role', '6')->orWhere('additional_role', '6')->get(),
         ]);
     }
 
@@ -150,20 +148,15 @@ class MbkmController extends Controller
         $form = Mbkm::find($mbkm);
 
         $rules = [
-            'name'                      => 'required|max:255',
-            'nim'                       => 'required',
-            'fakultas'                  => 'required',
-            'jurusan'                   => 'required',
-            'semester'                  => 'required',
             'program'                   => 'required',
             'tanggal_mulai'             => 'required',
-            'tanggal_selesai'           => 'required',
             'mobilisasi'                => 'nullable',
             'lokasi_program'            => 'nullable',
             'lokasi_mobilisasi'         => 'nullable',
             'pembimbing_industri'       => 'nullable',
             'dosen_pembimbing'          => 'nullable',
             'informasi_tambahan'        => 'nullable',
+            'tanggal_selesai'           => 'required',
             'tahun_ajaran'              => 'required',
             'tempat_program_perusahaan' => 'required',
             'program_keberapa'          => 'required',
