@@ -133,7 +133,6 @@ class RegisterController extends Controller
                 $user->jurusan = $jurusan->nama_prodi;
             }
 
-//            dd($user, $fakultas, $jurusan);
             return $user;
         });
 
