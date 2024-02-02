@@ -89,6 +89,7 @@
                                                 <span class="badge badge-danger"></span>
                                                 <i class="fa fa-solid fa-trash" style="color: #bf0040;"></i>
                                             </button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
