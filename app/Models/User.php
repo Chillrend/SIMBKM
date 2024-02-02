@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 // use Illuminate\Contracts\Auth\Authenticatable;
 
-class User extends Authenticatable 
+class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -53,14 +53,9 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class, 'role');
     }
 
-    public function roleKedua()
+    public function additionalRoles()
     {
-        return $this->belongsTo(Role::class, 'role_kedua');
-    }
-
-    public function roleKetiga()
-    {
-        return $this->belongsTo(Role::class, 'role_ketiga');
+        return $this->belongsTo(Role::class, 'additional_role');
     }
 
     public function dataFakultas(){
