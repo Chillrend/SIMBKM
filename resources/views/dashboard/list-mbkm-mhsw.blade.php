@@ -24,7 +24,6 @@
                             <tr>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No.</th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Siswa</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Fakultas</th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Perusahaan</th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Program</th>
                                 <th class="text-secondary opacity-7"></th>
@@ -38,10 +37,7 @@
                                     <p class="text-xs font-weight-bold mb-0">{{ $loop->iteration }}</p>
                                 </td>
                                 <td class="text-sm text-start">
-                                    <p class="text-xs font-weight-bold mb-0">{{ $program->name }}</p>
-                                </td>
-                                <td class="text-sm text-center">
-                                    <p class="text-xs font-weight-bold mb-0">{{ $program->dataFakultas->name }}</p>
+                                    <p class="text-xs font-weight-bold mb-0">{{ $program->namaUser->name }}</p>
                                 </td>
                                 <td class="text-sm text-center">
                                     <p class="text-xs font-weight-bold mb-0">{{ $program->tempat_program_perusahaan }}</p>

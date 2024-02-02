@@ -39,13 +39,7 @@ class Mbkm extends Model
         $this->belongsTo(TahunAjaranMbkm::class, 'tahun_ajaran');
     }
 
-    public function dataFakultas(){
-        return $this->belongsTo(Fakultas::class, 'fakultas');
-    }
 
-    public function dataJurusan(){
-        return $this->belongsTo(Jurusan::class, 'jurusan');
-    }
 
     public function dataProgram(){
         return $this->belongsTo(ProgramMbkm::class, 'program');
@@ -53,6 +47,10 @@ class Mbkm extends Model
 
     public function mbkms(){
         return $this->hasMany(Logbook::class);
+    }
+
+    public function namaUser(){
+        return $this->belongsTo(User::class, 'user');
     }
 
     public function listUser(){
