@@ -108,7 +108,7 @@
                                 @enderror
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="jurusan_id" class="form-label">Jurusan</label>
+                                <label for="api_prodi_id" class="form-label">Jurusan</label>
                                 <select class="form-select @error('api_prodi_id') is-invalid @enderror"
                                         id="api_prodi_id"
                                         name="api_prodi_id" required>
@@ -135,24 +135,18 @@
     <script>
         $(document).ready(function () {
 
-            $('#api_jurusan_id').on('change', function () {
+            $('#api_jurusan_idd').on('change', function () {
                 var idFakultas = this.value;
-                $("#jurusan_id").html('');
+                $("#api_prodi_id").html('');
                 $.ajax({
-                    url: "{{url('/api/fetch-jurusan')}}",
-                    type: "POST",
-                    data: {
-                        api_jurusan_id: idFakultas,
-                        _token: '{{csrf_token()}}'
-                    },
-                    dataType: 'json',
+                    url: "https://dev-h2h.upatik.io/api/akademik/jurusan/find/" + idFakultas,
+                    type: "GET",
                     success: function (result) {
-                        $('#api_prodi_id').html('<option value="" disabled selected>Pilih Jurusan</option>');
-                        $.each(result.jurusan, function (key, value) {
+                        $('#api_prodi_id').html('<option value="" disabled selected>Pilih Jasdurusan</option>');
+                        $.each(result, function (key, value) {
                             $("#api_prodi_id").append('<option value="' + value
-                                .id + '">' + value.name + '</option>');
+                                .id + '">' + value.nama_jurusan + '</option>');
                         });
-                        // $('#city-dropdown').html('<option value="">-- Select City --</option>');
                     }
                 });
             });

@@ -62,6 +62,19 @@ class RegisterController extends Controller
 
     public function editUser($id)
     {
+        $client = new ApiHelper(config('app.api_url'), config('app.api_user'), config('app.api_password'));
+
+        $response = $client->get("/jurusan/all")->getBody()->getContents();
+        $fakultas = collect(json_decode($response, true));
+        $fakultas = $fakultas->map(function ($fakulta) use ($client) {
+            return (object)$fakulta;
+        });
+
+        $response = $client->get("/prodi/all")->getBody()->getContents();
+        $jurusans = collect(json_decode($response, true));
+        $jurusans = $jurusans->map(function ($jurusan) use ($client) {
+            return (object)($jurusan);
+        });
 
         return view('dashboard.edit-akun', [
             'title'      => 'Edit Akun',
@@ -70,32 +83,30 @@ class RegisterController extends Controller
             'active'     => 'Edit Akun',
             'user'       => User::find($id),
             'roles'      => Role::all(),
-            'fakultas'   => Fakultas::all(),
-            'jurusans'   => Jurusan::all(),
+            'fakultas'   => $fakultas,
+            'jurusans'   => $jurusans,
         ]);
     }
 
     public function updateUser(Request $request, $id)
     {
-
         $user = User::find($id);
 
         $validatedData = $request->validate([
-            'name'        => 'required|max:255',
-            'email'       => 'required|email',
-            'password'    => 'nullable|min:5|max:255',
-            'role'        => 'required',
-            'role_kedua'  => 'nullable',
-            'role_ketiga' => 'nullable',
-            'fakultas_id' => 'required',
-            'jurusan_id'  => 'required',
+            'name'            => 'required|max:255',
+            'email'           => 'required|email',
+            'password'        => 'required|min:5|max:255',
+            'role'            => 'required',
+            'additional_role' => 'nullable',
+            'api_jurusan_id'  => 'required',
+            'api_prodi_id'    => 'required',
         ]);
 
         if (isset($validatedData['password'])) {
             $validatedData['password'] = Hash::make($validatedData['password']);
         }
 
-        if ($validatedData['email'] && $user->email !== $validatedData['email']) {
+        if ($user->email !== $validatedData['email']) {
             if (User::where('email', $validatedData['email'])->exists()) {
                 return redirect()->back()->withErrors(['email' => 'The email address is already in use.']);
             }
