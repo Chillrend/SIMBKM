@@ -81,14 +81,14 @@ class RegisterController extends Controller
         $user = User::find($id);
 
         $validatedData = $request->validate([
-            'name' => 'required|max:255',
-            'email' => 'required|email',
-            'password' => 'nullable|min:5|max:255',
-            'role' => 'required',
-            'role_kedua' => 'nullable',
+            'name'        => 'required|max:255',
+            'email'       => 'required|email',
+            'password'    => 'nullable|min:5|max:255',
+            'role'        => 'required',
+            'role_kedua'  => 'nullable',
             'role_ketiga' => 'nullable',
             'fakultas_id' => 'required',
-            'jurusan_id' => 'required',
+            'jurusan_id'  => 'required',
         ]);
 
         if (isset($validatedData['password'])) {
@@ -117,13 +117,32 @@ class RegisterController extends Controller
         return redirect('/dashboard/register/kelola-akun/');
     }
 
-    public function kelolaAkun(){
+    public function kelolaAkun()
+    {
+        $client = new ApiHelper(config('app.api_url'), config('app.api_user'), config('app.api_password'));
+
+        $users = User::latest()->get()->map(function (User $user) use ($client) {
+            if ($user->api_jurusan_id) {
+                $response = $client->get("/jurusan/find/" . $user->api_jurusan_id)->getBody()->getContents();
+                $fakultas = (object) json_decode($response, true);
+                $user->fakultas = $fakultas->nama_jurusan;
+            }
+            if ($user->api_prodi_id) {
+                $response = $client->get("/prodi/find/" . $user->api_prodi_id)->getBody()->getContents();
+                $jurusan  = (object) json_decode($response, true);
+                $user->jurusan = $jurusan->nama_prodi;
+            }
+
+//            dd($user, $fakultas, $jurusan);
+            return $user;
+        });
+
         return view('dashboard.kelola-akun', [
-            'title' => 'Buat Akun / Kelola Akun',
+            'title'      => 'Buat Akun / Kelola Akun',
             'title_page' => 'Buat Akun',
-            'name' => auth()->user()->name,
-            'active' => 'Buat Akun',
-            'users' => User::latest()->get()
+            'name'       => auth()->user()->name,
+            'active'     => 'Buat Akun',
+            'users'      => $users,
         ]);
     }
 }
