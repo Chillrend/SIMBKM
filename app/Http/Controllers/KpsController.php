@@ -235,13 +235,29 @@ class KpsController extends Controller
     }
 
     public function hasilKonversi(){
-        $user = User::where('api_jurusan_id', auth()->user()->api_jurusan_id)->where('role', 7)->get('id')->toArray();
+        $user = User::where('api_prodi_id', auth()->user()->api_prodi_id)->where('role', 7)->get('id')->toArray();
         $konversi = HasilKonversi::whereIn('owner', $user)->where('status', 'Sudah Dikonversi')->with('dataOwner')->get();
+
+        $client = new ApiHelper(config('app.api_url'), config('app.api_user'), config('app.api_password'));
+
+        $prodiresponse      = $client->get("/prodi/find/". auth()->user()->api_prodi_id);
+        $namaprodi          = json_decode($prodiresponse->getBody()->getContents(), true)['nama_prodi'];
+
+        $prodiresponse      = $client->get("/prodi/find/". auth()->user()->api_prodi_id);
+        $idjurusan          = json_decode($prodiresponse->getBody()->getContents(), true)['id_jurusan'];
+
+        $jurusanresponse    = $client->get("/jurusan/find/$idjurusan");
+        $namajurusan        = json_decode($jurusanresponse->getBody()->getContents(), true)['nama_jurusan'];
+
         return view('dashboard.kps.hasil-konversi', [
             'title' => 'Konversi / Hasil Konversi',
             'title_page' => 'Konversi',
             'active' => 'Konversi KPS',
             'konversis' => $konversi,
+            'api' => (object) [
+                'DataFakultas'  => $namajurusan,
+                'DataJurusan'   => $namaprodi
+            ]
         ]);
     }
 
