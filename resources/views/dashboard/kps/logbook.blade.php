@@ -29,7 +29,7 @@
                                     <p class="text-xs font-weight-bold mb-0">{{ $loop->iteration }}</p>
                                 </td>
                                 <td class="text-sm text-center ">
-                                    <p class="text-xs font-weight-bold mb-0">{{ $data->name }}</p>
+                                    <p class="text-xs font-weight-bold mb-0">{{ $data->namaUser->name }}</p>
                                 </td>
                                 <td class="text-sm text-center ">
                                   <p class="text-xs font-weight-bold mb-0">{{ $data->program_keberapa }}</p>
@@ -38,7 +38,7 @@
                                   <td>
                                     <a href="/logbook/kps/list/{{ $data->id }}" ><span class="badge badge-primary"></span><i class="fa fa-regular fa-eye" style="color: #3eeefe;"></i></a>
                                   </td>
-                                  
+
                                 </td>
                           @endforeach
                       </tbody>

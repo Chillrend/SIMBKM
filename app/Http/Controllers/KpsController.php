@@ -45,11 +45,14 @@ class KpsController extends Controller
     }
 
     public function logbook(){
+        $mbkms = Mbkm::with('namaUser')->get()->filter(function ($mbkm) {
+            return $mbkm->namaUser->api_jurusan_id == auth()->user()->api_jurusan_id;
+        });
         return view('dashboard.kps.logbook',[
             'active' => 'Logbook KPS',
             'title_page' => 'Logbook',
             'title' => 'Logbook',
-            'mahasiswa' => Mbkm::where('fakultas', auth()->user()->fakultas_id)->get()
+            'mahasiswa' => $mbkms,
         ]);
     }
 
