@@ -28,7 +28,7 @@
                                     <p class="text-xs font-weight-bold mb-0">{{ $loop->iteration }}</p>
                                 </td>
                                 <td class="text-sm text-center col-6">
-                                    <p class="text-xs font-weight-bold mb-0">{{ $data->name }}</p>
+                                    <p class="text-xs font-weight-bold mb-0">{{ $data->namaUser->name }}</p>
                                 </td>
                                 <td class="text-sm text-center col-2">
                                   <p class="text-xs font-weight-bold mb-0">{{ $data->program_keberapa }}</p>
@@ -52,7 +52,7 @@
 {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const ctx = document.getElementById('myChart');
-  
+
     new Chart(ctx, {
       type: 'bar',
       data: {

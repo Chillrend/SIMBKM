@@ -22,11 +22,15 @@ use Illuminate\Support\Facades\DB;
 class KpsController extends Controller
 {
     public function dashboard(){
+        $mbkms = Mbkm::with('namaUser')->get()->filter(function ($mbkm) {
+            return $mbkm->namaUser->api_jurusan_id == auth()->user()->api_jurusan_id;
+        });
+
         return view('dashboard.kps.dashboard', [
             'active' => 'Dashboard KPS',
             'title_page' => 'Dashboard',
             'title' => 'Dashboard',
-            'mahasiswa' => Mbkm::where('fakultas', auth()->user()->fakultas_id)->latest()->get()
+            'mahasiswa' => $mbkms,
         ]);
     }
 
@@ -36,7 +40,7 @@ class KpsController extends Controller
             'title' => 'Dashboard',
             'title_page' => 'Dashboard / Detail Mahasiswa',
             'active' => 'Dashboard KPS',
-            'laporan' => Laporan::where('mbkm', $id)->with('listMbkm')->get()
+            'laporan' => Laporan::where('mbkm', $id)->with('listMbkm')->first()
         ]);
     }
 
@@ -65,7 +69,7 @@ class KpsController extends Controller
 
     public function logLogbook($id){
         $logbook = LogLogbook::find($id);
-        
+
         return view('dashboard.kps.detail-logbook',[
             'active' => 'Logbook KPS',
             'title_page' => 'Logbook / List Logbook / Detail',
@@ -173,10 +177,7 @@ class KpsController extends Controller
         $prodiresponse      = $client->get("/prodi/find/". auth()->user()->api_prodi_id);
         $namaprodi          = json_decode($prodiresponse->getBody()->getContents(), true)['nama_prodi'];
 
-        $prodiresponse      = $client->get("/prodi/find/". auth()->user()->api_prodi_id);
-        $idjurusan          = json_decode($prodiresponse->getBody()->getContents(), true)['id_jurusan'];
-
-        $jurusanresponse    = $client->get("/jurusan/find/$idjurusan");
+        $jurusanresponse    = $client->get("/jurusan/find/". auth()->user()->api_jurusan_id);
         $namajurusan        = json_decode($jurusanresponse->getBody()->getContents(), true)['nama_jurusan'];
 
 

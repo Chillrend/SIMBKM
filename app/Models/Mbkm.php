@@ -35,8 +35,8 @@ class Mbkm extends Model
     }
 
 
-    public function tahun_ajaran(){
-        $this->belongsTo(TahunAjaranMbkm::class, 'tahun_ajaran');
+    public function thn_ajaran(){
+        return $this->belongsTo(TahunAjaranMbkm::class, 'tahun_ajaran');
     }
 
 
