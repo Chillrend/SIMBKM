@@ -31,7 +31,7 @@ FROM mbkms m
 LEFT JOIN fakultas f ON f.id = m.fakultas
 LEFT JOIN jurusan j ON j.id = m.jurusan
 GROUP BY f.name, j.name");
-       
+
 
 // dd($data, $data1, $data2);
 

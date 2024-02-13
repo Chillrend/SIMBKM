@@ -41,11 +41,21 @@ class KpsController extends Controller
     }
 
     public function logbook(){
+
+        $user = User::where('api_prodi_id', auth()->user()->api_prodi_id)->where('role', 7)->get('id')->toArray();
+        $mahasiswa = Mbkm::whereIn('user', $user)->where('user', $user)->get();
+        dd($mahasiswa);
+
+        $client = new ApiHelper(config('app.api_url'), config('app.api_user'), config('app.api_password'));
+
+        // $jurusanresponse    = $client->get("/jurusan/find/", auth()->user()->api_jurusan_id);
+
+
         return view('dashboard.kps.logbook',[
             'active' => 'Logbook KPS',
             'title_page' => 'Logbook',
             'title' => 'Logbook',
-            'mahasiswa' => Mbkm::where('fakultas', auth()->user()->fakultas_id)->get()
+            'mahasiswa' => $mahasiswa
         ]);
     }
 
