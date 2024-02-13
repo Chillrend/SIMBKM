@@ -21,16 +21,16 @@
                     <select class="form-select @error('fakultas') is-invalid @enderror px-4 w-100" id="fakultas" name="fakultas" onchange="jurusan()">
                       <option value=""disabled selected>Pilih Jurusan</option>
                       @foreach($fakultas as $data)
-                          <option value="{{ $data->name }}">{{ $data->name }}</option>
+                          <option value="{{ $data->nama_jurusan }}">{{ $data->nama_jurusan }}</option>
                       @endforeach
                     </select>
                   </div>
                   <input type="text" class="form-control" placeholder="Search.." name="search" id="search" value="{{ request('search') }}">
                   <button class="btn btn-primary mb-0" type="submit" >Search</button>
                 </div>
-                
+
               </form>
-              
+
             </div>
 
             <div class="card-body">
@@ -59,13 +59,13 @@
                                   <p class="text-xs font-weight-bold mb-0">{{ $loop->iteration }}</p>
                               </td>
                               <td class="text-sm text-center ">
-                                  <p class="text-xs font-weight-bold mb-0">{{ $data->name }}</p>
+                                  <p class="text-xs font-weight-bold mb-0">{{ $data->namaUser->name }}</p>
                               </td>
                               <td class="text-sm text-center ">
-                                <p class="text-xs font-weight-bold mb-0">{{ $data->dataFakultas->name }}</p>
+                                <p class="text-xs font-weight-bold mb-0">{{ $data->namaUser->dataFakultas()->nama_jurusan }}</p>
                               </td>
                               <td class="text-sm text-center ">
-                                <p class="text-xs font-weight-bold mb-0">{{ $data->dataJurusan->name }}</p>
+                                <p class="text-xs font-weight-bold mb-0">{{ $data->namaUser->dataJurusan()->nama_prodi }}</p>
                               </td>
                               <td class="text-sm text-center ">
                                 <p class="text-xs font-weight-bold mb-0">{{ $data->dataProgram->name }}</p>
@@ -148,7 +148,7 @@
                 label.push(value[i].jurusan)
                 data.push(value[i].total)
                 backgroundColor.push('rgba(54, 162, 235, 0.2)');
-             }   
+             }
           } else {
             var value = {!! json_encode($jumlahData[2], JSON_HEX_TAG) !!};
             console.log(value);
@@ -186,7 +186,6 @@
 
 
 function ci() {
-  console.log(toogle);
   switch (toogle) {
     case 0:
       toogle = 1;

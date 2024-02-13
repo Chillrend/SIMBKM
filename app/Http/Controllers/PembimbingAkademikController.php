@@ -16,10 +16,10 @@ use Illuminate\Support\Facades\DB;
 class PembimbingAkademikController extends Controller
 {
     public function dashboard(){
-        
-        $data = DB::select('SELECT pm.name as label, count(pm.name) as total FROM 
+
+        $data = DB::select('SELECT pm.name as label, count(pm.name) as total FROM
         mbkms m left join program_mbkms pm on pm.id=m.program GROUP BY pm.name');
-        
+
         return view('dashboard.pembimbing-akademik.dashboard', [
             'active' => 'Dashboard Pembimbing Akademik',
             'title_page' => 'Dashboard',
@@ -28,14 +28,6 @@ class PembimbingAkademikController extends Controller
             ->paginate(10)->withQueryString(),
             'jumlahData' => $data
         ]);
-    }
-
-    public function fetchJurusan(Request $request){
-        $data['jurusan'] = Jurusan::where("fakultas_id", $request->fakultas_id)
-                            ->where('status', '=' , 'Aktif')
-                            ->get(["name", "id"]);
-
-        return response()->json($data);
     }
 
     public function detailMahasiswa($id){

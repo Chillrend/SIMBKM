@@ -27,7 +27,7 @@ class MahasiswaExport implements FromCollection, WithHeadings, ShouldAutoSize, W
         ];
     }
 
-     
+
     public function headings(): array
     {
         return [
@@ -55,7 +55,7 @@ class MahasiswaExport implements FromCollection, WithHeadings, ShouldAutoSize, W
     {
         $data[] = [];
         $i = 0;
-        $mahasiswa = Mbkm::with('dataFakultas')->with('dataJurusan')
+        $mahasiswa = Mbkm::with( 'namaUser')
                     ->with('dataProgram')
                     ->with('listUser')
                     ->with('listPI')
@@ -63,10 +63,10 @@ class MahasiswaExport implements FromCollection, WithHeadings, ShouldAutoSize, W
 
         foreach($mahasiswa as $user){
             $data[$i] = [
-                'Name' => $user->name,
-                'Nim' => $user->nim,
-                'Jurusan' => $user->dataFakultas->name,
-                'Prodi' => $user->dataJurusan->name,
+                'Name' => $user->namaUser->name,
+                'Nim' => $user->namaUser->nim,
+                'Jurusan' => $user->namaUser->dataFakultas()->nama_jurusan,
+                'Prodi' => $user->namaUser->dataJurusan()->nama_prodi,
                 'Semester' => $user->semester,
                 'Program' => $user->dataProgram->name,
                 'Tanggal_Mulai' => $user->tanggal_mulai,

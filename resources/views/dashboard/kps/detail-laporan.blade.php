@@ -16,7 +16,7 @@
                 </div>
             </div>
             <div class="card-body">
-                  <div class="row">   
+                  <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="name" class="form-control-label">Nama</label>
@@ -34,7 +34,7 @@
                         <select class="form-select" id="fakultas" name="fakultas" disabled>
                             <option value="" disabled selected>{{ $laporan[0]->listMbkm->dataFakultas->name }}</option>
                         </select>
-                        
+
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="jurusan" class="form-label">Prodi</label>
@@ -129,7 +129,7 @@
                             <option value="" disabled selected>{{ $laporan[0]->listMbkm->listPI->name }}</option>
                             @else
                             <option value="" disabled selected></option>
-                            @endif        
+                            @endif
                         </select>
                     </div>
                     <div class="col-md-6">
@@ -173,7 +173,7 @@
                         {{-- <a href="/laporan/kps/detail/{{ $laporan[0]->id }}" class="btn btn-outline-primary col-12">Sign Dokumen</a> --}}
                         <i>Mahasiswa Belum Tanda Tangan </i>
                         @endif
-                        
+
                         @if($laporan[0]->sign_first == 1 && $laporan[0]->sign_second == 0)
                             <a  class="btn btn-outline-secondary col-12" disabled>Sign Dokumen</a>
                             <i>Dosen Pembimbing Belum Tanda Tangan </i>
@@ -189,7 +189,7 @@
                         @endif
                         @if($laporan[0]->sign_first == 1 && $laporan[0]->sign_second == 1 && $laporan[0]->sign_third == 1 && $laporan[0]->sign_fourth == 1)
                             <a href="/dashboard/laporan/preview/{{ $laporan[0]->id }}" class="btn btn-outline-primary col-12" disabled>View & Download</a>
-                        @endif    
+                        @endif
                     </div>
                     {{-- <a href="/laporan/dosbing/view-pdf/{{ $laporan[0]->id }}" class="btn btn-outline-primary col-12">Sign Dokumen</a> --}}
                 @else
@@ -201,7 +201,7 @@
                   </div>
                   <hr class="horizontal dark">
                 @endif
-                
+
 
                 @foreach($logcomment as $comment)
                         <div class="row mt-2">
@@ -211,7 +211,7 @@
                 @endforeach
           </div>
         </div>
-      </div>    
+      </div>
 
       <script>
         document.addEventListener('trix-file-accept', function(e){
