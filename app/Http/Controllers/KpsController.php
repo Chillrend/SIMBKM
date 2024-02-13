@@ -94,8 +94,9 @@ class KpsController extends Controller
     }
 
     public function laporan(){
-        $mbkm = Mbkm::where('jurusan', auth()->user()->jurusan_id)->get();
-        $user = '';
+        $mbkm = Mbkm::whereHas('namaUser', function ($userquery) {
+            $userquery->where('users.api_jurusan_id',  auth()->user()->dataFakultas()->id);
+        })->get();
         if(empty($mbkm)){
             $user = User::where('email', $mbkm[0]->email)->get();
         }else{
