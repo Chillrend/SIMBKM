@@ -32,14 +32,14 @@
                     <div class="col-md-6 mb-3">
                         <label for="fakultas" class="form-label">Jurusan</label>
                         <select class="form-select" id="fakultas" name="fakultas" disabled>
-                            <option value="" disabled selected>{{ $laporan[0]->listMbkm->dataFakultas->name }}</option>
+                            <option value="" disabled selected>{{ $laporan[0]->listMbkm->namaUser->dataFakultas()->nama_jurusan }}</option>
                         </select>
                         
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="jurusan" class="form-label">Prodi</label>
                         <select class="form-select" id="jurusan" name="jurusan" disabled>
-                            <option value=""selected>{{ $laporan[0]->listMbkm->dataJurusan->name }}</option>
+                            <option value=""selected>{{ $laporan[0]->listMbkm->namaUser->dataJurusan()->nama_prodi }}</option>
                         </select>
                     </div>
                     <div class="col-md-6 mb-3">
