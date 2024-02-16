@@ -16,17 +16,17 @@
                 </div>
             </div>
             <div class="card-body">
-                  <div class="row">   
+                  <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="name" class="form-control-label">Nama</label>
-                            <input class="form-control" id="name" type="text" name="name" value="{{ $laporan[0]->listMbkm->name }}" disabled>
+                            <input class="form-control" id="name" type="text" name="name" value="{{ $laporan[0]->listMbkm->namaUser->name }}" disabled>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="nim" class="form-control-label">NIM</label>
-                            <input class="form-control" id="nim" type="text" name="nim" placeholder="Masukan NIM" value="{{ $laporan[0]->listMbkm->nim }}" disabled>
+                            <input class="form-control" id="nim" type="text" name="nim" placeholder="Masukan NIM" value="{{ $laporan[0]->listMbkm->namaUser->nim }}" disabled>
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
@@ -34,7 +34,7 @@
                         <select class="form-select" id="fakultas" name="fakultas" disabled>
                             <option value="" disabled selected>{{ $laporan[0]->listMbkm->namaUser->dataFakultas()->nama_jurusan }}</option>
                         </select>
-                        
+
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="jurusan" class="form-label">Prodi</label>
@@ -129,7 +129,7 @@
                             <option value="" disabled selected>{{ $laporan[0]->listMbkm->listPI->name }}</option>
                             @else
                             <option value="" disabled selected></option>
-                            @endif        
+                            @endif
                         </select>
                     </div>
                     <div class="col-md-6">
@@ -166,7 +166,7 @@
                                 </div>
                             </div>
                             @endif
-                        </div>    
+                        </div>
                         @if($laporan[0]->status == "Diterima" && $laporan[0]->sign_first == 0)
                         <a class="btn btn-outline-secondary col-12" disabled>Sign Dokumen</a>
                         <i>Mahasiswa Belum Tanda Tangan</i>
@@ -188,7 +188,7 @@
                         @endif
                         @if($laporan[0]->sign_first == 1 && $laporan[0]->sign_second == 1 && $laporan[0]->sign_third == 1 && $laporan[0]->sign_fourth == 1)
                             <a href="/dashboard/laporan/preview/{{ $laporan[0]->id }}" class="btn btn-outline-primary col-12" disabled>View & Download</a>
-                        @endif    
+                        @endif
                     </div>
                     {{-- <a href="/laporan/dosbing/view-pdf/{{ $laporan[0]->id }}" class="btn btn-outline-gray900">View Dokumen</a> --}}
                 @else
@@ -200,7 +200,7 @@
                   </div>
                   <hr class="horizontal dark">
                 @endif
-                
+
 
                 @foreach($logcomment as $comment)
                         <div class="row mt-2">
@@ -210,7 +210,7 @@
                 @endforeach
           </div>
         </div>
-      </div>    
+      </div>
 
       <script>
         document.addEventListener('trix-file-accept', function(e){

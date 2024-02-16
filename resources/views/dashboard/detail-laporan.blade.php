@@ -16,25 +16,12 @@
                 </div>
             </div>
             <div class="card-body">
-                  <div class="row">   
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="name" class="form-control-label">Nama</label>
-                            <input class="form-control" id="name" type="text" name="name" value="{{ $laporan[0]->listMbkm->name }}" disabled>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="nim" class="form-control-label">NIM</label>
-                            <input class="form-control" id="nim" type="text" name="nim" placeholder="Masukan NIM" value="{{ $laporan[0]->listMbkm->nim }}" disabled>
-                        </div>
-                    </div>
+                  <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="fakultas" class="form-label">Jurusan</label>
                         <select class="form-select" id="fakultas" name="fakultas" disabled>
                             <option value="" disabled selected>{{ $laporan[0]->listMbkm->namaUser->dataFakultas()->nama_jurusan }}</option>
                         </select>
-                        
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="jurusan" class="form-label">Prodi</label>
@@ -124,7 +111,7 @@
                             @else
                             <option value="" disabled selected></option>
                             @endif
-                            
+
                         </select>
                     </div>
                     <div class="col-md-6 mb-3">
@@ -134,7 +121,7 @@
                             <option value="" disabled selected>{{ $laporan[0]->listMbkm->listPI->name }}</option>
                             @else
                             <option value="" disabled selected></option>
-                            @endif        
+                            @endif
                         </select>
                     </div>
                     <div class="col-md-6">
@@ -143,7 +130,7 @@
                             <input class="form-control" id="informasi_tambahan" type="text" name="informasi_tambahan" value="{{ $laporan[0]->listMbkm->informasi_tambahan }}" disabled>
                         </div>
                     </div>
-                    
+
                 {{-- Display laporan name if laporan != null --}}
                 @if($laporan[0]->dokumen_path != null)
                     <div class="d-flex">
@@ -186,7 +173,7 @@
                         </div>
                     </div>
                 @endif
-                
+
                 {{-- File Submit Form, only display if at least one of laporan or sertifikat document is null --}}
                 @if($laporan[0]->dokumen_path == null || $laporan[0]->dokumen_sertifikat_path == null)
                     <form action="/dashboard/laporan/{{ $laporan[0]->id }}" method="POST" enctype="multipart/form-data">
@@ -195,7 +182,7 @@
                             <div class="row mt-5">
                                 <div class="col-md-8  d-flex">
                                     <label for="dokumen" class="form-label">Post Laporan</label>
-                                    <input class="form-control @error('dokumen') is-invalid @enderror" type="file" id="dokumen" name="dokumen">  
+                                    <input class="form-control @error('dokumen') is-invalid @enderror" type="file" id="dokumen" name="dokumen">
                                         @error('dokumen')
                                             <div class="invalid-feedback">
                                             {{ $message }}
@@ -210,7 +197,7 @@
                             <div class="row mt-5">
                                 <div class="col-md-8  d-flex">
                                     <label for="dokumen_sertifikat" class="form-label">Post Sertifikat</label>
-                                    <input class="form-control @error('dokumen_sertifikat') is-invalid @enderror" type="file" id="dokumen_sertifikat" name="dokumen_sertifikat">  
+                                    <input class="form-control @error('dokumen_sertifikat') is-invalid @enderror" type="file" id="dokumen_sertifikat" name="dokumen_sertifikat">
                                         @error('dokumen_sertifikat')
                                             <div class="invalid-feedback">
                                             {{ $message }}
@@ -233,7 +220,7 @@
                           <div class="row mt-5">
                             <div class="col-md-8  d-flex">
                                 <label for="dokumen" class="form-label">Posting Ulang Laporan</label>
-                                <input class="form-control @error('dokumen') is-invalid @enderror" type="file" id="dokumen" name="dokumen">  
+                                <input class="form-control @error('dokumen') is-invalid @enderror" type="file" id="dokumen" name="dokumen">
                                     @error('dokumen')
                                         <div class="invalid-feedback">
                                            {{ $message }}
@@ -255,7 +242,7 @@
                 @endforeach
           </div>
         </div>
-      </div>    
+      </div>
 
       <script>
         document.addEventListener('trix-file-accept', function(e){
@@ -275,11 +262,11 @@
 
             case '0':
                 lokasiProgram.setAttribute("hidden", true);
-                lokasiProgramValue.value = '' 
+                lokasiProgramValue.value = ''
                 break;
 
             default:
-                
+
             }
         };
 

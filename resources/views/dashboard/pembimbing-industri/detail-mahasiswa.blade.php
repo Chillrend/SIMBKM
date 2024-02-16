@@ -12,7 +12,7 @@
           <div class="card mb-4">
             <div class="card-header pb-0">
                 <div class="d-flex align-items-center">
-                    <h5>Informasi Mbkm {{ $laporan[0]->listMbkm->name }}</h5>
+                    <h5>Informasi Mbkm {{ $laporan[0]->listMbkm->namaUser->name }}</h5>
                 </div>
             </div>
             <div class="card-body">

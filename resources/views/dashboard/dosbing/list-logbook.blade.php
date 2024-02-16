@@ -12,7 +12,7 @@
           <div class="card mb-4">
             <div class="card-header pb-0">
                 <div class="d-flex align-items-center">
-                    <h5>Logbook {{ $logbooks[0]->listMbkm->name }}</h5>
+                    <h5>Logbook {{ $logbooks[0]->listMbkm->namaUser->name }}</h5>
                     <div class="ms-md-auto d-flex">
                       <div class="input-group ms-md-auto d-flex">
                         <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
@@ -39,7 +39,7 @@
                 @else
                   <small class="mt-0">Dosen Pembimbing: Belum Ada</small>
                 @endif
-                
+
               </div>
               <div class="row mt-3">
                 <p>{{ $logbook->listMbkm->lokasi_program }}</p>
@@ -49,7 +49,7 @@
                 </div>
               </div>
               <hr class="horizontal dark mt-0">
-              @endforeach  
+              @endforeach
 
               @else
                 <h3>Mahasiswa Belum membuat informasi mbkm</h3>
@@ -57,5 +57,5 @@
               @endif
           </div>
         </div>
-      </div>    
+      </div>
 @endsection
