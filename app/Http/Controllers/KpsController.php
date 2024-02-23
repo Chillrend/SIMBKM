@@ -22,11 +22,15 @@ use Illuminate\Support\Facades\DB;
 class KpsController extends Controller
 {
     public function dashboard(){
+        $mbkms = Mbkm::with('namaUser')->get()->filter(function ($mbkm) {
+            return $mbkm->namaUser->api_jurusan_id == auth()->user()->api_jurusan_id;
+        });
+
         return view('dashboard.kps.dashboard', [
             'active' => 'Dashboard KPS',
             'title_page' => 'Dashboard',
             'title' => 'Dashboard',
-            'mahasiswa' => Mbkm::where('fakultas', auth()->user()->fakultas_id)->latest()->get()
+            'mahasiswa' => $mbkms,
         ]);
     }
 
@@ -36,16 +40,19 @@ class KpsController extends Controller
             'title' => 'Dashboard',
             'title_page' => 'Dashboard / Detail Mahasiswa',
             'active' => 'Dashboard KPS',
-            'laporan' => Laporan::where('mbkm', $id)->with('listMbkm')->get()
+            'laporan' => Laporan::where('mbkm', $id)->with('listMbkm')->first()
         ]);
     }
 
     public function logbook(){
+        $mbkms = Mbkm::with('namaUser')->get()->filter(function ($mbkm) {
+            return $mbkm->namaUser->api_jurusan_id == auth()->user()->api_jurusan_id;
+        });
         return view('dashboard.kps.logbook',[
             'active' => 'Logbook KPS',
             'title_page' => 'Logbook',
             'title' => 'Logbook',
-            'mahasiswa' => Mbkm::where('fakultas', auth()->user()->fakultas_id)->get()
+            'mahasiswa' => $mbkms,
         ]);
     }
 
@@ -65,7 +72,7 @@ class KpsController extends Controller
 
     public function logLogbook($id){
         $logbook = LogLogbook::find($id);
-        
+
         return view('dashboard.kps.detail-logbook',[
             'active' => 'Logbook KPS',
             'title_page' => 'Logbook / List Logbook / Detail',
@@ -87,8 +94,9 @@ class KpsController extends Controller
     }
 
     public function laporan(){
-        $mbkm = Mbkm::where('jurusan', auth()->user()->jurusan_id)->get();
-        $user = '';
+        $mbkm = Mbkm::whereHas('namaUser', function ($userquery) {
+            $userquery->where('users.api_jurusan_id',  auth()->user()->dataFakultas()->id);
+        })->get();
         if(empty($mbkm)){
             $user = User::where('email', $mbkm[0]->email)->get();
         }else{
@@ -173,10 +181,7 @@ class KpsController extends Controller
         $prodiresponse      = $client->get("/prodi/find/". auth()->user()->api_prodi_id);
         $namaprodi          = json_decode($prodiresponse->getBody()->getContents(), true)['nama_prodi'];
 
-        $prodiresponse      = $client->get("/prodi/find/". auth()->user()->api_prodi_id);
-        $idjurusan          = json_decode($prodiresponse->getBody()->getContents(), true)['id_jurusan'];
-
-        $jurusanresponse    = $client->get("/jurusan/find/$idjurusan");
+        $jurusanresponse    = $client->get("/jurusan/find/". auth()->user()->api_jurusan_id);
         $namajurusan        = json_decode($jurusanresponse->getBody()->getContents(), true)['nama_jurusan'];
 
 
@@ -235,13 +240,29 @@ class KpsController extends Controller
     }
 
     public function hasilKonversi(){
-        $user = User::where('api_jurusan_id', auth()->user()->api_jurusan_id)->where('role', 7)->get('id')->toArray();
+        $user = User::where('api_prodi_id', auth()->user()->api_prodi_id)->where('role', 7)->get('id')->toArray();
         $konversi = HasilKonversi::whereIn('owner', $user)->where('status', 'Sudah Dikonversi')->with('dataOwner')->get();
+
+        $client = new ApiHelper(config('app.api_url'), config('app.api_user'), config('app.api_password'));
+
+        $prodiresponse      = $client->get("/prodi/find/". auth()->user()->api_prodi_id);
+        $namaprodi          = json_decode($prodiresponse->getBody()->getContents(), true)['nama_prodi'];
+
+        $prodiresponse      = $client->get("/prodi/find/". auth()->user()->api_prodi_id);
+        $idjurusan          = json_decode($prodiresponse->getBody()->getContents(), true)['id_jurusan'];
+
+        $jurusanresponse    = $client->get("/jurusan/find/$idjurusan");
+        $namajurusan        = json_decode($jurusanresponse->getBody()->getContents(), true)['nama_jurusan'];
+
         return view('dashboard.kps.hasil-konversi', [
             'title' => 'Konversi / Hasil Konversi',
             'title_page' => 'Konversi',
             'active' => 'Konversi KPS',
             'konversis' => $konversi,
+            'api' => (object) [
+                'DataFakultas'  => $namajurusan,
+                'DataJurusan'   => $namaprodi
+            ]
         ]);
     }
 

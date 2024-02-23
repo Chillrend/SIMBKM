@@ -15,7 +15,6 @@ use function Deployer\download;
 class LaporanController extends Controller
 {
     public function index($id){
-        
         return view('dashboard.detail-laporan', [
             'title' => 'Laporan',
             'title_page' => 'Laporan / Edit',
@@ -24,7 +23,7 @@ class LaporanController extends Controller
             'laporan' => Laporan::where('id', $id)->with('listMbkm')->get(),
             'logcomment' => CommentLaporan::all()->where('laporan', $id)
         ]);
-    }    
+    }
 
     public function viewPdf($id){
         return view('dashboard.viewpdf',[
@@ -36,48 +35,13 @@ class LaporanController extends Controller
     public function fetchDokumen(Request $request){
         $data['dokumen'] = Laporan::where("id", $request->dokumen)
                             ->get();
-                            
+
         return response()->json($data);
     }
 
-    public function update(Request $request, $id){
-
-        $rules = $request->validate([
-            'dokumen' => 'nullable|mimes:pdf',
-            'dokumen_sertifikat' => 'nullable|mimes:pdf'            
-        ]);
-
-        if ($request->hasFile('dokumen')) {
-            $rules['dokumen_name'] = $request->dokumen->getClientOriginalName();
-            $rules['dokumen_path'] = $request->file('dokumen')->store('dokumen-laporan');
-        }
-        if ($request->hasFile('dokumen_sertifikat')) {
-            $rules['dokumen_sertifikat_name'] = $request->dokumen_sertifikat->getClientOriginalName();
-            $rules['dokumen_sertifikat_path'] = $request->file('dokumen_sertifikat')->store('dokumen-sertifikat');
-        }
-       
-        // $rules['sign_first'] = 1;
-        // $rules['sign_second']= 0;
-
-        // Laporan::where('id', $id)->update($rules);
-
-        $laporan = Laporan::find($id);
-
-        $laporan->update($rules);
-
-        if(LogSignaturePdf::where('laporan_id',$id)->doesntExist()){
-            LogSignaturePdf::create([
-                'laporan_id' => $id
-            ]);
-        };
-
-
-        return redirect('/dashboard/laporan/'.$id)->with('success', 'Dokumen berhasil ditambahkan!');       
-    }
-    
     public function revisi(Request $request, $id){
         $rules = $request->validate([
-            'dokumen' => 'required|mimes:pdf'            
+            'dokumen' => 'required|mimes:pdf'
         ]);
 
         $rules['dokumen_name'] = $request->dokumen->getClientOriginalName();
@@ -94,6 +58,41 @@ class LaporanController extends Controller
         return redirect('/dashboard/laporan/'.$id)->with('success', 'Dokumen Laporan berhasil ditambahkan!');
     }
 
+    public function update(Request $request, $id){
+
+        $rules = $request->validate([
+            'dokumen' => 'nullable|mimes:pdf',
+            'dokumen_sertifikat' => 'nullable|mimes:pdf'
+        ]);
+
+        if ($request->hasFile('dokumen')) {
+            $rules['dokumen_name'] = $request->dokumen->getClientOriginalName();
+            $rules['dokumen_path'] = $request->file('dokumen')->store('dokumen-laporan');
+        }
+        if ($request->hasFile('dokumen_sertifikat')) {
+            $rules['dokumen_sertifikat_name'] = $request->dokumen_sertifikat->getClientOriginalName();
+            $rules['dokumen_sertifikat_path'] = $request->file('dokumen_sertifikat')->store('dokumen-sertifikat');
+        }
+
+        // $rules['sign_first'] = 1;
+        // $rules['sign_second']= 0;
+
+        // Laporan::where('id', $id)->update($rules);
+
+        $laporan = Laporan::find($id);
+
+        $laporan->update($rules);
+
+        if(LogSignaturePdf::where('laporan_id',$id)->doesntExist()){
+            LogSignaturePdf::create([
+                'laporan_id' => $id
+            ]);
+        };
+
+
+        return redirect('/dashboard/laporan/'.$id)->with('success', 'Dokumen berhasil ditambahkan!');
+    }
+
     public function savePdf(Request $request){
         $fileName = pathinfo($request->dokumenPath, PATHINFO_FILENAME);
 
@@ -105,7 +104,7 @@ class LaporanController extends Controller
         $dataAnnotate = json_encode($request->annotateJson, true);
         $dataSignaturePertama = json_encode($request->signature_pertama, true);
         $dataJsonBackgroundSignature = json_encode($request->bgJson, true);
-        
+
         Storage::put('dokumen-annotate/' . $fileName . '.json', json_decode($dataAnnotate));
         Storage::put('dokumen-signature/' . $fileName . '_pertama.json', json_decode($dataSignaturePertama));
         Storage::put('dokumen-json-signature-background/' . $fileName . '_pertama.json', json_decode($dataJsonBackgroundSignature));
@@ -124,7 +123,7 @@ class LaporanController extends Controller
         $signatureData->update($rulesSignature);
 
         // return $pdf;
-        return redirect('/dashboard/laporan')->with('success', 'Dokumen Laporan Berhasil ditandatangan!');       
+        return redirect('/dashboard/laporan')->with('success', 'Dokumen Laporan Berhasil ditandatangan!');
     }
 
     public function previewPdf($id){
@@ -135,8 +134,8 @@ class LaporanController extends Controller
     }
 
     public function saveAndRedirect(){
-        return redirect('/dashboard/laporan')->with('success', 'Dokumen Laporan berhasil didownload!');       
+        return redirect('/dashboard/laporan')->with('success', 'Dokumen Laporan berhasil didownload!');
     }
 
-    
+
 }

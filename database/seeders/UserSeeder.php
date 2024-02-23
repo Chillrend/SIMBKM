@@ -28,7 +28,9 @@ class UserSeeder extends Seeder
             'password' => Hash::make('123456'),
             'role' => '7',
             'nim' => '2007411044',
-            'status' => '1'
+            'status' => '1',
+            'api_jurusan_id' => '8413e691-e878-4e8a-862a-32d92b51cbad',
+            'api_prodi_id' => 'c72e7084-9f08-4d40-b290-02fe22af0463'
         ]);
 
         User::create([
@@ -44,7 +46,9 @@ class UserSeeder extends Seeder
             'email' => 'einstein@gmail.com',
             'password' => Hash::make('123456'),
             'role' => '4',
-            'status' => '1'
+            'status' => '1',
+            'api_jurusan_id' => '8413e691-e878-4e8a-862a-32d92b51cbad',
+            'api_prodi_id' => 'c72e7084-9f08-4d40-b290-02fe22af0463'
         ]);
 
         User::create([
@@ -52,7 +56,9 @@ class UserSeeder extends Seeder
             'email' => 'kps@gmail.com',
             'password' => Hash::make('123456'),
             'role' => '3',
-            'status' => '1'
+            'status' => '1',
+            'api_jurusan_id' => '8413e691-e878-4e8a-862a-32d92b51cbad',
+            'api_prodi_id' => 'c72e7084-9f08-4d40-b290-02fe22af0463'
         ]);
 
         User::create([

@@ -35,7 +35,7 @@
                                     <p class="text-xs font-weight-bold mb-0">{{ $loop->iteration }}</p>
                                 </td>
                                 <td class="text-sm text-center ">
-                                    <p class="text-xs font-weight-bold mb-0">{{ $data->name }}</p>
+                                    <p class="text-xs font-weight-bold mb-0">{{ $data->namaUser->name }}</p>
                                 </td>
                                 <td class="text-sm text-center ">
                                   <p class="text-xs font-weight-bold mb-0">{{ $data->program_keberapa }}</p>

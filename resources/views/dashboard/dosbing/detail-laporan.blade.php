@@ -16,30 +16,30 @@
                 </div>
             </div>
             <div class="card-body">
-                  <div class="row">   
+                  <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="name" class="form-control-label">Nama</label>
-                            <input class="form-control" id="name" type="text" name="name" value="{{ $laporan[0]->listMbkm->name }}" disabled>
+                            <input class="form-control" id="name" type="text" name="name" value="{{ $laporan[0]->listMbkm->namaUser->name }}" disabled>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="nim" class="form-control-label">NIM</label>
-                            <input class="form-control" id="nim" type="text" name="nim" placeholder="Masukan NIM" value="{{ $laporan[0]->listMbkm->nim }}" disabled>
+                            <input class="form-control" id="nim" type="text" name="nim" placeholder="Masukan NIM" value="{{ $laporan[0]->listMbkm->namaUser->nim }}" disabled>
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="fakultas" class="form-label">Jurusan</label>
                         <select class="form-select" id="fakultas" name="fakultas" disabled>
-                            <option value="" disabled selected>{{ $laporan[0]->listMbkm->dataFakultas->name }}</option>
+                            <option value="" disabled selected>{{ $laporan[0]->listMbkm->namaUser->dataFakultas()->nama_jurusan }}</option>
                         </select>
-                        
+
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="jurusan" class="form-label">Prodi</label>
                         <select class="form-select" id="jurusan" name="jurusan" disabled>
-                            <option value=""selected>{{ $laporan[0]->listMbkm->dataJurusan->name }}</option>
+                            <option value=""selected>{{ $laporan[0]->listMbkm->namaUser->dataJurusan()->nama_prodi }}</option>
                         </select>
                     </div>
                     <div class="col-md-6 mb-3">
@@ -129,7 +129,7 @@
                             <option value="" disabled selected>{{ $laporan[0]->listMbkm->listPI->name }}</option>
                             @else
                             <option value="" disabled selected></option>
-                            @endif        
+                            @endif
                         </select>
                     </div>
                     <div class="col-md-6">
@@ -191,7 +191,7 @@
                                                 <i>Mahasiswa Belum Tanda Tangan</i>
                                                 @endif
                                                 @if($laporan[0]->sign_first == 1 && $laporan[0]->sign_second == 0 && $laporan[0]->status == "Diterima")
-                                                    <a  class="btn btn-outline-secondary col-12" disabled>View & Download</a> 
+                                                    <a  class="btn btn-outline-secondary col-12" disabled>View & Download</a>
                                                     <a href="/laporan/dosbing/view-pdf/{{ $laporan[0]->id }}" class="btn btn-outline-gray900">View Dokumen</a>
                                                     /* <a href="/laporan/dosbing/sign-pdf/{{ $laporan[0]->id }}" class="btn btn-outline-primary col-12">Sign Dokumen</a> */
                                                     <i>Dosen Pembimbing Belum Tanda Tangan </i>
@@ -206,7 +206,7 @@
                                                 @endif
                                                 @if($laporan[0]->sign_first == 1 && $laporan[0]->sign_second == 1 && $laporan[0]->sign_third == 1 && $laporan[0]->sign_fourth == 1)
                                                     <a href="/dashboard/laporan/preview/{{ $laporan[0]->id }}" class="btn btn-outline-primary col-12" disabled>View & Download</a>
-                                                @endif  
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -216,9 +216,9 @@
                                     <div class="col-sm-5 col-md-6">
                                         <label for="sertifikat" class="form-label">Sertifikat</label>
                                     </div>
-                                </div> 
+                                </div>
                             </div>
-                        </div> 
+                        </div>
                         @if($laporan[0]->dokumen_sertifikat_path != null)
                         <a href="/laporan/dosbing/view-Sertifikatpdf/{{ $laporan[0]->id }}" class="btn btn-outline-gray900">View Sertifikat</a>
                         @else
@@ -241,7 +241,7 @@
                 @endforeach
           </div>
         </div>
-      </div>    
+      </div>
 
       <script>
         document.addEventListener('trix-file-accept', function(e){

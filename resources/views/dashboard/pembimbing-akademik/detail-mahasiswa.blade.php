@@ -13,35 +13,35 @@
           <div class="card mb-4">
             <div class="card-header pb-0">
                 <div class="d-flex align-items-center">
-                    <h5>Informasi Mbkm {{ $laporan[0]->listMbkm->name }}</h5>
+                    <h5>Informasi Mbkm {{ $laporan[0]->listMbkm->namaUser->name }}</h5>
                     <a href="/dashboard/pa/logbook/{{ $laporan[0]->mbkm }}" class="btn btn-primary ms-md-auto mt-2"> Lihat Logbook</a>
                 </div>
             </div>
             <div class="card-body">
-                <div class="row">   
+                <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="name" class="form-control-label">Nama</label>
-                            <input class="form-control" id="name" type="text" name="name" value="{{ $laporan[0]->listMbkm->name }}" disabled>
+                            <input class="form-control" id="name" type="text" name="name" value="{{ $laporan[0]->listMbkm->namaUser->name }}" disabled>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="nim" class="form-control-label">NIM</label>
-                            <input class="form-control" id="nim" type="text" name="nim" placeholder="Masukan NIM" value="{{ $laporan[0]->listMbkm->nim }}" disabled>
+                            <input class="form-control" id="nim" type="text" name="nim" placeholder="Masukan NIM" value="{{ $laporan[0]->listMbkm->namaUser->nim }}" disabled>
                         </div>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="fakultas" class="form-label">Jurusan</label>
                         <select class="form-select" id="fakultas" name="fakultas" disabled>
-                            <option value="" disabled selected>{{ $laporan[0]->listMbkm->dataFakultas->name }}</option>
+                            <option value="" disabled selected>{{ $laporan[0]->listMbkm->namaUser->dataFakultas->name }}</option>
                         </select>
-                        
+
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="jurusan" class="form-label">Prodi</label>
                         <select class="form-select" id="jurusan" name="jurusan" disabled>
-                            <option value=""selected>{{ $laporan[0]->listMbkm->dataJurusan->name }}</option>
+                            <option value=""selected>{{ $laporan[0]->listMbkm->namaUser->dataJurusan->name }}</option>
                         </select>
                     </div>
                     <div class="col-md-6 mb-3">
@@ -126,7 +126,7 @@
                             @else
                             <option value="" disabled selected></option>
                             @endif
-                            
+
                         </select>
                     </div>
                     <div class="col-md-6 mb-3">
@@ -136,7 +136,7 @@
                             <option value="" disabled selected>{{ $laporan[0]->listMbkm->listPI->name }}</option>
                             @else
                             <option value="" disabled selected></option>
-                            @endif        
+                            @endif
                         </select>
                     </div>
                     <div class="col-md-6">
@@ -146,7 +146,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <hr class="horizontal dark mt-0">
 
                 <h3 class="mt-4">Laporan</h3>
@@ -185,7 +185,7 @@
                             <a href="/dashboard/pa/laporan/view-pdf/{{ $laporan[0]->id }}" class="btn btn-outline-primary col-12">Lihat Laporan</a>
                         @endif
                     </div>
-                   
+
                 @else
                     <div class="row mt-5">
                         <div class="col-md-8 ">
@@ -194,15 +194,15 @@
                         </div>
                     </div>
                   <hr class="horizontal dark">
-                
+
                 @endif
                 <hr class="horizontal dark mt-0">
             </div>
           </div>
         </div>
-      </div>    
+      </div>
 
-      
+
       @else
         <h3>Mahasiswa Belum mengisi informasi Mbkm, silahkan isi informasi Mbkm terlebih dahulu</h3>
         <hr class="horizontal dark mt-0">
@@ -226,11 +226,11 @@
 
             case '0':
                 lokasiProgram.setAttribute("hidden", true);
-                lokasiProgramValue.value = '' 
+                lokasiProgramValue.value = ''
                 break;
 
             default:
-                
+
             }
         };
 
