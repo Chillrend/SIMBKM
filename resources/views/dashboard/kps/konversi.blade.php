@@ -43,10 +43,10 @@
                                     <p class="text-xs font-weight-bold mb-0">{{ $konversi->dataOwner->name }}</p>
                                 </td>
                                 <td class="text-sm text-center">
-                                  <p class="text-xs font-weight-bold mb-0">{{ $konversi->dataOwner->dataFakultas->name }}</p>
+                                  <p class="text-xs font-weight-bold mb-0">{{ $api->DataFakultas }}</p>
                                 </td>
                                 <td class="text-sm text-center">
-                                  <p class="text-xs font-weight-bold mb-0">{{ $konversi->dataOwner->dataJurusan->name }}</p>
+                                  <p class="text-xs font-weight-bold mb-0">{{ $api->DataJurusan }}</p>
                                 </td>
                                 <td class="text-sm text-center">
                                   <p class="text-xs font-weight-bold mb-0">{{ $konversi->dataOwner->nim }}</p>

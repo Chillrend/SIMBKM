@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ApiHelper;
 use App\Models\Mbkm;
 use App\Models\User;
 use App\Models\Laporan;
@@ -16,6 +17,7 @@ use App\Models\CommentLaporan;
 use App\Models\CommentKonversi;
 use App\Models\LogSignaturePdf;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class KpsController extends Controller
 {
@@ -163,14 +165,30 @@ class KpsController extends Controller
     }
 
     public function konversi(){
-        $user = User::where('jurusan_id', auth()->user()->jurusan_id)->where('role', 7)->get('id')->toArray();
+        $user = User::where('api_prodi_id', auth()->user()->api_prodi_id)->where('role', 7)->get('id')->toArray();
         $konversi = HasilKonversi::whereIn('owner', $user)->where('status', 'dalam pemeriksaan')->with('dataOwner')->get();
+
+        $client = new ApiHelper(config('app.api_url'), config('app.api_user'), config('app.api_password'));
+
+        $prodiresponse      = $client->get("/prodi/find/". auth()->user()->api_prodi_id);
+        $namaprodi          = json_decode($prodiresponse->getBody()->getContents(), true)['nama_prodi'];
+
+        $prodiresponse      = $client->get("/prodi/find/". auth()->user()->api_prodi_id);
+        $idjurusan          = json_decode($prodiresponse->getBody()->getContents(), true)['id_jurusan'];
+
+        $jurusanresponse    = $client->get("/jurusan/find/$idjurusan");
+        $namajurusan        = json_decode($jurusanresponse->getBody()->getContents(), true)['nama_jurusan'];
+
 
         return view('dashboard.kps.konversi',[
             'title' => 'Konversi',
             'title_page' => 'Konversi',
             'active' => 'Konversi KPS',
             'konversis' => $konversi,
+            'api' => (object) [
+                'DataFakultas'  => $namajurusan,
+                'DataJurusan'   => $namaprodi
+            ]
         ]);
     }
 
@@ -217,7 +235,7 @@ class KpsController extends Controller
     }
 
     public function hasilKonversi(){
-        $user = User::where('jurusan_id', auth()->user()->jurusan_id)->where('role', 7)->get('id')->toArray();
+        $user = User::where('api_jurusan_id', auth()->user()->api_jurusan_id)->where('role', 7)->get('id')->toArray();
         $konversi = HasilKonversi::whereIn('owner', $user)->where('status', 'Sudah Dikonversi')->with('dataOwner')->get();
         return view('dashboard.kps.hasil-konversi', [
             'title' => 'Konversi / Hasil Konversi',

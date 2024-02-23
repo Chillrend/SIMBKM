@@ -27,6 +27,7 @@ class UserSeeder extends Seeder
             'email' => 'mhsw@gmail.com',
             'password' => Hash::make('123456'),
             'role' => '7',
+            'nim' => '2007411044',
             'status' => '1'
         ]);
 
@@ -82,6 +83,7 @@ class UserSeeder extends Seeder
             'email' => 'mahasiswa@gmail.com',
             'password' => Hash::make('123456'),
             'role' => '7',
+            'nim' => '2007411045',
             'status' => '1'
         ]);
         User::create([
@@ -89,6 +91,7 @@ class UserSeeder extends Seeder
             'email' => 'dito@gmail.com',
             'password' => Hash::make('123456'),
             'role' => '7',
+            'nim' => '2007411046',
             'status' => '1'
         ]);
         User::create([
@@ -96,6 +99,7 @@ class UserSeeder extends Seeder
             'email' => 'galih@gmail.com',
             'password' => Hash::make('123456'),
             'role' => '7',
+            'nim' => '2007411047',
             'status' => '1'
         ]);
         User::create([
@@ -103,6 +107,7 @@ class UserSeeder extends Seeder
             'email' => 'mail@gmail.com',
             'password' => Hash::make('123456'),
             'role' => '7',
+            'nim' => '2007411048',
             'status' => '1'
         ]);
         User::create([
@@ -110,6 +115,7 @@ class UserSeeder extends Seeder
             'email' => 'radit@gmail.com',
             'password' => Hash::make('123456'),
             'role' => '7',
+            'nim' => '2007411049',
             'status' => '1'
         ]);
     }
