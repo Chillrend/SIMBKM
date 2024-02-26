@@ -118,7 +118,7 @@ class MbkmController extends Controller
         ]);
     }
 
-    public function editMyForm($mbkm)
+    public function editMyForm(Mbkm $mbkm)
     {
 
         //     if($author != auth()->user()->id) {
@@ -130,10 +130,12 @@ class MbkmController extends Controller
             'title_page'          => 'Informasi Mbkm / Form Mbkm Saya / Edit',
             'active'              => 'Informasi MBKM',
             'name'                => auth()->user()->name,
-            'mbkm'                => Mbkm::find($mbkm),
+            'mbkm'                => $mbkm,
             'programs'            => ProgramMbkm::where('status', 'Aktif')->get(),
             'tahun_ajaran'        => TahunAjaranMbkm::all()->sortByDesc('id'),
-            'dosbing'             => User::where('role', '4')->orWhere('additional_role', '4')->get(),
+            'dosbing'             => User::where(function ($query) {
+                $query->where('role', '4')->orWhere('additional_role', '4');
+            })->where('api_prodi_id', $mbkm->namaUser->api_prodi_id)->get(),
             'pembimbing_industri' => User::where('role', '6')->orWhere('additional_role', '6')->get(),
         ]);
     }

@@ -2,18 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CommentKonversi;
+use App\Models\CommentLaporan;
+use App\Models\Laporan;
+use App\Models\ProgramMbkm;
 use App\Models\TahunAjaranMbkm;
 use App\Models\User;
-use App\Models\Jurusan;
-use App\Models\Fakultas;
-use App\Models\ProgramMbkm;
-use App\Models\Laporan;
-use App\Models\CommentLaporan;
-use Illuminate\Http\Request;
-use App\Models\HasilKonversi;
-use App\Models\CommentKonversi;
 use Illuminate\Support\Facades\DB;
-use Laravel\Socialite\Facades\Socialite;
 
 class DashboardController extends Controller
 {
@@ -24,7 +19,8 @@ class DashboardController extends Controller
     //     ]);
     // }
 
-    public function pendaftaranMBKM(){
+    public function pendaftaranMBKM()
+    {
 
         return view('dashboard.informasi-mbkm', [
             'title' => 'Pendaftaran MBKM',
@@ -33,14 +29,17 @@ class DashboardController extends Controller
             'name' => auth()->user()->name,
             'programs' => ProgramMbkm::where('status', 'Aktif')->get(),
             'tahun_ajaran' => TahunAjaranMbkm::all()->sortByDesc('id'),
-            'dosbing' => User::where('role', '4')->orWhere('additional_role', '4')->get(),
+            'dosbing' => User::where(function ($query) {
+                $query->where('role', '4')->orWhere('additional_role', '4');
+            })->where('api_prodi_id', auth()->user()->api_prodi_id)->get(),
             'pembimbing_industri' => User::where('role', '6')->orWhere('additional_role', '6')->get(),
             'mbkm' => Laporan::where('owner', auth()->user()->id)->latest()->limit(1)->get()
 
         ]);
     }
 
-    public function uploadKurikulum(){
+    public function uploadKurikulum()
+    {
         return view('dashboard.upload-kurikulum', [
             'title' => 'Upload Kurikulum',
             'title_page' => 'Upload Kurikulum',
@@ -49,13 +48,14 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function hasilKonversi(){
+    public function hasilKonversi()
+    {
         $idKonversi = DB::table('hasil_konversis')
-                            ->select('id')
-                            ->where('owner', '=', auth()->user()->id)
-                            ->orderByDesc('id')
-                            ->limit(1)
-                            ->get();
+            ->select('id')
+            ->where('owner', '=', auth()->user()->id)
+            ->orderByDesc('id')
+            ->limit(1)
+            ->get();
         // dd($data);
 
 
@@ -69,8 +69,9 @@ class DashboardController extends Controller
     }
 
 
-    public function createLogbook(){
-        return view('dashboard.create-logbook',[
+    public function createLogbook()
+    {
+        return view('dashboard.create-logbook', [
             'title' => 'Logbook',
             'title_page' => 'Hasil Logbook',
             'active' => 'Logbook',
@@ -78,7 +79,8 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function laporan(){
+    public function laporan()
+    {
         return view('dashboard.laporan', [
             'title' => 'Laporan',
             'title_page' => 'Laporan',
@@ -88,7 +90,8 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function welcome(){
+    public function welcome()
+    {
         $auth = auth()->user();
 
         return view('dashboard.welcome', [

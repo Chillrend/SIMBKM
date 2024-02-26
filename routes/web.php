@@ -68,7 +68,7 @@ Route::post('/dashboard/forum/detail/comment', [ForumController::class, 'postCom
 // Mbkm Route
 Route::get('/dashboard/informasi-mbkm', [DashboardController::class, 'pendaftaranMBKM'])->middleware('auth');
 Route::get('/dashboard/informasi-mbkm/personal', [MbkmController::class, 'myForm'])->middleware('auth');
-Route::get('/dashboard/informasi-mbkm/{id}', [MbkmController::class, 'editMyForm'])->middleware('auth');
+Route::get('/dashboard/informasi-mbkm/{mbkm}', [MbkmController::class, 'editMyForm'])->middleware('auth');
 Route::post('/dashboard/informasi-mbkm/create', [MbkmController::class, 'store'])->middleware('auth');
 Route::post('/dashboard/informasi-mbkm/{id}/edit', [MbkmController::class, 'updateMyForm'])->middleware('auth');
 Route::delete('/dashboard/program-mbkm/{id}', [MbkmController::class, 'destroy'])->middleware('auth');
